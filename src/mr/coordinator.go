@@ -1,6 +1,7 @@
 package mr
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -9,6 +10,8 @@ import (
 	"sync"
 	"time"
 )
+
+const TimeOut = 10
 
 type Coordinator struct {
 	// Your definitions here.
@@ -24,10 +27,10 @@ type Coordinator struct {
 }
 
 type TaskState struct {
-	FileName  string    // 任务对应处理的文件名
-	StartTime time.Time // 任务分配出去的时间，用于计算worker是否在范围时间内完成了工作
-	WorkerID  int       // 记录是哪个Worker拿走了任务
-	Finished  bool      // 判断任务是否完成
+	FileName  string // 任务对应处理的文件名
+	StartTime int64  // 任务分配出去的时间，用于计算worker是否在范围时间内完成了工作
+	WorkerID  int    // 记录是哪个Worker拿走了任务
+	Finished  bool   // 判断任务是否完成
 }
 
 // Your code here -- RPC handlers for the worker to call.
@@ -35,8 +38,102 @@ type TaskState struct {
 // an example RPC handler.
 //
 // the RPC argument and reply types are defined in rpc.go.
-func (c *Coordinator) Example(args *ExampleArgs, reply *ExampleReply) error {
-	reply.Y = args.X + 1
+//
+//	func (c *Coordinator) Example(args *ExampleArgs, reply *ExampleReply) error {
+//		reply.Y = args.X + 1
+//		return nil
+//	}
+
+// 统计任务完成数量，用于协调器做状态切换
+func FinishedTask(taskList []TaskState) int {
+	finTask := 0
+	for _, task := range taskList {
+		if task.Finished {
+			finTask += 1
+		}
+	}
+	return finTask
+}
+
+func (c *Coordinator) AssignTask(args *WorkerRequest, reply *WokerReply) error {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	// 如果是协调器处于Map阶段，给Worker分配Map任务
+	if c.Phase == 0 {
+		// 如果MapTask中还有没完成的任务，就继续Map的配发
+		for i, task := range c.MapTask {
+			if !task.Finished {
+				reply.TaskType = "map"
+				reply.File = task.FileName
+				reply.TaskID = i
+				reply.NReduce = c.NReduce
+				reply.NMap = c.NMap
+				task.StartTime = time.Now().Unix()
+			}
+			fmt.Printf("Assgin %s Task, File %s, TaskID %d\n", reply.TaskType, reply.File, reply.TaskID)
+		}
+	} else if c.Phase == 1 {
+		for i, task := range c.ReduceTask {
+			if !task.Finished {
+				reply.TaskType = "reduce"
+				reply.File = task.FileName
+				reply.TaskID = i
+				reply.NReduce = c.NReduce
+				reply.NMap = c.NMap
+				task.StartTime = time.Now().Unix()
+			}
+			fmt.Printf("Assgin %s Task, File %s, TaskID %d\n", reply.TaskType, reply.File, reply.TaskID)
+		}
+	}
+	return nil
+}
+
+func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WokerReply) error {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	timeNow := time.Now().Unix()
+	if c.Phase == 0 {
+		// Worker向协调器报告工作状态，首先看这个任务是否Timeout
+		taskStartTime := c.MapTask[args.TaskID].StartTime
+		if timeNow-taskStartTime > TimeOut {
+			fmt.Printf("Map Task TimeOut, TaskID: %d, FileName: %s\n", args.TaskID, args.File)
+			return nil
+		}
+		// 如果任务没有超时，说明任务正常完成，在协调器中给该任务打上任务完成的标签
+		c.MapTask[args.TaskID].Finished = true
+
+		// 判断是否完成了所有的Map任务
+		if finTaskNum := FinishedTask(c.MapTask); finTaskNum == c.NMap {
+			c.Phase = 1
+			fmt.Printf("MapTask Finished, Coordinator into Phase %d\n", c.Phase)
+			// 完成所有Map任务后，就要向Reduce待完成任务中添加任务
+			for i := range c.NReduce {
+				reduceTask := TaskState{
+					FileName:  "",
+					StartTime: 0,
+					WorkerID:  i,
+					Finished:  false,
+				}
+				c.ReduceTask[i] = reduceTask
+			}
+		}
+	} else if c.Phase == 1 {
+		taskStartTime := c.ReduceTask[args.TaskID].StartTime
+		if timeNow-taskStartTime > TimeOut {
+			fmt.Printf("Reduce Task TimeOut, TaskID: %d\n", args.TaskID)
+			return nil
+		}
+		// 如果任务没有超时，说明正常完成，标记完成Reduce任务
+		c.ReduceTask[args.TaskID].Finished = true
+
+		// 检测是否完成所有Reduce任务
+		if finTaskNum := FinishedTask(c.ReduceTask); finTaskNum == c.NReduce {
+			c.Phase = 2
+			fmt.Printf("ReduceTask Finished, Coordinator into Phase %d\n", c.Phase)
+		}
+	}
 	return nil
 }
 
@@ -72,9 +169,24 @@ func (c *Coordinator) Done() bool {
 // main/mrcoordinator.go calls this function.
 // nReduce is the number of reduce tasks to use.
 func MakeCoordinator(files []string, nReduce int) *Coordinator {
-	c := Coordinator{}
+	c := Coordinator{
+		MapTask:    make([]TaskState, len(files)),
+		ReduceTask: make([]TaskState, nReduce),
+		Phase:      0,
+		NMap:       len(files),
+		NReduce:    nReduce,
+	}
 
 	// Your code here.
+	for i, file := range files {
+		MapTask := TaskState{
+			FileName:  file,
+			StartTime: 0,
+			WorkerID:  -1,
+			Finished:  false,
+		}
+		c.MapTask[i] = MapTask
+	}
 
 	c.server()
 	return &c
