@@ -61,14 +61,17 @@ func (c *Coordinator) AssignTask(args *WorkerRequest, reply *WorkerReply) error 
 	// 如果是协调器处于Map阶段，给Worker分配Map任务
 	if c.Phase == 0 {
 		// 如果MapTask中还有没完成的任务，就继续Map的配发，要求任务没有完成，并且也没有被分配
+		// 增加判断被分配出去的任务超时未完成的也要重新被分配
 		for i, task := range c.MapTask {
-			if !task.Finished && task.StartTime == 0 {
+			// 如果任务未完成，并且未被分配，或者被分配出去但是超时了，就重新分配
+			nowTime := time.Now().Unix()
+			if !task.Finished && (task.StartTime == 0 || nowTime-task.StartTime >= TimeOut) {
 				reply.TaskType = "map"
 				reply.File = task.FileName
 				reply.TaskID = i
 				reply.NReduce = c.NReduce
-				reply.NMap = c.NMap
-				c.MapTask[i].StartTime = time.Now().Unix()
+				c.MapTask[i].StartTime = nowTime
+				reply.DistributedTime = nowTime
 			}
 			// 如果已经为这个woker分配了一个任务 ，就退出分配循环
 			if reply.TaskType != "" {
@@ -78,13 +81,14 @@ func (c *Coordinator) AssignTask(args *WorkerRequest, reply *WorkerReply) error 
 		}
 	} else if c.Phase == 1 {
 		for i, task := range c.ReduceTask {
-			if !task.Finished && task.StartTime == 0 {
+			nowTime := time.Now().Unix()
+			if !task.Finished && (task.StartTime == 0 || nowTime-task.StartTime >= TimeOut) {
 				reply.TaskType = "reduce"
 				reply.File = task.FileName
 				reply.TaskID = i
 				reply.NReduce = c.NReduce
-				reply.NMap = c.NMap
-				c.ReduceTask[i].StartTime = time.Now().Unix()
+				c.ReduceTask[i].StartTime = nowTime
+				reply.DistributedTime = nowTime
 			}
 			// 如果已经为这个woker分配了一个任务 ，就退出分配循环
 			if reply.TaskType != "" {
@@ -107,7 +111,8 @@ func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WorkerReply) error {
 	if c.Phase == 0 {
 		// Worker向协调器报告工作状态，首先看这个任务是否Timeout
 		taskStartTime := c.MapTask[args.TaskID].StartTime
-		if timeNow-taskStartTime > TimeOut {
+		// 如果worker处理的任务的分配时间不等于该任务的起始时间，说明该任务被重新分配了，如果相等，还超时了那就按超时算
+		if taskStartTime != args.DistributedTime || timeNow-taskStartTime > TimeOut {
 			// fmt.Printf("Map Task TimeOut, TaskID: %d, FileName: %s\n", args.TaskID, args.File)
 			return nil
 		}
@@ -131,7 +136,7 @@ func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WorkerReply) error {
 		}
 	} else if c.Phase == 1 {
 		taskStartTime := c.ReduceTask[args.TaskID].StartTime
-		if timeNow-taskStartTime > TimeOut {
+		if taskStartTime != args.DistributedTime || timeNow-taskStartTime > TimeOut {
 			// fmt.Printf("Reduce Task TimeOut, TaskID: %d\n", args.TaskID)
 			return nil
 		}

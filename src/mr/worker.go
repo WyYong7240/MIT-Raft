@@ -60,8 +60,9 @@ func Worker(mapf func(string, string) []KeyValue,
 
 			// 完成Map任务后，向协调器发送完成任务信号
 			args := WorkerRequest{
-				File:   reply.File,
-				TaskID: reply.TaskID,
+				File:            reply.File,
+				TaskID:          reply.TaskID,
+				DistributedTime: reply.DistributedTime,
 			}
 			CallTaskFinished(&args)
 		} else if reply.TaskType == "reduce" {
@@ -71,8 +72,9 @@ func Worker(mapf func(string, string) []KeyValue,
 
 			// 完成Reduce任务后，向协调器发送完成任务信号
 			args := WorkerRequest{
-				File:   reply.File,
-				TaskID: reply.TaskID,
+				File:            reply.File,
+				TaskID:          reply.TaskID,
+				DistributedTime: reply.DistributedTime,
 			}
 			CallTaskFinished(&args)
 		} else if reply.TaskType == "done" {

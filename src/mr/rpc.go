@@ -26,16 +26,17 @@ type ExampleReply struct {
 
 // Add your RPC definitions here.
 type WorkerRequest struct {
-	File   string
-	TaskID int
+	File            string
+	TaskID          int
+	DistributedTime int64
 }
 
 type WorkerReply struct {
-	TaskType string
-	File     string
-	TaskID   int
-	NReduce  int
-	NMap     int
+	TaskType        string
+	File            string
+	TaskID          int
+	NReduce         int
+	DistributedTime int64
 }
 
 // Cook up a unique-ish UNIX-domain socket name
