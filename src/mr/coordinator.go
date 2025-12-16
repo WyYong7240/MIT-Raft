@@ -1,7 +1,6 @@
 package mr
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -55,41 +54,52 @@ func FinishedTask(taskList []TaskState) int {
 	return finTask
 }
 
-func (c *Coordinator) AssignTask(args *WorkerRequest, reply *WokerReply) error {
+func (c *Coordinator) AssignTask(args *WorkerRequest, reply *WorkerReply) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
 	// 如果是协调器处于Map阶段，给Worker分配Map任务
 	if c.Phase == 0 {
-		// 如果MapTask中还有没完成的任务，就继续Map的配发
+		// 如果MapTask中还有没完成的任务，就继续Map的配发，要求任务没有完成，并且也没有被分配
 		for i, task := range c.MapTask {
-			if !task.Finished {
+			if !task.Finished && task.StartTime == 0 {
 				reply.TaskType = "map"
 				reply.File = task.FileName
 				reply.TaskID = i
 				reply.NReduce = c.NReduce
 				reply.NMap = c.NMap
-				task.StartTime = time.Now().Unix()
+				c.MapTask[i].StartTime = time.Now().Unix()
 			}
-			fmt.Printf("Assgin %s Task, File %s, TaskID %d\n", reply.TaskType, reply.File, reply.TaskID)
+			// 如果已经为这个woker分配了一个任务 ，就退出分配循环
+			if reply.TaskType != "" {
+				break
+			}
+			// fmt.Printf("Assgin %s Task, File %s, TaskID %d\n", reply.TaskType, reply.File, reply.TaskID)
 		}
 	} else if c.Phase == 1 {
 		for i, task := range c.ReduceTask {
-			if !task.Finished {
+			if !task.Finished && task.StartTime == 0 {
 				reply.TaskType = "reduce"
 				reply.File = task.FileName
 				reply.TaskID = i
 				reply.NReduce = c.NReduce
 				reply.NMap = c.NMap
-				task.StartTime = time.Now().Unix()
+				c.ReduceTask[i].StartTime = time.Now().Unix()
 			}
-			fmt.Printf("Assgin %s Task, File %s, TaskID %d\n", reply.TaskType, reply.File, reply.TaskID)
+			// 如果已经为这个woker分配了一个任务 ，就退出分配循环
+			if reply.TaskType != "" {
+				break
+			}
+			// fmt.Printf("Assgin %s Task, File %s, TaskID %d\n", reply.TaskType, reply.File, reply.TaskID)
 		}
+	} else if c.Phase == 2 {
+		// 通知worker退出
+		reply.TaskType = "done"
 	}
 	return nil
 }
 
-func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WokerReply) error {
+func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WorkerReply) error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -98,7 +108,7 @@ func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WokerReply) error {
 		// Worker向协调器报告工作状态，首先看这个任务是否Timeout
 		taskStartTime := c.MapTask[args.TaskID].StartTime
 		if timeNow-taskStartTime > TimeOut {
-			fmt.Printf("Map Task TimeOut, TaskID: %d, FileName: %s\n", args.TaskID, args.File)
+			// fmt.Printf("Map Task TimeOut, TaskID: %d, FileName: %s\n", args.TaskID, args.File)
 			return nil
 		}
 		// 如果任务没有超时，说明任务正常完成，在协调器中给该任务打上任务完成的标签
@@ -107,9 +117,9 @@ func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WokerReply) error {
 		// 判断是否完成了所有的Map任务
 		if finTaskNum := FinishedTask(c.MapTask); finTaskNum == c.NMap {
 			c.Phase = 1
-			fmt.Printf("MapTask Finished, Coordinator into Phase %d\n", c.Phase)
+			// fmt.Printf("MapTask Finished, Coordinator into Phase %d\n", c.Phase)
 			// 完成所有Map任务后，就要向Reduce待完成任务中添加任务
-			for i := range c.NReduce {
+			for i := 0; i < c.NReduce; i++ {
 				reduceTask := TaskState{
 					FileName:  "",
 					StartTime: 0,
@@ -122,7 +132,7 @@ func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WokerReply) error {
 	} else if c.Phase == 1 {
 		taskStartTime := c.ReduceTask[args.TaskID].StartTime
 		if timeNow-taskStartTime > TimeOut {
-			fmt.Printf("Reduce Task TimeOut, TaskID: %d\n", args.TaskID)
+			// fmt.Printf("Reduce Task TimeOut, TaskID: %d\n", args.TaskID)
 			return nil
 		}
 		// 如果任务没有超时，说明正常完成，标记完成Reduce任务
@@ -131,7 +141,7 @@ func (c *Coordinator) TaskFin(args *WorkerRequest, reply *WokerReply) error {
 		// 检测是否完成所有Reduce任务
 		if finTaskNum := FinishedTask(c.ReduceTask); finTaskNum == c.NReduce {
 			c.Phase = 2
-			fmt.Printf("ReduceTask Finished, Coordinator into Phase %d\n", c.Phase)
+			// fmt.Printf("ReduceTask Finished, Coordinator into Phase %d\n", c.Phase)
 		}
 	}
 	return nil
@@ -160,6 +170,9 @@ func (c *Coordinator) Done() bool {
 	// 如果协调器的Phase状态进入2，代表任务完成
 	if c.Phase == 2 {
 		ret = true
+		// 同时删除中间文件夹和结果文件锁
+		os.Remove("./intermediate")
+		os.Remove("mr-out-result.lock")
 	}
 
 	return ret
@@ -189,5 +202,6 @@ func MakeCoordinator(files []string, nReduce int) *Coordinator {
 	}
 
 	c.server()
+	// fmt.Println("Coordinator Start Success!")
 	return &c
 }

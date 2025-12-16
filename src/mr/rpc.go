@@ -30,7 +30,7 @@ type WorkerRequest struct {
 	TaskID int
 }
 
-type WokerReply struct {
+type WorkerReply struct {
 	TaskType string
 	File     string
 	TaskID   int

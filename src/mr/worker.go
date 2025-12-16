@@ -2,6 +2,7 @@ package mr
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"hash/fnv"
 	"io"
@@ -10,8 +11,9 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"time"
 
-	"6.5840/main"
+	"github.com/gofrs/flock"
 )
 
 // Map functions return a slice of KeyValue.
@@ -19,6 +21,14 @@ type KeyValue struct {
 	Key   string
 	Value string
 }
+
+// for sorting by key.，包含两个字段key,value
+type ByKey []KeyValue
+
+// for sorting by key.，实现了sort.interface的三个接口方法
+func (a ByKey) Len() int           { return len(a) }
+func (a ByKey) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByKey) Less(i, j int) bool { return a[i].Key < a[j].Key }
 
 // use ihash(key) % NReduce to choose the reduce
 // task number for each KeyValue emitted by Map.
@@ -35,32 +45,43 @@ func Worker(mapf func(string, string) []KeyValue,
 	// Your worker implementation here.
 
 	// uncomment to send the Example RPC to the coordinator.
-	// CallExample()
-	reply := WokerReply{}
-	// Woker先从协调器获取任务
-	CallGetTask(&reply)
-	if reply.TaskType == "map" {
-		if err := DoMap(&reply, mapf); err != nil {
-			log.Fatalf("Map Task Failed, FileName: %s: %v", reply.File, err)
+	for {
+		reply := WorkerReply{}
+		// Woker先从协调器获取任务
+		CallGetTask(&reply)
+
+		// fmt.Printf("Woker Get %s Task, File %s, TaskID %d\n", reply.TaskType, reply.File, reply.TaskID)
+
+		if reply.TaskType == "map" {
+
+			if err := DoMap(&reply, mapf); err != nil {
+				log.Fatalf("Map Task Failed, FileName: %s: %v", reply.File, err)
+			}
+
+			// 完成Map任务后，向协调器发送完成任务信号
+			args := WorkerRequest{
+				File:   reply.File,
+				TaskID: reply.TaskID,
+			}
+			CallTaskFinished(&args)
+		} else if reply.TaskType == "reduce" {
+			if err := DoReduce(&reply, reducef); err != nil {
+				log.Fatalf("Reduce Task Failed, ReduceID: %d: %v", reply.TaskID, err)
+			}
+
+			// 完成Reduce任务后，向协调器发送完成任务信号
+			args := WorkerRequest{
+				File:   reply.File,
+				TaskID: reply.TaskID,
+			}
+			CallTaskFinished(&args)
+		} else if reply.TaskType == "done" {
+			// log.Printf("All Task Done!\n")
+			break
 		}
 
-		// 完成Map任务后，向协调器发送完成任务信号
-		args := WorkerRequest{
-			File:   reply.File,
-			TaskID: reply.TaskID,
-		}
-		CallTaskFinished(&args)
-	} else if reply.TaskType == "reduce" {
-		if err := DoReduce(&reply, reducef); err != nil {
-			log.Fatalf("Reduce Task Failed, ReduceID: %d: %v", reply.TaskID, err)
-		}
-
-		// 完成Reduce任务后，向协调器发送完成任务信号
-		args := WorkerRequest{
-			File:   reply.File,
-			TaskID: reply.TaskID,
-		}
-		CallTaskFinished(&args)
+		// 一个工作完成后，睡眠1秒，避免与其他进程产生冲突
+		time.Sleep(time.Second)
 	}
 }
 
@@ -113,28 +134,28 @@ func call(rpcname string, args interface{}, reply interface{}) bool {
 }
 
 // Woker向协调器请求任务
-func CallGetTask(reply *WokerReply) {
+func CallGetTask(reply *WorkerReply) {
 	args := WorkerRequest{}
-	ok := call("Coordinator.AssignTask", args, reply)
+	ok := call("Coordinator.AssignTask", &args, reply)
 	if ok {
-		fmt.Printf("Woker Call Get Task Success!\n")
+		// fmt.Printf("Woker Call Get Task Success!\n")
 	} else {
-		fmt.Printf("Woker Call Get Task Failed!\n")
+		// fmt.Printf("Woker Call Get Task Failed!\n")
 	}
 }
 
 func CallTaskFinished(args *WorkerRequest) {
-	reply := WokerReply{}
-	ok := call("Coordinator.TaskFin", args, reply)
+	reply := WorkerReply{}
+	ok := call("Coordinator.TaskFin", args, &reply)
 	if ok {
-		fmt.Printf("Woker Call Finish Task Success!\n")
+		// fmt.Printf("Woker Call Finish Task Success!\n")
 	} else {
-		fmt.Printf("Woker Call Finish Task Failed!\n")
+		// fmt.Printf("Woker Call Finish Task Failed!\n")
 	}
 }
 
 // Woker的Map操作
-func DoMap(reply *WokerReply, mapf func(string, string) []KeyValue) error {
+func DoMap(reply *WorkerReply, mapf func(string, string) []KeyValue) error {
 	// 打开Map任务的文件
 	file, err := os.Open(reply.File)
 	if err != nil {
@@ -162,7 +183,23 @@ func DoMap(reply *WokerReply, mapf func(string, string) []KeyValue) error {
 
 	// 将Map结果分组后，选择将其以临时文件的方式存储在系统中，方便传给接下来的Reduce工作
 	for i := 0; i < reply.NReduce; i++ {
-		tempFile, err := os.CreateTemp("intermediate", "mr-map-intermediate")
+		// 由于所有的Map操作都产生Nreduce个中间文件，计划所有的Map操作产生共Nreduce个中间文件，因此每个中间文件都需要上文件锁
+		// 所有产生的中间文件都在创建的intermediate文件夹中，待reduce操作完成后，会删除该文件夹和中间文件
+		os.Mkdir("./intermediate", 0755)
+		resultFileName := "./intermediate/mr-intermediate-" + strconv.Itoa(i)
+		fileLock := flock.New(resultFileName + ".lock")
+		lockCtx, err := fileLock.TryLock()
+		if err != nil {
+			// fmt.Println("Get File Lock Timeout: %v", err)
+		}
+		if !lockCtx {
+			// fmt.Println("Get File Lock error")
+		}
+		defer fileLock.Unlock()
+
+		// tempFile, err := os.CreateTemp("intermediate", "mr-map-intermediate")
+		// 如果存在文件，就接着写，不存在就创建
+		tempFile, _ := os.OpenFile(resultFileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 		if err != nil {
 			log.Fatalf("MapWoker Can't Create Temp File: %v", err)
 		}
@@ -175,40 +212,53 @@ func DoMap(reply *WokerReply, mapf func(string, string) []KeyValue) error {
 			log.Fatalf("MapWoker Encoder Error: %v", err)
 		}
 		tempFile.Close()
-
-		// 将第i个Reduce工作的准备文件重命名
-		tempFileName := "mr-intermediate-" + strconv.Itoa(i)
-		os.Rename(tempFile.Name(), tempFileName)
 	}
 	return nil
 }
 
 // Woker的Reduce操作
-func DoReduce(reply *WokerReply, reducef func(string, []string) string) error {
+func DoReduce(reply *WorkerReply, reducef func(string, []string) string) error {
 	// 读取中间文件存储的键值对
 	intermediate := []KeyValue{}
 
 	reduceID := reply.TaskID
-	intermediateFileName := "mr-intermediate-" + strconv.Itoa(reduceID)
+	intermediateFileName := "./intermediate/mr-intermediate-" + strconv.Itoa(reduceID)
 	file, err := os.Open(intermediateFileName)
 	if err != nil {
 		log.Fatalf("ReduceWoker Load intermediate File Failed, TaskID: %d: %v", reduceID, err)
 	}
+	// log.Printf("ReduceWorker Load intermediate File Success, TaskID: %d\n", reduceID)
 	decoder := json.NewDecoder(file)
 	for {
 		var fileKV []KeyValue
-		if err := decoder.Decode(&fileKV); err != nil {
-			log.Fatalf("ReduceWoker Read FileKV Failed: %v", err)
+		if err := decoder.Decode(&fileKV); errors.Is(err, io.EOF) {
 			break
+		} else if err != nil {
+			log.Fatalf("ReduceWoker Read FileKV Failed: %v", err)
 		}
 		intermediate = append(intermediate, fileKV...)
 	}
+	// log.Printf("ReduceWorker Read intermediate File Success, TaskID: %d\n", reduceID)
 
 	// 按键排序
-	sort.Sort(main.ByKey{intermediate})
+	sort.Sort(ByKey(intermediate))
 
-	// 先创建reduce结果文件，然后再将结果写入
-	reduceResult, _ := os.Create("mr-reduce-result")
+	// log.Printf("ReduceWorker Sort intermediate File Success, TaskID: %d\n", reduceID)
+
+	// 先创建reduce结果文件，然后再将结果写入; 由于是多个进程将结果写入一个文件，需要先获取这个文件的文件锁
+	resultFileName := "mr-out-result"
+	fileLock := flock.New(resultFileName + ".lock")
+	lockCtx, err := fileLock.TryLock()
+	if err != nil {
+		// fmt.Println("Get File Lock Timeout: %v", err)
+	}
+	if !lockCtx {
+		// fmt.Println("Get File Lock error")
+	}
+	defer fileLock.Unlock()
+
+	// reduceResult, _ := os.Create("mr-reduce-result")
+	reduceResult, _ := os.OpenFile(resultFileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	i := 0
 	for i < len(intermediate) {
 		j := i + 1
@@ -221,11 +271,18 @@ func DoReduce(reply *WokerReply, reducef func(string, []string) string) error {
 		for k := i; k < j; k++ {
 			values = append(values, intermediate[k].Value)
 		}
+
+		// log.Printf("ReduceWorker reduce from %d to %d, Key: %s\n", i, j, intermediate[i].Key)
+
 		// 将该键值的键和同键值交给reduce函数处理
 		output := reducef(intermediate[i].Key, values)
 		// 将结果写入文件
 		fmt.Fprintf(reduceResult, "%v %v\n", intermediate[i].Key, output)
+
+		i = j
 	}
+	os.Remove(intermediateFileName)
+	os.Remove(intermediateFileName + ".lock")
 
 	return nil
 }
