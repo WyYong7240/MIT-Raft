@@ -26,17 +26,18 @@ type ExampleReply struct {
 
 // Add your RPC definitions here.
 type WorkerRequest struct {
-	File            string
-	TaskID          int
-	DistributedTime int64
+	FileName        string // 当任务类型为Map时有意义，为处理完毕的文件名
+	ReduceID        int    // 当任务类型为Reduce时有意义，为处理完毕的reduce桶
+	DistributedTime int64  // 该任务被分配到worker的时间，用于判断worker是否超时
 }
 
 type WorkerReply struct {
-	TaskType        string
-	File            string
-	TaskID          int
-	NReduce         int
-	DistributedTime int64
+	TaskType        string // 任务类型
+	File            string // 当任务类型为Map时，有意义，为需要处理的文件名
+	NReduce         int    // 当任务类型为Map时有意义，为需要将中间结果划分为的桶数
+	TaskID          int    // 当任务类型为Map、Reduce时，有意义，Map:当前处理的是第几个Map任务；Reduce:当前处理的Reduce任务ID
+	NMap            int    // 当任务类型为Reduce时，有意义，为需要接收的中间文件数
+	DistributedTime int64  // 该任务被分配到Worker的时间
 }
 
 // Cook up a unique-ish UNIX-domain socket name
