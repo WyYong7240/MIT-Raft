@@ -2,10 +2,9 @@ package kvsrv
 
 import (
 	"6.5840/kvsrv1/rpc"
-	"6.5840/kvtest1"
-	"6.5840/tester1"
+	kvtest "6.5840/kvtest1"
+	tester "6.5840/tester1"
 )
-
 
 type Clerk struct {
 	clnt   *tester.Clnt
@@ -30,7 +29,14 @@ func MakeClerk(clnt *tester.Clnt, server string) kvtest.IKVClerk {
 // arguments. Additionally, reply must be passed as a pointer.
 func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 	// You will have to modify this function.
-	return "", 0, rpc.ErrNoKey
+	// 初始化调用RPC需要传入的两个参数
+	getArgs := rpc.GetArgs{
+		Key: key,
+	}
+	getReply := rpc.GetReply{}
+
+	ck.clnt.Call(ck.server, "KVServer.Get", &getArgs, &getReply)
+	return getReply.Value, getReply.Version, getReply.Err
 }
 
 // Put updates key with value only if the version in the
@@ -52,5 +58,14 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 // arguments. Additionally, reply must be passed as a pointer.
 func (ck *Clerk) Put(key, value string, version rpc.Tversion) rpc.Err {
 	// You will have to modify this function.
-	return rpc.ErrNoKey
+	// 初始化调用RPC需要传入的两个参数
+	putArgs := rpc.PutArgs{
+		Key:     key,
+		Value:   value,
+		Version: version,
+	}
+	putReply := rpc.PutReply{}
+
+	ck.clnt.Call(ck.server, "KVServer.Put", &putArgs, &putReply)
+	return putReply.Err
 }
