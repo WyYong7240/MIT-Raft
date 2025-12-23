@@ -54,6 +54,13 @@ func (lk *Lock) Acquire() {
 			// 如果上锁失败，继续获取锁，如果上锁成功，则跳出循环
 			// 由于version的存在，当两个客户端同时执行上锁操作时，RPC的线性操作，导致后者执行上锁操作时，Version版本会不一样，导致上锁出错
 			break
+		} else if lockErr == rpc.ErrMaybe {
+			// 如果在上锁的途中，发生了丢包，返回了ErrMaybe错误，检查目前的锁芯是否是该客户端对应的
+			// 如果是，那说明上锁成功了，如果不是，那就是被别人锁了，或者还没有上锁，重新获取锁
+			lockCode, _, _ := lk.ck.Get(lk.LockName)
+			if lockCode == lk.ClientKey {
+				break
+			}
 		}
 		time.Sleep(1 * time.Second)
 	}
@@ -61,15 +68,36 @@ func (lk *Lock) Acquire() {
 
 func (lk *Lock) Release() {
 	// Your code here
-	// 获取该锁的状态，判定该客户端持有的钥匙，是否可以匹配上该锁的锁芯
-	lockCode, lockVersion, lockErr := lk.ck.Get(lk.LockName)
-	// 如果获取锁失败，或者客户端发现自己不是持有该锁的人，应该返回解锁失败吧
-	if lockErr != rpc.OK || lockCode != lk.ClientKey {
-		log.Fatalf("Release Lock %s Failed: %v\n", lk.LockName, lockErr)
-	}
+	// 由于网络不可靠，所以可能会出现锁释放失败的情况,因此，针对可能失败的情况需要单独处理
+	retryCount := 0
+	for {
+		// 获取该锁的状态，判定该客户端持有的钥匙，是否可以匹配上该锁的锁芯
+		retryCount++
+		lockCode, lockVersion, lockErr := lk.ck.Get(lk.LockName)
+		// 如果获取锁失败，应该返回解锁失败吧
+		if lockErr != rpc.OK {
+			log.Fatalf("Release Lock %s Failed, Get Lock Failed:%v\n", lk.LockName, lockErr)
+		}
 
-	// 发现自己是该锁的持有者，合法释放该锁
-	if lockErr = lk.ck.Put(lk.LockName, "", lockVersion); lockErr != rpc.OK {
-		log.Fatalf("Release Lock %s Failed: %v\n", lk.LockName, lockErr)
+		// 获取锁成功，并且发现自己不是锁的持有者
+		if lockCode != lk.ClientKey {
+			// 如果是第一次尝试解锁，那就逻辑错误，出现问题
+			if retryCount == 1 {
+				log.Fatalf("Release Lock %s Failed, retryCount=1, LockCode Error:%v\n", lk.LockName, lockErr)
+			} else {
+				// 如果不是第一次尝试解锁，那么说明锁可能已经被之前的尝试解锁操作解锁成功了
+				break
+			}
+		}
+
+		// 发现自己是该锁的持有者，合法释放该锁，如果释放成功，就退出循环
+		lockErr = lk.ck.Put(lk.LockName, "", lockVersion)
+		if lockErr == rpc.OK {
+			break
+		} else if lockErr != rpc.ErrMaybe {
+			// 否则，如果返回的错误不是ErrMaybe，报错
+			log.Fatalf("Release Lock %s Failed, release lock Error:%v\n", lk.LockName, lockErr)
+		}
+		// 如果返回的错误是ErrMaybe，重试释放锁
 	}
 }
