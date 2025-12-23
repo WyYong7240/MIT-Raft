@@ -11,19 +11,6 @@ import (
 	"strconv"
 )
 
-//
-// example to show how to declare the arguments
-// and reply for an RPC.
-//
-
-type ExampleArgs struct {
-	X int
-}
-
-type ExampleReply struct {
-	Y int
-}
-
 // Add your RPC definitions here.
 type WorkerRequest struct {
 	FileName        string // 当任务类型为Map时有意义，为处理完毕的文件名

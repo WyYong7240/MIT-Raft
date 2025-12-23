@@ -1,11 +1,12 @@
 package kvsrv
 
 import (
-	"6.5840/kvsrv1/rpc"
-	"6.5840/kvtest1"
-	"6.5840/tester1"
-)
+	"time"
 
+	"6.5840/kvsrv1/rpc"
+	kvtest "6.5840/kvtest1"
+	tester "6.5840/tester1"
+)
 
 type Clerk struct {
 	clnt   *tester.Clnt
@@ -30,7 +31,20 @@ func MakeClerk(clnt *tester.Clnt, server string) kvtest.IKVClerk {
 // arguments. Additionally, reply must be passed as a pointer.
 func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 	// You will have to modify this function.
-	return "", 0, rpc.ErrNoKey
+	// 初始化调用RPC需要传入的两个参数
+	getArgs := rpc.GetArgs{
+		Key: key,
+	}
+	getReply := rpc.GetReply{}
+
+	// 对于Get操作来说，不论多少次重试都没关系，因为Get操作不改变服务器状态
+	for {
+		ok := ck.clnt.Call(ck.server, "KVServer.Get", &getArgs, &getReply)
+		if ok {
+			return getReply.Value, getReply.Version, getReply.Err
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
 }
 
 // Put updates key with value only if the version in the
@@ -52,5 +66,31 @@ func (ck *Clerk) Get(key string) (string, rpc.Tversion, rpc.Err) {
 // arguments. Additionally, reply must be passed as a pointer.
 func (ck *Clerk) Put(key, value string, version rpc.Tversion) rpc.Err {
 	// You will have to modify this function.
-	return rpc.ErrNoKey
+	// 初始化调用RPC需要传入的两个参数
+	putArgs := rpc.PutArgs{
+		Key:     key,
+		Value:   value,
+		Version: version,
+	}
+	putReply := rpc.PutReply{}
+
+	// 一直重试，直到Client收到Server的Reply
+	retryCount := 0
+	for {
+		ok := ck.clnt.Call(ck.server, "KVServer.Put", &putArgs, &putReply)
+		retryCount++ // 增加重传计数
+		// 如果是第一次发送，就收到了Server的回复，直接返回服务器的错误
+		if ok && retryCount == 1 {
+			return putReply.Err
+		} else if ok && retryCount != 1 {
+			// 如果收到了回复，但是不是第一次发送，即重试过，那么返回:可能错误
+			// 收到的错误，也可能不是ErrVersion，如果是其他两种错误，就直接返回
+			if putReply.Err != rpc.ErrVersion {
+				return putReply.Err
+			} else {
+				return rpc.ErrMaybe
+			}
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
 }
