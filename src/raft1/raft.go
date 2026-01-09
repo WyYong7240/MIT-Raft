@@ -377,18 +377,27 @@ func (rf *Raft) ticker() {
 
 			// 将发送拉票请求包装为一个函数
 			go func() {
+				rf.mu.Lock()
+				peers := rf.peers
+				me := rf.me
+				curTerm := rf.CurrentTerm
+				lastLogIndex := len(rf.Log) - 1
+				lastLogTerm := rf.Log[lastLogIndex].Term
+				rf.mu.Unlock()
+
+				requestVoteReplyChan := make(chan RequestVoteReply, len(peers)-1)
 				// 对每个server发送拉票请求
 				for i := 0; i < serverNum; i++ {
-					if i != me { // 不给自己发送拉票请求
-						rf.mu.Lock()
+					if i == me { // 不给自己发送拉票请求
+						continue
+					}
+					go func(peer int) {
 						args := RequestVoteArgs{
-							Term:         rf.CurrentTerm,
-							CandidateID:  rf.me,
-							LastLogIndex: len(rf.Log) - 1,
-							LastLogTerm:  rf.Log[len(rf.Log)-1].Term,
+							Term:         curTerm,
+							CandidateID:  me,
+							LastLogIndex: lastLogIndex,
+							LastLogTerm:  lastLogTerm,
 						}
-						rf.mu.Unlock()
-
 						reply := RequestVoteReply{}
 						if ok := rf.sendRequestVote(i, &args, &reply); ok {
 							// 如果发送的拉票请求收到了回复，计算是否得票
@@ -408,7 +417,7 @@ func (rf *Raft) ticker() {
 								}
 							}
 						}
-					}
+					}(i)
 				}
 				if guaranteedNum >= effectiveNum {
 					// 如果同意票数大于过半人数，将自己转换为leader身份，并初始化leader相关结构
