@@ -20,7 +20,14 @@ import (
 	tester "6.5840/tester1"
 )
 
-const TIMTOUTDURATION = 1500 // 选举超时基础时间
+const TIMTOUTDURATION = 1500 // 选举超时基础时间，单位毫秒
+type ServerState int
+
+const (
+	FOLLOWER  ServerState = 0
+	CANDIDATE ServerState = 1
+	LEADER    ServerState = 2
+)
 
 // A Go object implementing a single Raft peer.
 type Raft struct {
@@ -46,7 +53,7 @@ type Raft struct {
 	NextIndex  []int // 对于每台服务器，发送到该服务器的下一个日志条目索引，初始值为领导人最后的日志条的索引+1
 	MatchIndex []int // 对于每台服务器，已知的已经复制到该服务器的最高日志条目索引
 
-	State       int // 当前服务器的角色状态，0是follower、1是candidate、2是leader
+	State       ServerState // 当前服务器的角色状态，0是follower、1是candidate、2是leader
 	TimeOutChan chan int
 }
 
@@ -66,7 +73,7 @@ func (rf *Raft) GetState() (int, bool) {
 	term = rf.CurrentTerm
 	state := rf.State
 	rf.mu.Unlock()
-	isleader = state == 2
+	isleader = state == LEADER
 	return term, isleader
 }
 
@@ -341,6 +348,10 @@ func (rf *Raft) ticker() {
 		me := rf.me
 		serverNum := len(rf.peers)
 		rf.mu.Unlock()
+
+		switch curState {
+			case FOLLOWER
+		}
 
 		if curState == 0 {
 			Debug(dError, "S%d is Status %d, At T%d curState == 0", rf.me, rf.State, rf.CurrentTerm)
