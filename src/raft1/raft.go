@@ -9,6 +9,7 @@ package raft
 import (
 	//	"bytes"
 
+	"context"
 	"math/rand"
 	"sync"
 	"sync/atomic"
@@ -21,6 +22,10 @@ import (
 )
 
 const TIMTOUTDURATION = 1500 // 选举超时基础时间，单位毫秒
+const SERVER_TIMEOUT = 500
+const isRandom = false
+const enableSleep = true
+
 type ServerState int
 
 const (
@@ -164,7 +169,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 		// 将自己转为Follower
 		rf.CurrentTerm = args.Term    // 更新自己的任期
-		rf.State = 0                  // 将自己转换为follower
+		rf.State = FOLLOWER           // 将自己转换为follower
 		rf.VoteFor = args.CandidateID // 将投票记录修改
 
 		// 自己已经投票，重置自己的timeOut计时器
@@ -183,7 +188,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 			// 如果最后日志term大于自己的最后日志任期term，允许成为leader
 			reply.VoteGranted = true
 
-			rf.State = 0
+			rf.State = FOLLOWER
 			rf.VoteFor = args.CandidateID
 
 			// 自己已经投票，重置自己的timeOut计时器
@@ -197,7 +202,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 			// 如果最后日志任务term等于自己最后日志任期term，并且最后日志索引大于自己的最后日志索引，允许成为leader
 			reply.VoteGranted = true
 
-			rf.State = 0
+			rf.State = FOLLOWER
 			rf.VoteFor = args.CandidateID
 
 			// 自己已经投票，重置自己的timeOut计时器，防止自己刚投完票后就成为大一个Term的Candidate，最终出现一个小一个Term的leader和自己这个大一轮的Candidate
@@ -338,159 +343,219 @@ func (rf *Raft) killed() bool {
 	return z == 1
 }
 
+func (rf *Raft) FollowerCase(me int) {
+
+	// 如果为follower状态,等待接收leader的心跳
+	// 设定本轮的超时时间，设定为1.5秒的1-2倍随机，因为要求在5秒内选出leader
+	// curDuration := time.Duration(TIMTOUTDURATION * (float32(rf.me) + 1) / 2 * float32(time.Millisecond))
+
+	var curDuration time.Duration
+	if isRandom {
+		curDuration = time.Duration(TIMTOUTDURATION * (rand.Float32() + 1) * float32(time.Millisecond))
+	} else {
+		curDuration = time.Duration(SERVER_TIMEOUT * float32(me+1) * float32(time.Millisecond))
+	}
+
+	select {
+	case <-rf.TimeOutChan:
+		// 收到leader的心跳，重置倒计时，即进入下一轮倒计时
+		return
+	case <-time.After(curDuration):
+		// 如果超时没有收到leader的心跳，将自己转换身份为candidate，并将自己的term+1
+		// 由于Term+1，自己变成candidate，将投票投给自己，如果重置，可能会在发送拉票选举之前，投票给其他server
+		rf.mu.Lock()
+		rf.CurrentTerm += 1
+		rf.VoteFor = rf.me
+		rf.State = CANDIDATE
+		Debug(dTimer, "S%d TimeOut Convert State From Follower to Candidate At T%d", rf.me, rf.CurrentTerm)
+		rf.mu.Unlock()
+	}
+}
+
+func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, serverNum int) {
+	rf.mu.Lock()
+	peers := rf.peers
+	me := rf.me
+	curTerm := rf.CurrentTerm
+	lastLogIndex := len(rf.Log) - 1
+	lastLogTerm := rf.Log[lastLogIndex].Term
+	rf.mu.Unlock()
+
+	// 创建上下文，用于在身份已经跳转后，同志其他还在运行的拉票请求停下来
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel() // 确保函数退出前，总是调用cancel释放资源
+
+	// 创建缓冲通道，用于接收并行发送的拉票请求的reply，容量须够大，能够处理当身份已经跳转后，未执行完成的goroutine也能非阻塞写入结果
+	requestVoteReplyChan := make(chan RequestVoteReply, len(peers)-1)
+
+	// 并行对每个server发送拉票请求
+	for i := 0; i < serverNum; i++ {
+		if i == me { // 不给自己发送拉票请求
+			continue
+		}
+
+		go func(peer int, ctx context.Context) {
+			args := RequestVoteArgs{
+				Term:         curTerm,
+				CandidateID:  me,
+				LastLogIndex: lastLogIndex,
+				LastLogTerm:  lastLogTerm,
+			}
+			reply := RequestVoteReply{}
+
+			// 发送拉票请求，如果请求有回复，或者说请求成功，就将结果发送到reply处理管道
+			// 同时监听是否外部拉票程序已经有结果了，如果有结果，就直接退出该程序
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				if ok := rf.sendRequestVote(i, &args, &reply); ok {
+					requestVoteReplyChan <- reply
+				}
+			}
+		}(i, ctx)
+	}
+
+	// 拉票请求结果处理部分
+	for i := 0; i < serverNum-1; i++ {
+		reply := <-requestVoteReplyChan
+
+		if reply.VoteGranted {
+			guaranteedNum++
+			if guaranteedNum >= effectiveNum {
+				// 同时，该线程不再等待未完成的线程
+				cancel()
+				// 拉票环节结束，同意票数大于过半人数，将自己转换为leader身份，并初始化leader相关结构，开始发送心跳进入下一周期
+				rf.mu.Lock()
+				rf.State = LEADER
+				rf.NextIndex = make([]int, len(rf.peers))
+				rf.MatchIndex = make([]int, len(rf.peers))
+				for i := 0; i < len(rf.peers); i++ {
+					rf.NextIndex[i] = len(rf.Log)
+					rf.MatchIndex[i] = 0
+				}
+				Debug(dTrace, "S%d Candidate SendRequestVote Done At T%d, Success Come Leader", rf.me, rf.CurrentTerm)
+				rf.mu.Unlock()
+
+				select {
+				case rf.TimeOutChan <- 1:
+				default:
+				}
+				return
+			} else if reply.Term > curTerm {
+				// 也是拉票请求有了结果，因此通知未完成的拉票程序停止
+				cancel()
+				// 由于收到了更高的Term，将自己的身份转换为follower，并且更新term，重置倒计时进入下一ticker循环
+				rf.mu.Lock()
+				rf.State = FOLLOWER
+				rf.CurrentTerm = reply.Term
+				rf.VoteFor = -1
+				Debug(dTrace, "S%d Candidate SendRequestVote Receive Higher Term At T%d, Convert to Follower", me, rf.CurrentTerm)
+				rf.mu.Unlock()
+
+				select {
+				case rf.TimeOutChan <- 1:
+				default:
+				}
+				return
+			}
+		}
+	}
+}
+
+func (rf *Raft) CandidateCase(me int) {
+	// 如果当前server身份转变为candidate，则循环向每个Server发送拉票请求，每次成为candidate只用发送一轮拉票请求
+	rf.mu.Lock()
+	serverNum := len(rf.peers)
+	rf.mu.Unlock()
+
+	guaranteedNum := 1 // 初始化为1，是因为自己给自己投一票
+	effectiveNum := 0  // 计算过半门槛
+	// 设定过半有效门槛票数
+	if serverNum%2 == 0 {
+		effectiveNum = serverNum / 2
+	} else {
+		effectiveNum = serverNum/2 + 1
+	}
+
+	// 将发送拉票请求包装为一个函数
+	rf.CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, serverNum)
+
+	var curDuration time.Duration
+	if isRandom {
+		curDuration = time.Duration(TIMTOUTDURATION * (rand.Float32() + 1) * float32(time.Millisecond))
+	} else {
+		curDuration = time.Duration(SERVER_TIMEOUT * float32(me+1) * float32(time.Millisecond))
+	}
+
+	select {
+	case <-rf.TimeOutChan:
+		return
+	case <-time.After(curDuration):
+		// 如果拉票环节超时，将自己的term+1，进入下一轮的拉票环节
+		rf.mu.Lock()
+		rf.CurrentTerm += 1
+		Debug(dTrace, "S%d Candidate TimeOut Increate Term From T%d to T%d", rf.me, rf.CurrentTerm-1, rf.CurrentTerm)
+		rf.mu.Unlock()
+	}
+}
+
+func (rf *Raft) LeaderCase() {
+	// 如果为leader状态，需要向每个server发送心跳，心跳使用AppendEntries RPC代替
+	rf.mu.Lock()
+	me := rf.me
+	serverNum := len(rf.peers)
+	rf.mu.Unlock()
+
+	for i := 0; i < serverNum; i++ {
+		if i == me { // 不向自己发送心跳
+			continue
+		}
+
+		rf.mu.Lock()
+		args := AppendEntriesArgs{
+			Term:         rf.CurrentTerm,
+			LeaderID:     me,
+			PrevLogIndex: len(rf.Log) - 1,            // 作为leader，默认认为leader的最后一个日志索引就是其他follower相匹配的最后日志索引，不一样再前推
+			PrevLogTerm:  rf.Log[len(rf.Log)-1].Term, // 与prevLogIndex一样
+			Entries:      nil,
+			LeaderCommit: rf.CommitIndex,
+		}
+		reply := AppendEntriesReply{}
+		Debug(dLeader, "S%d Sending Heart Beat to S%d At T%d", me, i, rf.CurrentTerm)
+		rf.mu.Unlock()
+		go func() {
+			rf.peers[i].Call("Raft.AppendEntries", &args, &reply)
+		}()
+	}
+	// 由于实验要求leader每秒钟发送心跳不能超过10次，即睡眠随机睡眠时长至少为100ms，而下面的随机睡眠时长范围是50-350ms，因此在这里睡眠50ms
+	// time.Sleep(100 * time.Millisecond)
+}
+
 func (rf *Raft) ticker() {
-	for rf.killed() == false {
-		Debug(dError, "S%d is Status %d, At T%d", rf.me, rf.State, rf.CurrentTerm)
-		// Your code here (3A)
-		// Check if a leader election should be started.
+	for !rf.killed() {
+		Debug(dTrace, "S%d is Status %d, At T%d Debug", rf.me, rf.State, rf.CurrentTerm)
+
 		rf.mu.Lock()
 		curState := rf.State
 		me := rf.me
-		serverNum := len(rf.peers)
 		rf.mu.Unlock()
 
 		switch curState {
-			case FOLLOWER
+		case FOLLOWER:
+			rf.FollowerCase(me)
+		case CANDIDATE:
+			rf.CandidateCase(me)
+		case LEADER:
+			rf.LeaderCase()
 		}
 
-		if curState == 0 {
-			Debug(dError, "S%d is Status %d, At T%d curState == 0", rf.me, rf.State, rf.CurrentTerm)
-
-			// 如果为follower状态,等待接收leader的心跳
-			// 设定本轮的超时时间，设定为1.5秒的1-2倍随机，因为要求在5秒内选出leader
-			curDuration := time.Duration(TIMTOUTDURATION * (float32(rf.me) + 1) / 2 * float32(time.Millisecond))
-			select {
-			case <-rf.TimeOutChan:
-				// 收到leader的心跳，重置倒计时，即进入下一轮倒计时
-				continue
-			case <-time.After(curDuration):
-				// 如果超时没有收到leader的心跳，将自己转换身份为candidate，并将自己的term+1
-				// 由于Term+1，自己变成candidate，将投票投给自己，如果重置，可能会在发送拉票选举之前，投票给其他server
-				rf.mu.Lock()
-				rf.CurrentTerm += 1
-				rf.VoteFor = me
-				rf.State = 1
-				Debug(dPersist, "S%d TimeOut Convert State From Follower to Candidate At T%d", me, rf.CurrentTerm)
-				rf.mu.Unlock()
-			}
-
-		} else if curState == 1 {
-			// 如果当前server身份转变为candidate，则循环向每个Server发送拉票请求，每次成为candidate只用发送一轮拉票请求
-			guaranteedNum := 1 // 初始化为1，是因为自己给自己投一票
-			effectiveNum := 0  // 计算过半门槛
-
-			// 设定过半有效门槛票数
-			if serverNum%2 == 0 {
-				effectiveNum = serverNum / 2
-			} else {
-				effectiveNum = serverNum/2 + 1
-			}
-
-			// 将发送拉票请求包装为一个函数
-			go func() {
-				rf.mu.Lock()
-				peers := rf.peers
-				me := rf.me
-				curTerm := rf.CurrentTerm
-				lastLogIndex := len(rf.Log) - 1
-				lastLogTerm := rf.Log[lastLogIndex].Term
-				rf.mu.Unlock()
-
-				requestVoteReplyChan := make(chan RequestVoteReply, len(peers)-1)
-				// 对每个server发送拉票请求
-				for i := 0; i < serverNum; i++ {
-					if i == me { // 不给自己发送拉票请求
-						continue
-					}
-					go func(peer int) {
-						args := RequestVoteArgs{
-							Term:         curTerm,
-							CandidateID:  me,
-							LastLogIndex: lastLogIndex,
-							LastLogTerm:  lastLogTerm,
-						}
-						reply := RequestVoteReply{}
-						if ok := rf.sendRequestVote(i, &args, &reply); ok {
-							// 如果发送的拉票请求收到了回复，计算是否得票
-							if reply.VoteGranted {
-								guaranteedNum++
-							} else if reply.Term > args.Term {
-								rf.mu.Lock()
-								rf.State = 0
-								rf.CurrentTerm = reply.Term
-								rf.VoteFor = -1
-								Debug(dTrace, "S%d Candidate SendRequestVote Receive Higher Term At T%d, Convert to Follower", me, rf.CurrentTerm)
-								rf.mu.Unlock()
-								// 由于收到了更高的Term，将自己的身份转换为follower，并且更新term，重置倒计时进入下一ticker循环
-								select {
-								case rf.TimeOutChan <- 1:
-								default:
-								}
-							}
-						}
-					}(i)
-				}
-				if guaranteedNum >= effectiveNum {
-					// 如果同意票数大于过半人数，将自己转换为leader身份，并初始化leader相关结构
-					rf.mu.Lock()
-					rf.State = 2
-					rf.NextIndex = make([]int, len(rf.peers))
-					rf.MatchIndex = make([]int, len(rf.peers))
-					for i := 0; i < len(rf.peers); i++ {
-						rf.NextIndex[i] = len(rf.Log)
-						rf.MatchIndex[i] = 0
-					}
-					Debug(dTrace, "S%d Candidate SendRequestVote Done At T%d, Success Come Leader", me, rf.CurrentTerm)
-					rf.mu.Unlock()
-					// 告诉外部的倒计时，拉票请求已经发送完毕了,并且成功当选了leader
-					select {
-					case rf.TimeOutChan <- 1:
-					default:
-					}
-				}
-				// 只有成功当选leader后才需要重置timeOut，如果发送完拉票请求没有能够成功当选leader，自动等待触发election timeout
-			}()
-
-			curDuration := time.Duration(TIMTOUTDURATION * (rand.Float32() + 1) * float32(time.Millisecond))
-			select {
-			case <-rf.TimeOutChan:
-				// 拉票环节结束，成为leader，开始发送心跳进入下一周期
-				continue
-			case <-time.After(curDuration):
-				// 如果拉票环节超时，将自己的term+1，进入下一轮的拉票环节
-				rf.mu.Lock()
-				rf.CurrentTerm += 1
-				Debug(dTrace, "S%d Candidate TimeOut Increate Term From T%d to T%d", me, rf.CurrentTerm-1, rf.CurrentTerm)
-				rf.mu.Unlock()
-			}
-		} else {
-			// 如果为leader状态，需要向每个server发送心跳，心跳使用AppendEntries RPC代替
-			for i := 0; i < serverNum; i++ {
-				if i != me { // 不向自己发送心跳
-					rf.mu.Lock()
-					args := AppendEntriesArgs{
-						Term:         rf.CurrentTerm,
-						LeaderID:     me,
-						PrevLogIndex: len(rf.Log) - 1,            // 作为leader，默认认为leader的最后一个日志索引就是其他follower相匹配的最后日志索引，不一样再前推
-						PrevLogTerm:  rf.Log[len(rf.Log)-1].Term, // 与prevLogIndex一样
-						Entries:      nil,
-						LeaderCommit: rf.CommitIndex,
-					}
-					reply := AppendEntriesReply{}
-					Debug(dLeader, "S%d Sending Heart Beat to S%d At T%d", me, i, rf.CurrentTerm)
-					rf.mu.Unlock()
-					go func() {
-						rf.peers[i].Call("Raft.AppendEntries", &args, &reply)
-					}()
-				}
-			}
-			// 由于实验要求leader每秒钟发送心跳不能超过10次，即睡眠随机睡眠时长至少为100ms，而下面的随机睡眠时长范围是50-350ms，因此在这里睡眠50ms
-			time.Sleep(50 * time.Millisecond)
-		}
 		// pause for a random amount of time between 50 and 350
 		// milliseconds.
-		// ms := 50 + (rand.Int63() % 300)
-		// time.Sleep(time.Duration(ms) * time.Millisecond)
+		if enableSleep {
+			ms := 50 + (rand.Int63() % 300)
+			time.Sleep(time.Duration(ms) * time.Millisecond)
+		}
 		// 如此计算，leader每次发送心跳的时间间隔大概为100ms-400ms，而本设计的follower超时选举时间在1.5-3s，应该不会出问题
 	}
 }
