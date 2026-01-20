@@ -23,7 +23,11 @@ import (
 
 const TIMTOUTDURATION = 1500 // 选举超时基础时间，单位毫秒
 const SERVER_TIMEOUT = 500
-const isRandom = false
+
+// 每个服务器基础的TIMEOUT时间，适用于<4个服务器情况
+// S0:1500ms, S1:2000ms, S2:2500ms
+const SERVER_BASE_TIMEOUT = 1000
+const isRandom = true
 const enableSleep = true
 
 type ServerState int
@@ -254,7 +258,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		if args.Term > rf.CurrentTerm {
 			rf.CurrentTerm = args.Term
 			rf.VoteFor = -1
-			rf.State = 0
+			rf.State = FOLLOWER
+			Debug(dTrace, "S%d At T%d Recive Heart Beat From Leader S%d In T%d, Convert to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
 		} else if args.Term == rf.CurrentTerm && rf.State == 1 {
 			// 如果leader的Term和自己的一样，说明自己和leader是同时期的candidate，确认自己的身份是candidate，服从先自己一步成为leader的server
 			rf.State = 0
@@ -353,7 +358,7 @@ func (rf *Raft) FollowerCase(me int) {
 	if isRandom {
 		curDuration = time.Duration(TIMTOUTDURATION * (rand.Float32() + 1) * float32(time.Millisecond))
 	} else {
-		curDuration = time.Duration(SERVER_TIMEOUT * float32(me+1) * float32(time.Millisecond))
+		curDuration = time.Duration((SERVER_TIMEOUT*float32(me+1) + SERVER_BASE_TIMEOUT) * float32(time.Millisecond))
 	}
 
 	select {
@@ -409,8 +414,10 @@ func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, se
 			case <-ctx.Done():
 				return
 			default:
+				Debug(dTrace, "S%d Candidate SendRequestVote To S%d At T%d", args.CandidateID, i, args.Term)
 				if ok := rf.sendRequestVote(i, &args, &reply); ok {
 					requestVoteReplyChan <- reply
+					Debug(dTrace, "S%d Candidate Recevie RequestVoteReply From S%d At T%d", args.CandidateID, i, args.Term)
 				}
 			}
 		}(i, ctx)
@@ -478,14 +485,14 @@ func (rf *Raft) CandidateCase(me int) {
 		effectiveNum = serverNum/2 + 1
 	}
 
-	// 将发送拉票请求包装为一个函数
-	rf.CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, serverNum)
+	// 将发送拉票请求包装为一个函数，并使用goroutine方式运行，
+	go rf.CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, serverNum)
 
 	var curDuration time.Duration
 	if isRandom {
 		curDuration = time.Duration(TIMTOUTDURATION * (rand.Float32() + 1) * float32(time.Millisecond))
 	} else {
-		curDuration = time.Duration(SERVER_TIMEOUT * float32(me+1) * float32(time.Millisecond))
+		curDuration = time.Duration((SERVER_TIMEOUT*float32(me+1) + SERVER_BASE_TIMEOUT) * float32(time.Millisecond))
 	}
 
 	select {

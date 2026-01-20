@@ -66,11 +66,11 @@ func TestReElection3A(t *testing.T) {
 
 	// if the leader disconnects, a new one should be elected.
 	ts.g.DisconnectAll(leader1)
-	Debug(dError, "3A DisconnentAll %d", leader1)
+	Debug(dError, "3A Leader1 S%d DisconnentAll", leader1)
 	tester.AnnotateConnection(ts.g.GetConnected())
 	ts.checkOneLeader()
 
-	Debug(dError, "3A 73")
+	Debug(dError, "3A Leader1 S%d Reconnect", leader1)
 	// if the old leader rejoins, that shouldn't
 	// disturb the new leader. and the old leader
 	// should switch to follower.
@@ -80,6 +80,8 @@ func TestReElection3A(t *testing.T) {
 
 	// if there's no quorum, no new leader should
 	// be elected.
+	// 重选的Leader再次断链,并且，只留一个S还在线
+	Debug(dError, "3A Leader2 S%d and another Server DisconnentAll", leader2)
 	ts.g.DisconnectAll(leader2)
 	ts.g.DisconnectAll((leader2 + 1) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
@@ -90,11 +92,13 @@ func TestReElection3A(t *testing.T) {
 	ts.checkNoLeader()
 
 	// if a quorum arises, it should elect a leader.
+	Debug(dError, "3A Leader2 S%d Reconnect", leader2)
 	ts.g.ConnectOne((leader2 + 1) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 	ts.checkOneLeader()
 
 	// re-join of last node shouldn't prevent leader from existing.
+	Debug(dError, "3A another Server Reconnect")
 	ts.g.ConnectOne(leader2)
 	tester.AnnotateConnection(ts.g.GetConnected())
 	ts.checkOneLeader()
