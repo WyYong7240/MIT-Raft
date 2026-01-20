@@ -1,0 +1,1065 @@
+000003 INFO S0 Server initialized success, run ticker
+000005 INFO S1 Server initialized success, run ticker
+000006 INFO S2 Server initialized success, run ticker
+000005 TRCE S0 is Status 0, At T0 Debug
+Test (3A): initial election (reliable network)...
+000007 TRCE S2 is Status 0, At T0 Debug
+000007 TRCE S1 is Status 0, At T0 Debug
+017181 TIMR S2 TimeOut Convert State From Follower to Candidate At T1
+019066 TRCE S2 is Status 1, At T1 Debug
+019069 TRCE S2 Candidate SendRequestVote To S1 At T1
+019070 TRCE S2 Candidate SendRequestVote To S0 At T1
+019074 VOTE S0 Granting Vote to S2 at T1
+019074 VOTE S1 Granting Vote to S2 at T1
+019077 TRCE S2 Candidate Recevie RequestVoteReply From S0 At T1
+019080 TRCE S2 Candidate Recevie RequestVoteReply From S1 At T1
+019077 TRCE S2 Candidate SendRequestVote Done At T1, Success Come Leader
+019771 TRCE S2 is Status 2, At T1 Debug
+019773 LEAD S2 Sending Heart Beat to S0 At T1
+019773 LEAD S2 Sending Heart Beat to S1 At T1
+019775 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+019775 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+021381 TRCE S0 is Status 0, At T1 Debug
+022054 TRCE S1 is Status 0, At T1 Debug
+022738 TRCE S2 is Status 2, At T1 Debug
+022739 LEAD S2 Sending Heart Beat to S0 At T1
+022740 LEAD S2 Sending Heart Beat to S1 At T1
+022743 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+022745 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+023742 TRCE S0 is Status 0, At T1 Debug
+023816 TRCE S2 is Status 2, At T1 Debug
+023817 LEAD S2 Sending Heart Beat to S0 At T1
+023817 LEAD S2 Sending Heart Beat to S1 At T1
+023820 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+023820 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+024391 TRCE S2 is Status 2, At T1 Debug
+024391 LEAD S2 Sending Heart Beat to S0 At T1
+024392 LEAD S2 Sending Heart Beat to S1 At T1
+024393 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+024394 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+025355 TRCE S0 is Status 0, At T1 Debug
+025507 TRCE S1 is Status 0, At T1 Debug
+025680 TRCE S2 is Status 2, At T1 Debug
+025680 LEAD S2 Sending Heart Beat to S0 At T1
+025681 LEAD S2 Sending Heart Beat to S1 At T1
+025683 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+025684 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+026767 TRCE S0 is Status 0, At T1 Debug
+026989 TRCE S1 is Status 0, At T1 Debug
+028445 TRCE S1 is Status 0, At T1 Debug
+028708 TRCE S0 is Status 0, At T1 Debug
+029021 TRCE S2 is Status 2, At T1 Debug
+029022 LEAD S2 Sending Heart Beat to S0 At T1
+029022 LEAD S2 Sending Heart Beat to S1 At T1
+029025 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+029027 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+029571 TRCE S1 is Status 0, At T1 Debug
+029915 TRCE S2 is Status 2, At T1 Debug
+029916 LEAD S2 Sending Heart Beat to S0 At T1
+029917 LEAD S2 Sending Heart Beat to S1 At T1
+029920 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+029921 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+030868 TRCE S1 is Status 0, At T1 Debug
+032332 TRCE S2 is Status 2, At T1 Debug
+032333 LEAD S2 Sending Heart Beat to S0 At T1
+032334 LEAD S2 Sending Heart Beat to S1 At T1
+032336 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+032336 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+032435 TRCE S0 is Status 0, At T1 Debug
+034742 TRCE S2 is Status 2, At T1 Debug
+034743 LEAD S2 Sending Heart Beat to S0 At T1
+034743 LEAD S2 Sending Heart Beat to S1 At T1
+034746 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+034747 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+035305 TRCE S0 is Status 0, At T1 Debug
+035479 TRCE S1 is Status 0, At T1 Debug
+037093 TRCE S2 is Status 2, At T1 Debug
+037094 LEAD S2 Sending Heart Beat to S0 At T1
+037094 LEAD S2 Sending Heart Beat to S1 At T1
+037096 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+037097 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+037456 TRCE S0 is Status 0, At T1 Debug
+037690 TRCE S1 is Status 0, At T1 Debug
+038463 TRCE S2 is Status 2, At T1 Debug
+038464 LEAD S2 Sending Heart Beat to S0 At T1
+038464 LEAD S2 Sending Heart Beat to S1 At T1
+038467 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+038469 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+038887 TRCE S1 is Status 0, At T1 Debug
+038888 TRCE S0 is Status 0, At T1 Debug
+040492 TRCE S0 is Status 0, At T1 Debug
+040925 TRCE S1 is Status 0, At T1 Debug
+041572 TRCE S2 is Status 2, At T1 Debug
+041573 LEAD S2 Sending Heart Beat to S0 At T1
+041574 LEAD S2 Sending Heart Beat to S1 At T1
+041576 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+041576 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+042352 TRCE S0 is Status 0, At T1 Debug
+042415 TRCE S1 is Status 0, At T1 Debug
+042989 TRCE S2 is Status 2, At T1 Debug
+042990 LEAD S2 Sending Heart Beat to S0 At T1
+042991 LEAD S2 Sending Heart Beat to S1 At T1
+042993 TRCE S1 At T1 Recive Heart Beat From Leader S2 In T1
+042993 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T1
+043957 TRCE S1 is Status 0, At T1 Debug
+045651 TRCE S0 is Status 0, At T1 Debug
+  ... Passed --  time  4.6s #peers 3 #RPCs    28 #Ops    0
+046027 INFO S0 Server initialized success, run ticker
+046028 INFO S1 Server initialized success, run ticker
+046028 TRCE S0 is Status 0, At T0 Debug
+046028 INFO S2 Server initialized success, run ticker
+046029 TRCE S1 is Status 0, At T0 Debug
+Test (3A): election after network failure (reliable network)...
+046029 TRCE S2 is Status 0, At T0 Debug
+065592 TIMR S1 TimeOut Convert State From Follower to Candidate At T1
+065715 TIMR S0 TimeOut Convert State From Follower to Candidate At T1
+066158 TRCE S1 is Status 1, At T1 Debug
+066159 TRCE S1 Candidate SendRequestVote To S2 At T1
+066160 TRCE S1 Candidate SendRequestVote To S0 At T1
+066161 VOTE S0 Refuse Vote to S1 at T1
+066162 VOTE S2 Granting Vote to S1 at T1
+066164 TRCE S1 Candidate Recevie RequestVoteReply From S2 At T1
+066163 TRCE S1 Candidate Recevie RequestVoteReply From S0 At T1
+066165 TRCE S1 Candidate SendRequestVote Done At T1, Success Come Leader
+067222 TRCE S1 is Status 2, At T1 Debug
+067225 LEAD S1 Sending Heart Beat to S0 At T1
+067225 LEAD S1 Sending Heart Beat to S2 At T1
+067227 TRCE S2 At T1 Recive Heart Beat From Leader S1 In T1
+067229 TRCE S0 At T1 Recive Heart Beat From Leader S1 In T1
+067230 TRCE S0 At T1 Recive Heart Beat From Leader S1 In T1, Convert From Candidate to Follower
+067704 TIMR S0 TimeOut Convert State From Follower to Candidate At T2
+068069 TRCE S0 is Status 0, At T1 Debug
+069223 TRCE S1 is Status 2, At T1 Debug
+069224 LEAD S1 Sending Heart Beat to S0 At T1
+069224 LEAD S1 Sending Heart Beat to S2 At T1
+069226 TRCE S2 At T1 Recive Heart Beat From Leader S1 In T1
+069227 TRCE S0 At T1 Recive Heart Beat From Leader S1 In T1
+069635 TRCE S2 is Status 0, At T1 Debug
+070539 ERRO 3A Leader1 S1 DisconnentAll
+070961 TRCE S0 is Status 0, At T1 Debug
+071504 TRCE S2 is Status 0, At T1 Debug
+071566 TRCE S1 is Status 2, At T1 Debug
+071567 LEAD S1 Sending Heart Beat to S0 At T1
+071568 LEAD S1 Sending Heart Beat to S2 At T1
+072073 TRCE S1 is Status 2, At T1 Debug
+072074 LEAD S1 Sending Heart Beat to S0 At T1
+072074 LEAD S1 Sending Heart Beat to S2 At T1
+072226 TRCE S0 is Status 0, At T1 Debug
+073510 TIMR S1 TimeOut Convert State From Follower to Candidate At T2
+073963 TRCE S1 is Status 2, At T1 Debug
+073964 LEAD S1 Sending Heart Beat to S0 At T1
+073964 LEAD S1 Sending Heart Beat to S2 At T1
+076964 TRCE S1 is Status 2, At T1 Debug
+076965 LEAD S1 Sending Heart Beat to S0 At T1
+076965 LEAD S1 Sending Heart Beat to S2 At T1
+078830 TRCE S1 is Status 2, At T1 Debug
+078831 LEAD S1 Sending Heart Beat to S0 At T1
+078832 LEAD S1 Sending Heart Beat to S2 At T1
+081809 TRCE S1 is Status 2, At T1 Debug
+081810 LEAD S1 Sending Heart Beat to S0 At T1
+081811 LEAD S1 Sending Heart Beat to S2 At T1
+084027 TRCE S1 is Status 2, At T1 Debug
+084028 LEAD S1 Sending Heart Beat to S0 At T1
+084029 LEAD S1 Sending Heart Beat to S2 At T1
+086166 TRCE S1 is Status 2, At T1 Debug
+086169 LEAD S1 Sending Heart Beat to S0 At T1
+086170 LEAD S1 Sending Heart Beat to S2 At T1
+086825 TRCE S1 is Status 2, At T1 Debug
+086828 LEAD S1 Sending Heart Beat to S0 At T1
+086828 LEAD S1 Sending Heart Beat to S2 At T1
+090330 TRCE S1 is Status 2, At T1 Debug
+090332 LEAD S1 Sending Heart Beat to S0 At T1
+090333 LEAD S1 Sending Heart Beat to S2 At T1
+092394 TIMR S0 TimeOut Convert State From Follower to Candidate At T2
+093263 TRCE S1 is Status 2, At T1 Debug
+093265 LEAD S1 Sending Heart Beat to S0 At T1
+093266 LEAD S1 Sending Heart Beat to S2 At T1
+093831 TRCE S1 is Status 2, At T1 Debug
+093832 LEAD S1 Sending Heart Beat to S0 At T1
+093832 LEAD S1 Sending Heart Beat to S2 At T1
+094265 TRCE S0 is Status 1, At T2 Debug
+094269 TRCE S0 Candidate SendRequestVote To S2 At T2
+094270 TRCE S0 Candidate SendRequestVote To S1 At T2
+094276 VOTE S2 Granting Vote to S0 at T2
+094278 TRCE S0 Candidate Recevie RequestVoteReply From S2 At T2
+094278 TRCE S0 Candidate SendRequestVote Done At T2, Success Come Leader
+095137 ERRO 3A Leader1 S1 Reconnect
+095859 TRCE S1 is Status 2, At T1 Debug
+095860 LEAD S1 Sending Heart Beat to S0 At T1
+095860 LEAD S1 Sending Heart Beat to S2 At T1
+095864 TRCE S0 At T2 Recive Heart Beat From Leader S1 In T1
+095864 TRCE S2 At T2 Recive Heart Beat From Leader S1 In T1
+097229 TRCE S1 is Status 2, At T1 Debug
+097230 LEAD S1 Sending Heart Beat to S0 At T1
+097231 LEAD S1 Sending Heart Beat to S2 At T1
+097233 TRCE S2 At T2 Recive Heart Beat From Leader S1 In T1
+097235 TRCE S0 At T2 Recive Heart Beat From Leader S1 In T1
+097622 TRCE S0 is Status 2, At T2 Debug
+097622 LEAD S0 Sending Heart Beat to S1 At T2
+097623 LEAD S0 Sending Heart Beat to S2 At T2
+097626 TRCE S1 At T1 Recive Heart Beat From Leader S0 In T2
+097626 TRCE S1 At T2 Recive Heart Beat From Leader S0 In T2, Convert to Follower
+097626 TRCE S2 At T2 Recive Heart Beat From Leader S0 In T2
+097695 TRCE S2 is Status 0, At T2 Debug
+098419 TRCE S0 is Status 2, At T2 Debug
+098420 LEAD S0 Sending Heart Beat to S1 At T2
+098421 LEAD S0 Sending Heart Beat to S2 At T2
+098422 TRCE S2 At T2 Recive Heart Beat From Leader S0 In T2
+098424 TRCE S1 At T2 Recive Heart Beat From Leader S0 In T2
+099215 TRCE S1 is Status 0, At T2 Debug
+099974 TRCE S0 is Status 2, At T2 Debug
+099975 LEAD S0 Sending Heart Beat to S1 At T2
+099975 LEAD S0 Sending Heart Beat to S2 At T2
+099976 ERRO 3A Leader2 S0 and another Server DisconnentAll
+100468 TRCE S2 is Status 0, At T2 Debug
+101402 TRCE S1 is Status 0, At T2 Debug
+103151 TRCE S0 is Status 2, At T2 Debug
+103153 LEAD S0 Sending Heart Beat to S1 At T2
+103154 LEAD S0 Sending Heart Beat to S2 At T2
+103918 TRCE S2 is Status 0, At T2 Debug
+104982 TRCE S0 is Status 2, At T2 Debug
+104983 LEAD S0 Sending Heart Beat to S1 At T2
+104984 LEAD S0 Sending Heart Beat to S2 At T2
+106771 TRCE S0 is Status 2, At T2 Debug
+106772 LEAD S0 Sending Heart Beat to S1 At T2
+106772 LEAD S0 Sending Heart Beat to S2 At T2
+109389 TRCE S0 is Status 2, At T2 Debug
+109390 LEAD S0 Sending Heart Beat to S1 At T2
+109390 LEAD S0 Sending Heart Beat to S2 At T2
+111646 TRCE S0 is Status 2, At T2 Debug
+111696 LEAD S0 Sending Heart Beat to S1 At T2
+111697 LEAD S0 Sending Heart Beat to S2 At T2
+112255 TRCE S0 is Status 2, At T2 Debug
+112255 LEAD S0 Sending Heart Beat to S1 At T2
+112257 LEAD S0 Sending Heart Beat to S2 At T2
+113273 TRCE S0 is Status 2, At T2 Debug
+113273 LEAD S0 Sending Heart Beat to S1 At T2
+113275 LEAD S0 Sending Heart Beat to S2 At T2
+113982 TRCE S0 is Status 2, At T2 Debug
+113983 LEAD S0 Sending Heart Beat to S1 At T2
+113983 LEAD S0 Sending Heart Beat to S2 At T2
+115252 TRCE S0 is Status 2, At T2 Debug
+115253 LEAD S0 Sending Heart Beat to S1 At T2
+115254 LEAD S0 Sending Heart Beat to S2 At T2
+118721 TRCE S0 is Status 2, At T2 Debug
+118722 LEAD S0 Sending Heart Beat to S1 At T2
+118723 LEAD S0 Sending Heart Beat to S2 At T2
+119978 ERRO 3A Leader2 S0 Reconnect
+120603 TIMR S2 TimeOut Convert State From Follower to Candidate At T3
+121655 TRCE S0 is Status 2, At T2 Debug
+121657 LEAD S0 Sending Heart Beat to S1 At T2
+121659 LEAD S0 Sending Heart Beat to S2 At T2
+121869 TRCE S2 is Status 1, At T3 Debug
+121871 TRCE S2 Candidate SendRequestVote To S1 At T3
+121871 TRCE S2 Candidate SendRequestVote To S0 At T3
+121874 VOTE S1 Granting Vote to S2 at T3
+121875 TRCE S2 Candidate Recevie RequestVoteReply From S1 At T3
+121876 TRCE S2 Candidate SendRequestVote Done At T3, Success Come Leader
+122486 TRCE S2 is Status 2, At T3 Debug
+122487 LEAD S2 Sending Heart Beat to S0 At T3
+122487 LEAD S2 Sending Heart Beat to S1 At T3
+122491 TRCE S1 At T3 Recive Heart Beat From Leader S2 In T3
+123796 TRCE S0 is Status 2, At T2 Debug
+123798 LEAD S0 Sending Heart Beat to S1 At T2
+123798 LEAD S0 Sending Heart Beat to S2 At T2
+124020 TRCE S1 is Status 0, At T3 Debug
+124585 TRCE S0 is Status 2, At T2 Debug
+124586 LEAD S0 Sending Heart Beat to S1 At T2
+124587 LEAD S0 Sending Heart Beat to S2 At T2
+124658 TRCE S2 is Status 2, At T3 Debug
+124659 LEAD S2 Sending Heart Beat to S0 At T3
+124660 LEAD S2 Sending Heart Beat to S1 At T3
+124663 TRCE S1 At T3 Recive Heart Beat From Leader S2 In T3
+124842 ERRO 3A another Server Reconnect
+126320 TRCE S2 is Status 2, At T3 Debug
+126321 LEAD S2 Sending Heart Beat to S0 At T3
+126321 LEAD S2 Sending Heart Beat to S1 At T3
+126324 TRCE S0 At T2 Recive Heart Beat From Leader S2 In T3
+126325 TRCE S0 At T3 Recive Heart Beat From Leader S2 In T3, Convert to Follower
+126332 TRCE S1 At T3 Recive Heart Beat From Leader S2 In T3
+126903 TRCE S1 is Status 0, At T3 Debug
+127017 TRCE S0 is Status 0, At T3 Debug
+128421 TRCE S1 is Status 0, At T3 Debug
+129626 TRCE S2 is Status 2, At T3 Debug
+129627 LEAD S2 Sending Heart Beat to S0 At T3
+129627 LEAD S2 Sending Heart Beat to S1 At T3
+129631 TRCE S0 At T3 Recive Heart Beat From Leader S2 In T3
+129631 TRCE S1 At T3 Recive Heart Beat From Leader S2 In T3
+  ... Passed --  time  8.4s #peers 3 #RPCs    78 #Ops    0
+129998 INFO S0 Server initialized success, run ticker
+129999 TRCE S0 is Status 0, At T0 Debug
+130000 INFO S1 Server initialized success, run ticker
+130001 TRCE S1 is Status 0, At T0 Debug
+130005 INFO S2 Server initialized success, run ticker
+130006 INFO S3 Server initialized success, run ticker
+130007 INFO S4 Server initialized success, run ticker
+130007 TRCE S3 is Status 0, At T0 Debug
+130008 INFO S5 Server initialized success, run ticker
+130007 TRCE S2 is Status 0, At T0 Debug
+130008 INFO S6 Server initialized success, run ticker
+130007 TRCE S4 is Status 0, At T0 Debug
+130008 TRCE S5 is Status 0, At T0 Debug
+130008 TRCE S6 is Status 0, At T0 Debug
+Test (3A): multiple elections (reliable network)...
+146199 TIMR S5 TimeOut Convert State From Follower to Candidate At T1
+146522 TIMR S3 TimeOut Convert State From Follower to Candidate At T1
+148657 TRCE S3 is Status 1, At T1 Debug
+148658 TRCE S3 Candidate SendRequestVote To S6 At T1
+148659 TRCE S3 Candidate SendRequestVote To S2 At T1
+148659 TRCE S3 Candidate SendRequestVote To S0 At T1
+148662 VOTE S0 Granting Vote to S3 at T1
+148663 TRCE S3 Candidate Recevie RequestVoteReply From S0 At T1
+148660 VOTE S6 Granting Vote to S3 at T1
+148663 TRCE S3 Candidate Recevie RequestVoteReply From S6 At T1
+148660 TRCE S3 Candidate SendRequestVote To S5 At T1
+148664 VOTE S5 Refuse Vote to S3 at T1
+148665 TRCE S3 Candidate Recevie RequestVoteReply From S5 At T1
+148660 VOTE S2 Granting Vote to S3 at T1
+148660 TRCE S3 Candidate SendRequestVote To S1 At T1
+148666 TRCE S3 Candidate SendRequestVote Done At T1, Success Come Leader
+148660 TRCE S3 Candidate SendRequestVote To S4 At T1
+148668 VOTE S1 Granting Vote to S3 at T1
+148666 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T1
+148669 TRCE S3 Candidate Recevie RequestVoteReply From S1 At T1
+148669 VOTE S4 Granting Vote to S3 at T1
+148670 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T1
+148800 TRCE S5 is Status 1, At T1 Debug
+148802 TRCE S5 Candidate SendRequestVote To S1 At T1
+148802 TRCE S5 Candidate SendRequestVote To S6 At T1
+148803 TRCE S5 Candidate SendRequestVote To S0 At T1
+148803 TRCE S5 Candidate SendRequestVote To S3 At T1
+148803 VOTE S1 Refuse Vote to S5 at T1
+148804 TRCE S5 Candidate SendRequestVote To S2 At T1
+148804 VOTE S3 Refuse Vote to S5 at T1
+148805 VOTE S2 Refuse Vote to S5 at T1
+148805 VOTE S0 Refuse Vote to S5 at T1
+148805 TRCE S5 Candidate Recevie RequestVoteReply From S3 At T1
+148805 TRCE S5 Candidate Recevie RequestVoteReply From S2 At T1
+148805 TRCE S5 Candidate Recevie RequestVoteReply From S1 At T1
+148806 TRCE S5 Candidate Recevie RequestVoteReply From S0 At T1
+148804 TRCE S5 Candidate SendRequestVote To S4 At T1
+148803 VOTE S6 Refuse Vote to S5 at T1
+148807 VOTE S4 Refuse Vote to S5 at T1
+148808 TRCE S5 Candidate Recevie RequestVoteReply From S4 At T1
+148808 TRCE S5 Candidate Recevie RequestVoteReply From S6 At T1
+149313 TRCE S6 is Status 0, At T1 Debug
+149566 TRCE S2 is Status 0, At T1 Debug
+150270 TRCE S4 is Status 0, At T1 Debug
+150743 TRCE S1 is Status 0, At T1 Debug
+150787 TRCE S3 is Status 2, At T1 Debug
+150788 LEAD S3 Sending Heart Beat to S0 At T1
+150788 LEAD S3 Sending Heart Beat to S1 At T1
+150789 LEAD S3 Sending Heart Beat to S2 At T1
+150789 LEAD S3 Sending Heart Beat to S4 At T1
+150790 LEAD S3 Sending Heart Beat to S5 At T1
+150790 LEAD S3 Sending Heart Beat to S6 At T1
+151654 TRCE S0 is Status 0, At T1 Debug
+152638 TRCE S3 is Status 2, At T1 Debug
+152641 LEAD S3 Sending Heart Beat to S0 At T1
+152641 LEAD S3 Sending Heart Beat to S1 At T1
+152642 LEAD S3 Sending Heart Beat to S2 At T1
+152642 LEAD S3 Sending Heart Beat to S4 At T1
+152642 LEAD S3 Sending Heart Beat to S5 At T1
+152642 LEAD S3 Sending Heart Beat to S6 At T1
+156080 TRCE S3 is Status 2, At T1 Debug
+156080 LEAD S3 Sending Heart Beat to S0 At T1
+156080 LEAD S3 Sending Heart Beat to S1 At T1
+156080 LEAD S3 Sending Heart Beat to S2 At T1
+156081 LEAD S3 Sending Heart Beat to S4 At T1
+156081 LEAD S3 Sending Heart Beat to S5 At T1
+156081 LEAD S3 Sending Heart Beat to S6 At T1
+157288 TRCE S3 is Status 2, At T1 Debug
+157289 LEAD S3 Sending Heart Beat to S0 At T1
+157290 LEAD S3 Sending Heart Beat to S1 At T1
+157290 LEAD S3 Sending Heart Beat to S2 At T1
+157290 LEAD S3 Sending Heart Beat to S4 At T1
+157290 LEAD S3 Sending Heart Beat to S5 At T1
+157290 LEAD S3 Sending Heart Beat to S6 At T1
+158004 TRCE S3 is Status 2, At T1 Debug
+158004 LEAD S3 Sending Heart Beat to S0 At T1
+158005 LEAD S3 Sending Heart Beat to S1 At T1
+158005 LEAD S3 Sending Heart Beat to S2 At T1
+158005 LEAD S3 Sending Heart Beat to S4 At T1
+158005 LEAD S3 Sending Heart Beat to S5 At T1
+158005 LEAD S3 Sending Heart Beat to S6 At T1
+158689 TRCE S3 is Status 2, At T1 Debug
+158690 LEAD S3 Sending Heart Beat to S0 At T1
+158691 LEAD S3 Sending Heart Beat to S1 At T1
+158691 LEAD S3 Sending Heart Beat to S2 At T1
+158691 LEAD S3 Sending Heart Beat to S4 At T1
+158691 LEAD S3 Sending Heart Beat to S5 At T1
+158691 LEAD S3 Sending Heart Beat to S6 At T1
+160245 TRCE S3 is Status 2, At T1 Debug
+160246 LEAD S3 Sending Heart Beat to S0 At T1
+160247 LEAD S3 Sending Heart Beat to S1 At T1
+160247 LEAD S3 Sending Heart Beat to S2 At T1
+160247 LEAD S3 Sending Heart Beat to S4 At T1
+160247 LEAD S3 Sending Heart Beat to S5 At T1
+160247 LEAD S3 Sending Heart Beat to S6 At T1
+163310 TRCE S3 is Status 2, At T1 Debug
+163311 LEAD S3 Sending Heart Beat to S0 At T1
+163312 LEAD S3 Sending Heart Beat to S1 At T1
+163312 LEAD S3 Sending Heart Beat to S2 At T1
+163312 LEAD S3 Sending Heart Beat to S4 At T1
+163312 LEAD S3 Sending Heart Beat to S5 At T1
+163312 LEAD S3 Sending Heart Beat to S6 At T1
+164350 TRCE S3 is Status 2, At T1 Debug
+164351 LEAD S3 Sending Heart Beat to S0 At T1
+164351 LEAD S3 Sending Heart Beat to S1 At T1
+164352 LEAD S3 Sending Heart Beat to S2 At T1
+164352 LEAD S3 Sending Heart Beat to S4 At T1
+164352 LEAD S3 Sending Heart Beat to S5 At T1
+164352 LEAD S3 Sending Heart Beat to S6 At T1
+165917 TRCE S3 is Status 2, At T1 Debug
+165918 LEAD S3 Sending Heart Beat to S0 At T1
+165918 LEAD S3 Sending Heart Beat to S1 At T1
+165918 LEAD S3 Sending Heart Beat to S2 At T1
+165918 LEAD S3 Sending Heart Beat to S4 At T1
+165918 LEAD S3 Sending Heart Beat to S5 At T1
+165918 LEAD S3 Sending Heart Beat to S6 At T1
+166440 TIMR S1 TimeOut Convert State From Follower to Candidate At T2
+167216 TIMR S2 TimeOut Convert State From Follower to Candidate At T2
+169327 TRCE S3 is Status 2, At T1 Debug
+169327 LEAD S3 Sending Heart Beat to S0 At T1
+169328 LEAD S3 Sending Heart Beat to S1 At T1
+169328 LEAD S3 Sending Heart Beat to S2 At T1
+169328 LEAD S3 Sending Heart Beat to S4 At T1
+169328 LEAD S3 Sending Heart Beat to S5 At T1
+169328 LEAD S3 Sending Heart Beat to S6 At T1
+169720 TRCE S1 is Status 1, At T2 Debug
+169722 TRCE S1 Candidate SendRequestVote To S6 At T2
+169723 TRCE S1 Candidate SendRequestVote To S3 At T2
+169723 TRCE S1 Candidate SendRequestVote To S5 At T2
+169723 TRCE S1 Candidate SendRequestVote To S4 At T2
+169723 TRCE S1 Candidate SendRequestVote To S2 At T2
+169723 TRCE S1 Candidate SendRequestVote To S0 At T2
+169818 TRCE S2 is Status 1, At T2 Debug
+169819 TRCE S2 Candidate SendRequestVote To S6 At T2
+169820 TRCE S2 Candidate SendRequestVote To S3 At T2
+169820 TRCE S2 Candidate SendRequestVote To S0 At T2
+169821 TRCE S2 Candidate SendRequestVote To S1 At T2
+169821 TRCE S2 Candidate SendRequestVote To S4 At T2
+169821 VOTE S6 Granting Vote to S2 at T2
+169821 TRCE S2 Candidate SendRequestVote To S5 At T2
+169822 TRCE S2 Candidate Recevie RequestVoteReply From S6 At T2
+169824 VOTE S5 Granting Vote to S2 at T2
+169824 VOTE S4 Granting Vote to S2 at T2
+169825 TRCE S2 Candidate Recevie RequestVoteReply From S5 At T2
+169826 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T2
+169826 TRCE S2 Candidate SendRequestVote Done At T2, Success Come Leader
+170899 TRCE S5 is Status 0, At T2 Debug
+172417 TRCE S6 is Status 0, At T2 Debug
+172764 TRCE S3 is Status 2, At T1 Debug
+172765 LEAD S3 Sending Heart Beat to S0 At T1
+172765 LEAD S3 Sending Heart Beat to S1 At T1
+172765 LEAD S3 Sending Heart Beat to S2 At T1
+172765 LEAD S3 Sending Heart Beat to S4 At T1
+172765 LEAD S3 Sending Heart Beat to S5 At T1
+172766 LEAD S3 Sending Heart Beat to S6 At T1
+172769 TRCE S4 At T2 Recive Heart Beat From Leader S3 In T1
+172769 TRCE S0 At T1 Recive Heart Beat From Leader S3 In T1
+172772 TRCE S1 At T2 Recive Heart Beat From Leader S3 In T1
+172838 TRCE S4 is Status 0, At T2 Debug
+172931 TRCE S2 is Status 2, At T2 Debug
+172931 LEAD S2 Sending Heart Beat to S0 At T2
+172931 LEAD S2 Sending Heart Beat to S1 At T2
+172931 LEAD S2 Sending Heart Beat to S3 At T2
+172931 LEAD S2 Sending Heart Beat to S4 At T2
+172932 LEAD S2 Sending Heart Beat to S5 At T2
+172932 LEAD S2 Sending Heart Beat to S6 At T2
+173516 TRCE S0 is Status 0, At T1 Debug
+174448 TRCE S2 is Status 2, At T2 Debug
+174449 LEAD S2 Sending Heart Beat to S0 At T2
+174449 LEAD S2 Sending Heart Beat to S1 At T2
+174449 LEAD S2 Sending Heart Beat to S3 At T2
+174449 LEAD S2 Sending Heart Beat to S4 At T2
+174449 LEAD S2 Sending Heart Beat to S5 At T2
+174450 LEAD S2 Sending Heart Beat to S6 At T2
+174887 TRCE S3 is Status 2, At T1 Debug
+174888 LEAD S3 Sending Heart Beat to S0 At T1
+174889 LEAD S3 Sending Heart Beat to S1 At T1
+174889 LEAD S3 Sending Heart Beat to S2 At T1
+174889 LEAD S3 Sending Heart Beat to S4 At T1
+174889 LEAD S3 Sending Heart Beat to S5 At T1
+174890 LEAD S3 Sending Heart Beat to S6 At T1
+175220 TRCE S1 is Status 1, At T2 Debug
+175222 TRCE S1 Candidate SendRequestVote To S6 At T2
+175223 TRCE S1 Candidate SendRequestVote To S0 At T2
+175223 TRCE S1 Candidate SendRequestVote To S5 At T2
+175223 TRCE S1 Candidate SendRequestVote To S2 At T2
+175223 TRCE S1 Candidate SendRequestVote To S3 At T2
+175223 TRCE S1 Candidate SendRequestVote To S4 At T2
+175726 TRCE S4 is Status 0, At T2 Debug
+176119 TRCE S2 is Status 2, At T2 Debug
+176120 LEAD S2 Sending Heart Beat to S0 At T2
+176120 LEAD S2 Sending Heart Beat to S1 At T2
+176121 LEAD S2 Sending Heart Beat to S3 At T2
+176121 LEAD S2 Sending Heart Beat to S4 At T2
+176121 LEAD S2 Sending Heart Beat to S5 At T2
+176121 LEAD S2 Sending Heart Beat to S6 At T2
+176124 TRCE S6 At T2 Recive Heart Beat From Leader S2 In T2
+176125 TRCE S5 At T2 Recive Heart Beat From Leader S2 In T2
+176125 TRCE S4 At T2 Recive Heart Beat From Leader S2 In T2
+176126 TRCE S0 At T1 Recive Heart Beat From Leader S2 In T2
+176126 TRCE S0 At T2 Recive Heart Beat From Leader S2 In T2, Convert to Follower
+177249 TRCE S3 is Status 2, At T1 Debug
+177250 LEAD S3 Sending Heart Beat to S0 At T1
+177250 LEAD S3 Sending Heart Beat to S1 At T1
+177250 LEAD S3 Sending Heart Beat to S2 At T1
+177250 LEAD S3 Sending Heart Beat to S4 At T1
+177250 LEAD S3 Sending Heart Beat to S5 At T1
+177251 LEAD S3 Sending Heart Beat to S6 At T1
+177563 TRCE S4 is Status 0, At T2 Debug
+178229 TRCE S0 is Status 0, At T2 Debug
+178716 TRCE S6 is Status 0, At T2 Debug
+178869 TRCE S2 is Status 2, At T2 Debug
+178870 LEAD S2 Sending Heart Beat to S0 At T2
+178872 LEAD S2 Sending Heart Beat to S1 At T2
+178872 LEAD S2 Sending Heart Beat to S3 At T2
+178872 LEAD S2 Sending Heart Beat to S4 At T2
+178873 LEAD S2 Sending Heart Beat to S5 At T2
+178873 LEAD S2 Sending Heart Beat to S6 At T2
+178873 TRCE S0 At T2 Recive Heart Beat From Leader S2 In T2
+178874 TRCE S6 At T2 Recive Heart Beat From Leader S2 In T2
+178875 TRCE S5 At T2 Recive Heart Beat From Leader S2 In T2
+178876 TRCE S4 At T2 Recive Heart Beat From Leader S2 In T2
+178982 TRCE S5 is Status 0, At T2 Debug
+180316 TRCE S6 is Status 0, At T2 Debug
+180724 TRCE S3 is Status 2, At T1 Debug
+180725 LEAD S3 Sending Heart Beat to S0 At T1
+180725 LEAD S3 Sending Heart Beat to S1 At T1
+180725 LEAD S3 Sending Heart Beat to S2 At T1
+180725 LEAD S3 Sending Heart Beat to S4 At T1
+180726 LEAD S3 Sending Heart Beat to S5 At T1
+180726 LEAD S3 Sending Heart Beat to S6 At T1
+181517 TRCE S4 is Status 0, At T2 Debug
+181743 TRCE S0 is Status 0, At T2 Debug
+181957 TRCE S2 is Status 2, At T2 Debug
+181959 LEAD S2 Sending Heart Beat to S0 At T2
+181959 LEAD S2 Sending Heart Beat to S1 At T2
+181959 LEAD S2 Sending Heart Beat to S3 At T2
+181959 LEAD S2 Sending Heart Beat to S4 At T2
+181959 LEAD S2 Sending Heart Beat to S5 At T2
+181959 LEAD S2 Sending Heart Beat to S6 At T2
+181962 TRCE S5 At T2 Recive Heart Beat From Leader S2 In T2
+181962 TRCE S1 At T2 Recive Heart Beat From Leader S2 In T2
+181964 TRCE S1 At T2 Recive Heart Beat From Leader S2 In T2, Convert From Candidate to Follower
+181965 TRCE S0 At T2 Recive Heart Beat From Leader S2 In T2
+182304 TRCE S5 is Status 0, At T2 Debug
+182732 TRCE S3 is Status 2, At T1 Debug
+182733 LEAD S3 Sending Heart Beat to S0 At T1
+182734 LEAD S3 Sending Heart Beat to S1 At T1
+182734 LEAD S3 Sending Heart Beat to S2 At T1
+182735 LEAD S3 Sending Heart Beat to S4 At T1
+182735 LEAD S3 Sending Heart Beat to S5 At T1
+182735 LEAD S3 Sending Heart Beat to S6 At T1
+183220 TRCE S0 is Status 0, At T2 Debug
+183304 TRCE S1 is Status 0, At T2 Debug
+183753 TRCE S3 is Status 2, At T1 Debug
+183755 LEAD S3 Sending Heart Beat to S0 At T1
+183758 LEAD S3 Sending Heart Beat to S1 At T1
+183758 LEAD S3 Sending Heart Beat to S2 At T1
+183758 LEAD S3 Sending Heart Beat to S4 At T1
+183759 LEAD S3 Sending Heart Beat to S5 At T1
+183759 LEAD S3 Sending Heart Beat to S6 At T1
+183867 TRCE S2 is Status 2, At T2 Debug
+183868 LEAD S2 Sending Heart Beat to S0 At T2
+183870 LEAD S2 Sending Heart Beat to S1 At T2
+183870 LEAD S2 Sending Heart Beat to S3 At T2
+183870 LEAD S2 Sending Heart Beat to S4 At T2
+183871 LEAD S2 Sending Heart Beat to S5 At T2
+183871 LEAD S2 Sending Heart Beat to S6 At T2
+183872 TRCE S5 At T2 Recive Heart Beat From Leader S2 In T2
+183874 TRCE S1 At T2 Recive Heart Beat From Leader S2 In T2
+183876 TRCE S0 At T2 Recive Heart Beat From Leader S2 In T2
+184639 TRCE S1 is Status 0, At T2 Debug
+184784 TRCE S3 is Status 2, At T1 Debug
+184785 LEAD S3 Sending Heart Beat to S0 At T1
+184785 LEAD S3 Sending Heart Beat to S1 At T1
+184786 LEAD S3 Sending Heart Beat to S2 At T1
+184786 LEAD S3 Sending Heart Beat to S4 At T1
+184786 LEAD S3 Sending Heart Beat to S5 At T1
+184786 LEAD S3 Sending Heart Beat to S6 At T1
+185132 TRCE S5 is Status 0, At T2 Debug
+185672 TRCE S2 is Status 2, At T2 Debug
+185673 LEAD S2 Sending Heart Beat to S0 At T2
+185674 LEAD S2 Sending Heart Beat to S1 At T2
+185674 LEAD S2 Sending Heart Beat to S3 At T2
+185674 LEAD S2 Sending Heart Beat to S4 At T2
+185674 LEAD S2 Sending Heart Beat to S5 At T2
+185674 LEAD S2 Sending Heart Beat to S6 At T2
+185893 TRCE S5 is Status 0, At T2 Debug
+186899 TRCE S0 is Status 0, At T2 Debug
+187083 TRCE S2 is Status 2, At T2 Debug
+187084 LEAD S2 Sending Heart Beat to S0 At T2
+187085 LEAD S2 Sending Heart Beat to S1 At T2
+187085 LEAD S2 Sending Heart Beat to S3 At T2
+187085 LEAD S2 Sending Heart Beat to S4 At T2
+187085 LEAD S2 Sending Heart Beat to S5 At T2
+187085 LEAD S2 Sending Heart Beat to S6 At T2
+187337 TRCE S3 is Status 2, At T1 Debug
+187341 LEAD S3 Sending Heart Beat to S0 At T1
+187342 LEAD S3 Sending Heart Beat to S1 At T1
+187343 LEAD S3 Sending Heart Beat to S2 At T1
+187343 LEAD S3 Sending Heart Beat to S4 At T1
+187343 LEAD S3 Sending Heart Beat to S5 At T1
+187343 LEAD S3 Sending Heart Beat to S6 At T1
+188828 TRCE S3 is Status 2, At T1 Debug
+188829 LEAD S3 Sending Heart Beat to S0 At T1
+188830 LEAD S3 Sending Heart Beat to S1 At T1
+188830 LEAD S3 Sending Heart Beat to S2 At T1
+188830 LEAD S3 Sending Heart Beat to S4 At T1
+188830 LEAD S3 Sending Heart Beat to S5 At T1
+188830 LEAD S3 Sending Heart Beat to S6 At T1
+189287 TRCE S2 is Status 2, At T2 Debug
+189288 LEAD S2 Sending Heart Beat to S0 At T2
+189290 LEAD S2 Sending Heart Beat to S1 At T2
+189291 LEAD S2 Sending Heart Beat to S3 At T2
+189291 LEAD S2 Sending Heart Beat to S4 At T2
+189291 LEAD S2 Sending Heart Beat to S5 At T2
+189292 LEAD S2 Sending Heart Beat to S6 At T2
+190467 TRCE S2 is Status 2, At T2 Debug
+190468 LEAD S2 Sending Heart Beat to S0 At T2
+190470 LEAD S2 Sending Heart Beat to S1 At T2
+190472 LEAD S2 Sending Heart Beat to S3 At T2
+190472 LEAD S2 Sending Heart Beat to S4 At T2
+190472 LEAD S2 Sending Heart Beat to S5 At T2
+190472 LEAD S2 Sending Heart Beat to S6 At T2
+190652 TRCE S3 is Status 2, At T1 Debug
+190654 LEAD S3 Sending Heart Beat to S0 At T1
+190654 LEAD S3 Sending Heart Beat to S1 At T1
+190654 LEAD S3 Sending Heart Beat to S2 At T1
+190654 LEAD S3 Sending Heart Beat to S4 At T1
+190654 LEAD S3 Sending Heart Beat to S5 At T1
+190654 LEAD S3 Sending Heart Beat to S6 At T1
+191522 TRCE S2 is Status 2, At T2 Debug
+191523 LEAD S2 Sending Heart Beat to S0 At T2
+191524 LEAD S2 Sending Heart Beat to S1 At T2
+191524 LEAD S2 Sending Heart Beat to S3 At T2
+191524 LEAD S2 Sending Heart Beat to S4 At T2
+191524 LEAD S2 Sending Heart Beat to S5 At T2
+191524 LEAD S2 Sending Heart Beat to S6 At T2
+193070 TRCE S3 is Status 2, At T1 Debug
+193070 LEAD S3 Sending Heart Beat to S0 At T1
+193071 LEAD S3 Sending Heart Beat to S1 At T1
+193071 LEAD S3 Sending Heart Beat to S2 At T1
+193071 LEAD S3 Sending Heart Beat to S4 At T1
+193071 LEAD S3 Sending Heart Beat to S5 At T1
+193072 LEAD S3 Sending Heart Beat to S6 At T1
+193911 TRCE S2 is Status 2, At T2 Debug
+193912 LEAD S2 Sending Heart Beat to S0 At T2
+193913 LEAD S2 Sending Heart Beat to S1 At T2
+193913 LEAD S2 Sending Heart Beat to S3 At T2
+193913 LEAD S2 Sending Heart Beat to S4 At T2
+193913 LEAD S2 Sending Heart Beat to S5 At T2
+193913 LEAD S2 Sending Heart Beat to S6 At T2
+194830 TRCE S3 is Status 2, At T1 Debug
+194831 LEAD S3 Sending Heart Beat to S0 At T1
+194832 LEAD S3 Sending Heart Beat to S1 At T1
+194832 LEAD S3 Sending Heart Beat to S2 At T1
+194832 LEAD S3 Sending Heart Beat to S4 At T1
+194832 LEAD S3 Sending Heart Beat to S5 At T1
+194832 LEAD S3 Sending Heart Beat to S6 At T1
+196245 TRCE S2 is Status 2, At T2 Debug
+196246 LEAD S2 Sending Heart Beat to S0 At T2
+196247 LEAD S2 Sending Heart Beat to S1 At T2
+196247 LEAD S2 Sending Heart Beat to S3 At T2
+196247 LEAD S2 Sending Heart Beat to S4 At T2
+196247 LEAD S2 Sending Heart Beat to S5 At T2
+196247 LEAD S2 Sending Heart Beat to S6 At T2
+196852 TIMR S6 TimeOut Convert State From Follower to Candidate At T3
+196925 TRCE S2 is Status 2, At T2 Debug
+196927 LEAD S2 Sending Heart Beat to S0 At T2
+196927 LEAD S2 Sending Heart Beat to S1 At T2
+196927 LEAD S2 Sending Heart Beat to S3 At T2
+196927 LEAD S2 Sending Heart Beat to S4 At T2
+196927 LEAD S2 Sending Heart Beat to S5 At T2
+196928 LEAD S2 Sending Heart Beat to S6 At T2
+197230 TRCE S3 is Status 2, At T1 Debug
+197231 LEAD S3 Sending Heart Beat to S0 At T1
+197232 LEAD S3 Sending Heart Beat to S1 At T1
+197232 LEAD S3 Sending Heart Beat to S2 At T1
+197232 LEAD S3 Sending Heart Beat to S4 At T1
+197232 LEAD S3 Sending Heart Beat to S5 At T1
+197232 LEAD S3 Sending Heart Beat to S6 At T1
+199243 TRCE S3 is Status 2, At T1 Debug
+199245 LEAD S3 Sending Heart Beat to S0 At T1
+199247 LEAD S3 Sending Heart Beat to S1 At T1
+199247 LEAD S3 Sending Heart Beat to S2 At T1
+199247 LEAD S3 Sending Heart Beat to S4 At T1
+199247 LEAD S3 Sending Heart Beat to S5 At T1
+199248 LEAD S3 Sending Heart Beat to S6 At T1
+199715 TRCE S2 is Status 2, At T2 Debug
+199717 LEAD S2 Sending Heart Beat to S0 At T2
+199718 LEAD S2 Sending Heart Beat to S1 At T2
+199718 LEAD S2 Sending Heart Beat to S3 At T2
+199718 LEAD S2 Sending Heart Beat to S4 At T2
+199719 LEAD S2 Sending Heart Beat to S5 At T2
+199719 LEAD S2 Sending Heart Beat to S6 At T2
+199790 TRCE S6 is Status 1, At T3 Debug
+199793 TRCE S6 Candidate SendRequestVote To S2 At T3
+199794 TRCE S6 Candidate SendRequestVote To S4 At T3
+199795 TRCE S6 Candidate SendRequestVote To S1 At T3
+199795 TRCE S6 Candidate SendRequestVote To S0 At T3
+199793 TRCE S6 Candidate SendRequestVote To S5 At T3
+199793 TRCE S6 Candidate SendRequestVote To S3 At T3
+199798 VOTE S0 Granting Vote to S6 at T3
+199799 VOTE S5 Granting Vote to S6 at T3
+199801 TRCE S6 Candidate Recevie RequestVoteReply From S0 At T3
+199799 VOTE S1 Granting Vote to S6 at T3
+199802 TRCE S6 Candidate Recevie RequestVoteReply From S5 At T3
+199804 TRCE S6 Candidate Recevie RequestVoteReply From S1 At T3
+199804 TRCE S6 Candidate SendRequestVote Done At T3, Success Come Leader
+199992 TRCE S3 is Status 2, At T1 Debug
+199994 LEAD S3 Sending Heart Beat to S0 At T1
+199996 LEAD S3 Sending Heart Beat to S1 At T1
+199998 LEAD S3 Sending Heart Beat to S2 At T1
+199998 LEAD S3 Sending Heart Beat to S4 At T1
+199998 LEAD S3 Sending Heart Beat to S5 At T1
+199998 LEAD S3 Sending Heart Beat to S6 At T1
+200359 TRCE S0 is Status 0, At T3 Debug
+200544 TRCE S6 is Status 2, At T3 Debug
+200546 LEAD S6 Sending Heart Beat to S0 At T3
+200547 LEAD S6 Sending Heart Beat to S1 At T3
+200547 LEAD S6 Sending Heart Beat to S2 At T3
+200548 LEAD S6 Sending Heart Beat to S3 At T3
+200548 LEAD S6 Sending Heart Beat to S4 At T3
+200548 LEAD S6 Sending Heart Beat to S5 At T3
+200549 TRCE S0 At T3 Recive Heart Beat From Leader S6 In T3
+200551 TRCE S5 At T3 Recive Heart Beat From Leader S6 In T3
+200555 TRCE S1 At T3 Recive Heart Beat From Leader S6 In T3
+201596 TRCE S6 is Status 2, At T3 Debug
+201597 LEAD S6 Sending Heart Beat to S0 At T3
+201598 LEAD S6 Sending Heart Beat to S1 At T3
+201599 LEAD S6 Sending Heart Beat to S2 At T3
+201599 TRCE S0 At T3 Recive Heart Beat From Leader S6 In T3
+201599 LEAD S6 Sending Heart Beat to S3 At T3
+201600 LEAD S6 Sending Heart Beat to S4 At T3
+201600 LEAD S6 Sending Heart Beat to S5 At T3
+201601 TRCE S1 At T3 Recive Heart Beat From Leader S6 In T3
+201602 TRCE S5 At T3 Recive Heart Beat From Leader S6 In T3
+201799 TRCE S0 is Status 0, At T3 Debug
+201993 TRCE S1 is Status 0, At T3 Debug
+202628 TRCE S2 is Status 2, At T2 Debug
+202629 LEAD S2 Sending Heart Beat to S0 At T2
+202629 LEAD S2 Sending Heart Beat to S1 At T2
+202629 LEAD S2 Sending Heart Beat to S3 At T2
+202629 LEAD S2 Sending Heart Beat to S4 At T2
+202629 LEAD S2 Sending Heart Beat to S5 At T2
+202629 LEAD S2 Sending Heart Beat to S6 At T2
+202640 TRCE S3 is Status 2, At T1 Debug
+202641 LEAD S3 Sending Heart Beat to S0 At T1
+202641 LEAD S3 Sending Heart Beat to S1 At T1
+202641 LEAD S3 Sending Heart Beat to S2 At T1
+202641 LEAD S3 Sending Heart Beat to S4 At T1
+202641 LEAD S3 Sending Heart Beat to S5 At T1
+202641 LEAD S3 Sending Heart Beat to S6 At T1
+202693 TRCE S0 is Status 0, At T3 Debug
+202990 TRCE S5 is Status 0, At T3 Debug
+203530 TRCE S2 is Status 2, At T2 Debug
+203532 LEAD S2 Sending Heart Beat to S0 At T2
+203532 LEAD S2 Sending Heart Beat to S1 At T2
+203532 LEAD S2 Sending Heart Beat to S3 At T2
+203532 LEAD S2 Sending Heart Beat to S4 At T2
+203532 LEAD S2 Sending Heart Beat to S5 At T2
+203533 LEAD S2 Sending Heart Beat to S6 At T2
+203725 TRCE S1 is Status 0, At T3 Debug
+204542 TRCE S2 is Status 2, At T2 Debug
+204543 LEAD S2 Sending Heart Beat to S0 At T2
+204543 LEAD S2 Sending Heart Beat to S1 At T2
+204543 LEAD S2 Sending Heart Beat to S3 At T2
+204543 LEAD S2 Sending Heart Beat to S4 At T2
+204544 LEAD S2 Sending Heart Beat to S5 At T2
+204544 LEAD S2 Sending Heart Beat to S6 At T2
+204921 TRCE S5 is Status 0, At T3 Debug
+204979 TRCE S6 is Status 2, At T3 Debug
+204980 LEAD S6 Sending Heart Beat to S0 At T3
+204981 LEAD S6 Sending Heart Beat to S1 At T3
+204981 LEAD S6 Sending Heart Beat to S2 At T3
+204981 LEAD S6 Sending Heart Beat to S3 At T3
+204981 LEAD S6 Sending Heart Beat to S4 At T3
+204981 LEAD S6 Sending Heart Beat to S5 At T3
+206123 TRCE S3 is Status 2, At T1 Debug
+206125 LEAD S3 Sending Heart Beat to S0 At T1
+206126 LEAD S3 Sending Heart Beat to S1 At T1
+206126 LEAD S3 Sending Heart Beat to S2 At T1
+206126 LEAD S3 Sending Heart Beat to S4 At T1
+206126 LEAD S3 Sending Heart Beat to S5 At T1
+206127 LEAD S3 Sending Heart Beat to S6 At T1
+206128 TRCE S0 At T3 Recive Heart Beat From Leader S3 In T1
+206129 TRCE S1 At T3 Recive Heart Beat From Leader S3 In T1
+206131 TRCE S5 At T3 Recive Heart Beat From Leader S3 In T1
+206131 TRCE S4 At T2 Recive Heart Beat From Leader S3 In T1
+207026 TRCE S5 is Status 0, At T3 Debug
+207215 TRCE S6 is Status 2, At T3 Debug
+207217 LEAD S6 Sending Heart Beat to S0 At T3
+207218 LEAD S6 Sending Heart Beat to S1 At T3
+207219 LEAD S6 Sending Heart Beat to S2 At T3
+207219 LEAD S6 Sending Heart Beat to S3 At T3
+207219 LEAD S6 Sending Heart Beat to S4 At T3
+207219 LEAD S6 Sending Heart Beat to S5 At T3
+207534 TRCE S2 is Status 2, At T2 Debug
+207535 LEAD S2 Sending Heart Beat to S0 At T2
+207535 LEAD S2 Sending Heart Beat to S1 At T2
+207535 LEAD S2 Sending Heart Beat to S3 At T2
+207535 LEAD S2 Sending Heart Beat to S4 At T2
+207535 LEAD S2 Sending Heart Beat to S5 At T2
+207535 LEAD S2 Sending Heart Beat to S6 At T2
+208010 TRCE S4 is Status 0, At T2 Debug
+208571 TRCE S1 is Status 0, At T3 Debug
+208849 TRCE S2 is Status 2, At T2 Debug
+208850 LEAD S2 Sending Heart Beat to S0 At T2
+208851 LEAD S2 Sending Heart Beat to S1 At T2
+208851 LEAD S2 Sending Heart Beat to S3 At T2
+208851 LEAD S2 Sending Heart Beat to S4 At T2
+208851 LEAD S2 Sending Heart Beat to S5 At T2
+208851 LEAD S2 Sending Heart Beat to S6 At T2
+208954 TRCE S0 is Status 0, At T3 Debug
+209597 TRCE S3 is Status 2, At T1 Debug
+209598 LEAD S3 Sending Heart Beat to S0 At T1
+209599 LEAD S3 Sending Heart Beat to S1 At T1
+209599 LEAD S3 Sending Heart Beat to S2 At T1
+209599 LEAD S3 Sending Heart Beat to S4 At T1
+209599 LEAD S3 Sending Heart Beat to S5 At T1
+209599 LEAD S3 Sending Heart Beat to S6 At T1
+209811 TRCE S6 is Status 2, At T3 Debug
+209812 LEAD S6 Sending Heart Beat to S0 At T3
+209812 LEAD S6 Sending Heart Beat to S1 At T3
+209813 LEAD S6 Sending Heart Beat to S2 At T3
+209813 LEAD S6 Sending Heart Beat to S3 At T3
+209813 LEAD S6 Sending Heart Beat to S4 At T3
+209813 LEAD S6 Sending Heart Beat to S5 At T3
+209814 TRCE S5 At T3 Recive Heart Beat From Leader S6 In T3
+209816 TRCE S4 At T2 Recive Heart Beat From Leader S6 In T3
+209817 TRCE S4 At T3 Recive Heart Beat From Leader S6 In T3, Convert to Follower
+209816 TRCE S2 At T2 Recive Heart Beat From Leader S6 In T3
+209818 TRCE S2 At T3 Recive Heart Beat From Leader S6 In T3, Convert to Follower
+210891 TRCE S4 is Status 0, At T3 Debug
+210965 TRCE S6 is Status 2, At T3 Debug
+210966 LEAD S6 Sending Heart Beat to S0 At T3
+210966 LEAD S6 Sending Heart Beat to S1 At T3
+210966 LEAD S6 Sending Heart Beat to S2 At T3
+210966 LEAD S6 Sending Heart Beat to S3 At T3
+210966 LEAD S6 Sending Heart Beat to S4 At T3
+210966 LEAD S6 Sending Heart Beat to S5 At T3
+210968 TRCE S4 At T3 Recive Heart Beat From Leader S6 In T3
+210969 TRCE S5 At T3 Recive Heart Beat From Leader S6 In T3
+210969 TRCE S2 At T3 Recive Heart Beat From Leader S6 In T3
+211706 TRCE S2 is Status 0, At T3 Debug
+211741 TRCE S4 is Status 0, At T3 Debug
+211961 TRCE S6 is Status 2, At T3 Debug
+211964 LEAD S6 Sending Heart Beat to S0 At T3
+211966 LEAD S6 Sending Heart Beat to S1 At T3
+211967 LEAD S6 Sending Heart Beat to S2 At T3
+211967 LEAD S6 Sending Heart Beat to S3 At T3
+211967 LEAD S6 Sending Heart Beat to S4 At T3
+211967 LEAD S6 Sending Heart Beat to S5 At T3
+211969 TRCE S2 At T3 Recive Heart Beat From Leader S6 In T3
+211970 TRCE S4 At T3 Recive Heart Beat From Leader S6 In T3
+211971 TRCE S5 At T3 Recive Heart Beat From Leader S6 In T3
+212430 TRCE S3 is Status 2, At T1 Debug
+212431 LEAD S3 Sending Heart Beat to S0 At T1
+212432 LEAD S3 Sending Heart Beat to S1 At T1
+212432 LEAD S3 Sending Heart Beat to S2 At T1
+212432 LEAD S3 Sending Heart Beat to S4 At T1
+212432 LEAD S3 Sending Heart Beat to S5 At T1
+212432 LEAD S3 Sending Heart Beat to S6 At T1
+213076 TRCE S2 is Status 0, At T3 Debug
+213195 TRCE S5 is Status 0, At T3 Debug
+213677 TRCE S6 is Status 2, At T3 Debug
+213679 LEAD S6 Sending Heart Beat to S0 At T3
+213679 LEAD S6 Sending Heart Beat to S1 At T3
+213680 LEAD S6 Sending Heart Beat to S2 At T3
+213680 LEAD S6 Sending Heart Beat to S3 At T3
+213680 LEAD S6 Sending Heart Beat to S4 At T3
+213680 LEAD S6 Sending Heart Beat to S5 At T3
+213682 TRCE S5 At T3 Recive Heart Beat From Leader S6 In T3
+213683 TRCE S2 At T3 Recive Heart Beat From Leader S6 In T3
+213685 TRCE S4 At T3 Recive Heart Beat From Leader S6 In T3
+214051 TRCE S5 is Status 0, At T3 Debug
+214052 TRCE S4 is Status 0, At T3 Debug
+214052 TRCE S3 is Status 2, At T1 Debug
+214053 LEAD S3 Sending Heart Beat to S0 At T1
+214054 LEAD S3 Sending Heart Beat to S1 At T1
+214054 LEAD S3 Sending Heart Beat to S2 At T1
+214054 LEAD S3 Sending Heart Beat to S4 At T1
+214054 LEAD S3 Sending Heart Beat to S5 At T1
+214054 LEAD S3 Sending Heart Beat to S6 At T1
+214055 TRCE S0 At T3 Recive Heart Beat From Leader S3 In T1
+214056 TRCE S6 At T3 Recive Heart Beat From Leader S3 In T1
+214057 TRCE S4 At T3 Recive Heart Beat From Leader S3 In T1
+215041 TRCE S6 is Status 2, At T3 Debug
+215042 LEAD S6 Sending Heart Beat to S0 At T3
+215043 LEAD S6 Sending Heart Beat to S1 At T3
+215043 LEAD S6 Sending Heart Beat to S2 At T3
+215043 LEAD S6 Sending Heart Beat to S3 At T3
+215043 LEAD S6 Sending Heart Beat to S4 At T3
+215043 LEAD S6 Sending Heart Beat to S5 At T3
+215045 TRCE S3 At T1 Recive Heart Beat From Leader S6 In T3
+215046 TRCE S3 At T3 Recive Heart Beat From Leader S6 In T3, Convert to Follower
+215046 TRCE S4 At T3 Recive Heart Beat From Leader S6 In T3
+215045 TRCE S0 At T3 Recive Heart Beat From Leader S6 In T3
+215196 TRCE S5 is Status 0, At T3 Debug
+215615 TRCE S4 is Status 0, At T3 Debug
+215709 TRCE S3 is Status 0, At T3 Debug
+216137 TRCE S2 is Status 0, At T3 Debug
+216231 TRCE S3 is Status 0, At T3 Debug
+217078 TRCE S0 is Status 0, At T3 Debug
+217303 TRCE S4 is Status 0, At T3 Debug
+217430 TRCE S6 is Status 2, At T3 Debug
+217431 LEAD S6 Sending Heart Beat to S0 At T3
+217431 LEAD S6 Sending Heart Beat to S1 At T3
+217432 LEAD S6 Sending Heart Beat to S2 At T3
+217432 LEAD S6 Sending Heart Beat to S3 At T3
+217432 LEAD S6 Sending Heart Beat to S4 At T3
+217432 LEAD S6 Sending Heart Beat to S5 At T3
+217433 TRCE S0 At T3 Recive Heart Beat From Leader S6 In T3
+217434 TRCE S4 At T3 Recive Heart Beat From Leader S6 In T3
+217434 TRCE S3 At T3 Recive Heart Beat From Leader S6 In T3
+217740 TRCE S0 is Status 0, At T3 Debug
+218320 TRCE S2 is Status 0, At T3 Debug
+219397 TRCE S3 is Status 0, At T3 Debug
+219784 TRCE S6 is Status 2, At T3 Debug
+219785 LEAD S6 Sending Heart Beat to S0 At T3
+219786 LEAD S6 Sending Heart Beat to S1 At T3
+219786 LEAD S6 Sending Heart Beat to S2 At T3
+219786 LEAD S6 Sending Heart Beat to S3 At T3
+219786 LEAD S6 Sending Heart Beat to S4 At T3
+219786 LEAD S6 Sending Heart Beat to S5 At T3
+219839 TRCE S0 is Status 0, At T3 Debug
+220900 TRCE S4 is Status 0, At T3 Debug
+221704 TRCE S6 is Status 2, At T3 Debug
+221705 LEAD S6 Sending Heart Beat to S0 At T3
+221706 LEAD S6 Sending Heart Beat to S1 At T3
+221706 LEAD S6 Sending Heart Beat to S2 At T3
+221706 LEAD S6 Sending Heart Beat to S3 At T3
+221706 LEAD S6 Sending Heart Beat to S4 At T3
+221706 LEAD S6 Sending Heart Beat to S5 At T3
+223441 TRCE S6 is Status 2, At T3 Debug
+223443 LEAD S6 Sending Heart Beat to S0 At T3
+223444 LEAD S6 Sending Heart Beat to S1 At T3
+223444 LEAD S6 Sending Heart Beat to S2 At T3
+223444 LEAD S6 Sending Heart Beat to S3 At T3
+223444 LEAD S6 Sending Heart Beat to S4 At T3
+223444 LEAD S6 Sending Heart Beat to S5 At T3
+224870 TRCE S6 is Status 2, At T3 Debug
+224871 LEAD S6 Sending Heart Beat to S0 At T3
+224871 LEAD S6 Sending Heart Beat to S1 At T3
+224871 LEAD S6 Sending Heart Beat to S2 At T3
+224871 LEAD S6 Sending Heart Beat to S3 At T3
+224871 LEAD S6 Sending Heart Beat to S4 At T3
+224871 LEAD S6 Sending Heart Beat to S5 At T3
+227979 TRCE S6 is Status 2, At T3 Debug
+227980 LEAD S6 Sending Heart Beat to S0 At T3
+227981 LEAD S6 Sending Heart Beat to S1 At T3
+227981 LEAD S6 Sending Heart Beat to S2 At T3
+227981 LEAD S6 Sending Heart Beat to S3 At T3
+227981 LEAD S6 Sending Heart Beat to S4 At T3
+227981 LEAD S6 Sending Heart Beat to S5 At T3
+230241 TRCE S6 is Status 2, At T3 Debug
+230244 LEAD S6 Sending Heart Beat to S0 At T3
+230245 LEAD S6 Sending Heart Beat to S1 At T3
+230245 LEAD S6 Sending Heart Beat to S2 At T3
+230246 LEAD S6 Sending Heart Beat to S3 At T3
+230246 LEAD S6 Sending Heart Beat to S4 At T3
+230246 LEAD S6 Sending Heart Beat to S5 At T3
+233734 TRCE S6 is Status 2, At T3 Debug
+233736 LEAD S6 Sending Heart Beat to S0 At T3
+233736 LEAD S6 Sending Heart Beat to S1 At T3
+233736 LEAD S6 Sending Heart Beat to S2 At T3
+233736 LEAD S6 Sending Heart Beat to S3 At T3
+233737 LEAD S6 Sending Heart Beat to S4 At T3
+233737 LEAD S6 Sending Heart Beat to S5 At T3
+234859 TIMR S5 TimeOut Convert State From Follower to Candidate At T4
+235667 TRCE S6 is Status 2, At T3 Debug
+235669 LEAD S6 Sending Heart Beat to S0 At T3
+235669 LEAD S6 Sending Heart Beat to S1 At T3
+235669 LEAD S6 Sending Heart Beat to S2 At T3
+235669 LEAD S6 Sending Heart Beat to S3 At T3
+235670 LEAD S6 Sending Heart Beat to S4 At T3
+235670 LEAD S6 Sending Heart Beat to S5 At T3
+237046 TRCE S5 is Status 1, At T4 Debug
+237047 TRCE S5 Candidate SendRequestVote To S0 At T4
+237049 TRCE S5 Candidate SendRequestVote To S6 At T4
+237050 VOTE S0 Granting Vote to S5 at T4
+237050 TRCE S5 Candidate SendRequestVote To S1 At T4
+237050 TRCE S5 Candidate SendRequestVote To S3 At T4
+237053 VOTE S3 Granting Vote to S5 at T4
+237050 TRCE S5 Candidate SendRequestVote To S2 At T4
+237050 TRCE S5 Candidate SendRequestVote To S4 At T4
+237054 TRCE S5 Candidate Recevie RequestVoteReply From S3 At T4
+237052 TRCE S5 Candidate Recevie RequestVoteReply From S0 At T4
+237055 VOTE S2 Granting Vote to S5 at T4
+237057 TRCE S5 Candidate Recevie RequestVoteReply From S2 At T4
+237057 TRCE S5 Candidate SendRequestVote Done At T4, Success Come Leader
+237161 TIMR S1 TimeOut Convert State From Follower to Candidate At T4
+237873 TRCE S1 is Status 1, At T4 Debug
+237877 TRCE S1 Candidate SendRequestVote To S6 At T4
+237877 TRCE S1 Candidate SendRequestVote To S3 At T4
+237878 TRCE S1 Candidate SendRequestVote To S0 At T4
+237878 TRCE S1 Candidate SendRequestVote To S4 At T4
+237878 TRCE S1 Candidate SendRequestVote To S2 At T4
+237878 TRCE S1 Candidate SendRequestVote To S5 At T4
+238261 TRCE S5 is Status 2, At T4 Debug
+238263 LEAD S5 Sending Heart Beat to S0 At T4
+238263 LEAD S5 Sending Heart Beat to S1 At T4
+238263 LEAD S5 Sending Heart Beat to S2 At T4
+238263 LEAD S5 Sending Heart Beat to S3 At T4
+238263 LEAD S5 Sending Heart Beat to S4 At T4
+238263 LEAD S5 Sending Heart Beat to S6 At T4
+238265 TRCE S3 At T4 Recive Heart Beat From Leader S5 In T4
+238265 TRCE S2 At T4 Recive Heart Beat From Leader S5 In T4
+238265 TRCE S0 At T4 Recive Heart Beat From Leader S5 In T4
+238507 TRCE S6 is Status 2, At T3 Debug
+238509 LEAD S6 Sending Heart Beat to S0 At T3
+238509 LEAD S6 Sending Heart Beat to S1 At T3
+238509 LEAD S6 Sending Heart Beat to S2 At T3
+238509 LEAD S6 Sending Heart Beat to S3 At T3
+238510 LEAD S6 Sending Heart Beat to S4 At T3
+238510 LEAD S6 Sending Heart Beat to S5 At T3
+239204 TRCE S5 is Status 2, At T4 Debug
+239207 LEAD S5 Sending Heart Beat to S0 At T4
+239209 LEAD S5 Sending Heart Beat to S1 At T4
+239211 LEAD S5 Sending Heart Beat to S2 At T4
+239211 LEAD S5 Sending Heart Beat to S3 At T4
+239212 LEAD S5 Sending Heart Beat to S4 At T4
+239212 LEAD S5 Sending Heart Beat to S6 At T4
+239212 TRCE S0 At T4 Recive Heart Beat From Leader S5 In T4
+239215 TRCE S6 At T3 Recive Heart Beat From Leader S5 In T4
+239216 TRCE S1 At T4 Recive Heart Beat From Leader S5 In T4
+239217 TRCE S1 At T4 Recive Heart Beat From Leader S5 In T4, Convert From Candidate to Follower
+239215 TRCE S2 At T4 Recive Heart Beat From Leader S5 In T4
+239215 TRCE S4 At T3 Recive Heart Beat From Leader S5 In T4
+239222 TRCE S4 At T4 Recive Heart Beat From Leader S5 In T4, Convert to Follower
+239216 TRCE S3 At T4 Recive Heart Beat From Leader S5 In T4
+239216 TRCE S6 At T4 Recive Heart Beat From Leader S5 In T4, Convert to Follower
+239310 TRCE S6 is Status 0, At T4 Debug
+239807 TRCE S3 is Status 0, At T4 Debug
+239851 TRCE S2 is Status 0, At T4 Debug
+239852 TRCE S1 is Status 0, At T4 Debug
+240226 TRCE S0 is Status 0, At T4 Debug
+240402 TRCE S2 is Status 0, At T4 Debug
+240636 TRCE S3 is Status 0, At T4 Debug
+241448 TRCE S5 is Status 2, At T4 Debug
+241449 LEAD S5 Sending Heart Beat to S0 At T4
+241450 LEAD S5 Sending Heart Beat to S1 At T4
+241450 LEAD S5 Sending Heart Beat to S2 At T4
+241450 LEAD S5 Sending Heart Beat to S3 At T4
+241450 LEAD S5 Sending Heart Beat to S4 At T4
+241451 LEAD S5 Sending Heart Beat to S6 At T4
+241453 TRCE S6 At T4 Recive Heart Beat From Leader S5 In T4
+241454 TRCE S0 At T4 Recive Heart Beat From Leader S5 In T4
+241453 TRCE S2 At T4 Recive Heart Beat From Leader S5 In T4
+241454 TRCE S1 At T4 Recive Heart Beat From Leader S5 In T4
+241453 TRCE S3 At T4 Recive Heart Beat From Leader S5 In T4
+241454 TRCE S4 At T4 Recive Heart Beat From Leader S5 In T4
+241834 TRCE S6 is Status 0, At T4 Debug
+242551 TRCE S1 is Status 0, At T4 Debug
+242685 TRCE S2 is Status 0, At T4 Debug
+242686 TRCE S4 is Status 0, At T4 Debug
+242874 TRCE S0 is Status 0, At T4 Debug
+243278 TRCE S4 is Status 0, At T4 Debug
+243634 TRCE S3 is Status 0, At T4 Debug
+  ... Passed --  time 11.4s #peers 7 #RPCs   486 #Ops    0
+PASS
+ok  	6.5840/raft1	24.411s

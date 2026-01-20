@@ -1,0 +1,203 @@
+000005 INFO S0 Server initialized success, run ticker
+000007 TRCE S0 is Status 0, At T0 Debug
+000009 INFO S1 Server initialized success, run ticker
+000009 INFO S2 Server initialized success, run ticker
+Test (3A): election after network failure (reliable network)...
+000010 TRCE S1 is Status 0, At T0 Debug
+000010 TRCE S2 is Status 0, At T0 Debug
+005017 TIMR S0 TimeOut Convert State From Follower to Candidate At T1
+007115 TRCE S0 is Status 1, At T1 Debug
+007125 VOTE S1 Granting Vote to S0 at T1
+007125 VOTE S2 Granting Vote to S0 at T1
+007127 TRCE S0 Candidate SendRequestVote Done At T1, Success Come Leader
+008690 TRCE S2 is Status 0, At T1 Debug
+
+009743 ERRO 3A DisconnentAll 0
+010266 TRCE S1 is Status 0, At T1 Debug
+010538 TRCE S0 is Status 2, At T1 Debug
+010539 LEAD S0 Sending Heart Beat to S1 At T1
+010540 LEAD S0 Sending Heart Beat to S2 At T1
+012049 TRCE S0 is Status 2, At T1 Debug
+012050 LEAD S0 Sending Heart Beat to S1 At T1
+012051 LEAD S0 Sending Heart Beat to S2 At T1
+012986 TRCE S0 is Status 2, At T1 Debug
+012987 LEAD S0 Sending Heart Beat to S1 At T1
+012987 LEAD S0 Sending Heart Beat to S2 At T1
+014716 TRCE S0 is Status 2, At T1 Debug
+014717 LEAD S0 Sending Heart Beat to S1 At T1
+014717 LEAD S0 Sending Heart Beat to S2 At T1
+016763 TRCE S0 is Status 2, At T1 Debug
+016764 LEAD S0 Sending Heart Beat to S1 At T1
+016764 LEAD S0 Sending Heart Beat to S2 At T1
+018080 TRCE S0 is Status 2, At T1 Debug
+018080 LEAD S0 Sending Heart Beat to S1 At T1
+018081 LEAD S0 Sending Heart Beat to S2 At T1
+
+020271 TIMR S1 TimeOut Convert State From Follower to Candidate At T2
+
+021876 TRCE S1 is Status 1, At T2 Debug
+021880 VOTE S2 Granting Vote to S1 at T2
+021882 TRCE S1 Candidate SendRequestVote Done At T2, Success Come Leader
+023024 TRCE S1 is Status 2, At T2 Debug
+023025 LEAD S1 Sending Heart Beat to S0 At T2
+023028 LEAD S1 Sending Heart Beat to S2 At T2
+
+023032 TRCE S2 At T2 Recive Heart Beat From Leader S1 In T2
+
+023550 TRCE S2 is Status 0, At T2 Debug
+
+023933 ERRO 3A 73
+024447 TRCE S2 is Status 0, At T2 Debug
+
+// S0 重新加入, 此时，S1是Leader
+025874 TRCE S0 is Status 2, At T1 Debug
+025875 LEAD S0 Sending Heart Beat to S1 At T1
+025875 LEAD S0 Sending Heart Beat to S2 At T1
+
+025877 TRCE S2 At T2 Recive Heart Beat From Leader S0 In T1
+025877 TRCE S1 At T2 Recive Heart Beat From Leader S0 In T1
+
+025978 TRCE S1 is Status 2, At T2 Debug
+025980 LEAD S1 Sending Heart Beat to S0 At T2
+025981 LEAD S1 Sending Heart Beat to S2 At T2
+
+025983 TRCE S2 At T2 Recive Heart Beat From Leader S1 In T2
+025984 TRCE S0 At T1 Recive Heart Beat From Leader S1 In T2
+
+026637 TRCE S1 is Status 2, At T2 Debug
+026638 LEAD S1 Sending Heart Beat to S0 At T2
+026639 LEAD S1 Sending Heart Beat to S2 At T2
+
+026642 TRCE S2 At T2 Recive Heart Beat From Leader S1 In T2
+026645 TRCE S0 At T2 Recive Heart Beat From Leader S1 In T2
+
+028577 TRCE S1 is Status 2, At T2 Debug
+028578 LEAD S1 Sending Heart Beat to S0 At T2
+028578 LEAD S1 Sending Heart Beat to S2 At T2
+
+028580 TRCE S2 At T2 Recive Heart Beat From Leader S1 In T2
+028580 TRCE S0 At T2 Recive Heart Beat From Leader S1 In T2
+
+// 发现重连的S0变为了Follower
+028851 TRCE S2 is Status 0, At T2 Debug
+029065 TRCE S0 is Status 0, At T2 Debug
+030447 TRCE S1 is Status 2, At T2 Debug
+
+030448 LEAD S1 Sending Heart Beat to S0 At T2
+030450 LEAD S1 Sending Heart Beat to S2 At T2
+
+031611 TRCE S0 is Status 0, At T2 Debug
+032298 TRCE S2 is Status 0, At T2 Debug
+033792 TRCE S1 is Status 2, At T2 Debug
+
+033793 LEAD S1 Sending Heart Beat to S0 At T2
+033794 LEAD S1 Sending Heart Beat to S2 At T2
+035430 TRCE S1 is Status 2, At T2 Debug
+
+035431 LEAD S1 Sending Heart Beat to S0 At T2
+035432 LEAD S1 Sending Heart Beat to S2 At T2
+// 出现问题，为什么S0会timeOut，怀疑是S1 主循环睡眠时长达到350ms，试图将Server TimeOut时间范围从500ms-1500ms改到1500ms-2500ms
+036613 TIMR S0 TimeOut Convert State From Follower to Candidate At T3
+
+038452 TRCE S1 is Status 2, At T2 Debug
+038453 LEAD S1 Sending Heart Beat to S0 At T2
+038454 LEAD S1 Sending Heart Beat to S2 At T2
+
+039046 TRCE S0 is Status 1, At T3 Debug
+041663 TRCE S1 is Status 2, At T2 Debug
+041664 LEAD S1 Sending Heart Beat to S0 At T2
+041665 LEAD S1 Sending Heart Beat to S2 At T2
+043891 TRCE S1 is Status 2, At T2 Debug
+043892 LEAD S1 Sending Heart Beat to S0 At T2
+043893 LEAD S1 Sending Heart Beat to S2 At T2
+046355 TRCE S1 is Status 2, At T2 Debug
+046356 LEAD S1 Sending Heart Beat to S0 At T2
+046358 LEAD S1 Sending Heart Beat to S2 At T2
+047301 TIMR S2 TimeOut Convert State From Follower to Candidate At T3
+048429 TRCE S2 is Status 1, At T3 Debug
+048763 TRCE S1 is Status 2, At T2 Debug
+048764 LEAD S1 Sending Heart Beat to S0 At T2
+048764 LEAD S1 Sending Heart Beat to S2 At T2
+049902 TRCE S1 is Status 2, At T2 Debug
+049903 LEAD S1 Sending Heart Beat to S0 At T2
+049903 LEAD S1 Sending Heart Beat to S2 At T2
+051119 TRCE S1 is Status 2, At T2 Debug
+051120 LEAD S1 Sending Heart Beat to S0 At T2
+051120 LEAD S1 Sending Heart Beat to S2 At T2
+051895 TRCE S1 is Status 2, At T2 Debug
+051896 LEAD S1 Sending Heart Beat to S0 At T2
+051896 LEAD S1 Sending Heart Beat to S2 At T2
+055253 TRCE S1 is Status 2, At T2 Debug
+055253 LEAD S1 Sending Heart Beat to S0 At T2
+055254 LEAD S1 Sending Heart Beat to S2 At T2
+057884 TRCE S1 is Status 2, At T2 Debug
+057885 LEAD S1 Sending Heart Beat to S0 At T2
+057886 LEAD S1 Sending Heart Beat to S2 At T2
+061176 TRCE S1 is Status 2, At T2 Debug
+061177 LEAD S1 Sending Heart Beat to S0 At T2
+061177 LEAD S1 Sending Heart Beat to S2 At T2
+063014 TRCE S1 is Status 2, At T2 Debug
+063016 LEAD S1 Sending Heart Beat to S0 At T2
+063016 LEAD S1 Sending Heart Beat to S2 At T2
+065954 TRCE S1 is Status 2, At T2 Debug
+065955 LEAD S1 Sending Heart Beat to S0 At T2
+065955 LEAD S1 Sending Heart Beat to S2 At T2
+067021 TRCE S1 is Status 2, At T2 Debug
+067022 LEAD S1 Sending Heart Beat to S0 At T2
+067023 LEAD S1 Sending Heart Beat to S2 At T2
+070494 TRCE S1 is Status 2, At T2 Debug
+070494 LEAD S1 Sending Heart Beat to S0 At T2
+070495 LEAD S1 Sending Heart Beat to S2 At T2
+072270 TRCE S1 is Status 2, At T2 Debug
+072270 LEAD S1 Sending Heart Beat to S0 At T2
+072271 LEAD S1 Sending Heart Beat to S2 At T2
+074522 TRCE S1 is Status 2, At T2 Debug
+074523 LEAD S1 Sending Heart Beat to S0 At T2
+074523 LEAD S1 Sending Heart Beat to S2 At T2
+076313 TRCE S1 is Status 2, At T2 Debug
+076315 LEAD S1 Sending Heart Beat to S0 At T2
+076315 LEAD S1 Sending Heart Beat to S2 At T2
+078314 TRCE S1 is Status 2, At T2 Debug
+078314 LEAD S1 Sending Heart Beat to S0 At T2
+078314 LEAD S1 Sending Heart Beat to S2 At T2
+081771 TRCE S1 is Status 2, At T2 Debug
+081772 LEAD S1 Sending Heart Beat to S0 At T2
+081772 LEAD S1 Sending Heart Beat to S2 At T2
+082541 TRCE S1 is Status 2, At T2 Debug
+082542 LEAD S1 Sending Heart Beat to S0 At T2
+082543 LEAD S1 Sending Heart Beat to S2 At T2
+084202 TRCE S1 is Status 2, At T2 Debug
+084203 LEAD S1 Sending Heart Beat to S0 At T2
+084204 LEAD S1 Sending Heart Beat to S2 At T2
+085439 TRCE S1 is Status 2, At T2 Debug
+085440 LEAD S1 Sending Heart Beat to S0 At T2
+085441 LEAD S1 Sending Heart Beat to S2 At T2
+087918 TRCE S1 is Status 2, At T2 Debug
+087918 LEAD S1 Sending Heart Beat to S0 At T2
+087919 LEAD S1 Sending Heart Beat to S2 At T2
+091408 TRCE S1 is Status 2, At T2 Debug
+091409 LEAD S1 Sending Heart Beat to S0 At T2
+091410 LEAD S1 Sending Heart Beat to S2 At T2
+092025 TRCE S1 is Status 2, At T2 Debug
+092026 LEAD S1 Sending Heart Beat to S0 At T2
+092026 LEAD S1 Sending Heart Beat to S2 At T2
+093004 TRCE S1 is Status 2, At T2 Debug
+093005 LEAD S1 Sending Heart Beat to S0 At T2
+093006 LEAD S1 Sending Heart Beat to S2 At T2
+095454 TRCE S1 is Status 2, At T2 Debug
+095455 LEAD S1 Sending Heart Beat to S0 At T2
+095456 LEAD S1 Sending Heart Beat to S2 At T2
+096039 TRCE S1 is Status 2, At T2 Debug
+096040 LEAD S1 Sending Heart Beat to S0 At T2
+096041 LEAD S1 Sending Heart Beat to S2 At T2
+099068 TRCE S1 is Status 2, At T2 Debug
+099069 LEAD S1 Sending Heart Beat to S0 At T2
+099069 LEAD S1 Sending Heart Beat to S2 At T2
+Fatal: expected one leader, got none
+        /root/Golang/MIT-Raft/src/raft1/test.go:100
+        /root/Golang/MIT-Raft/src/raft1/raft_test.go:95
+info: wrote visualization to /tmp/porcupine-2819794719.html
+--- FAIL: TestReElection3A (10.04s)
+FAIL
+exit status 1
+FAIL	6.5840/raft1	10.045s
