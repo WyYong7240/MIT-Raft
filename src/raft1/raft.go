@@ -320,13 +320,54 @@ func (rf *Raft) sendRequestVote(server int, args *RequestVoteArgs, reply *Reques
 // term. the third return value is true if this server believes it is
 // the leader.
 func (rf *Raft) Start(command interface{}) (int, int, bool) {
-	index := -1
-	term := -1
-	isLeader := true
+	rf.mu.Lock()
+	index := len(rf.Log)           // 第一个表示将要添加的日志条目在该Server Log中的位置,由于Log从1开始，并且Log默认有一个占位的条目，因此不需要-1
+	term := rf.CurrentTerm         // 表示当前任期
+	isLeader := rf.State == LEADER // 表示自己是否是Leader
+	rf.mu.Unlock()
 
 	// Your code here (3B).
 
+	// 如果不是Leader，直接返回
+	if !isLeader {
+		return index, term, isLeader
+	}
+
+	// 将新条目添加到自己的日志列表中
+	newLog := LogEntry{
+		Term:    term,
+		Command: command,
+	}
+	rf.mu.Lock()
+	rf.Log = append(rf.Log, newLog)
+	me := rf.me
+	serverNum := len(rf.peers)
+	rf.mu.Unlock()
+
+	// Leader并行向所有Follower发送新条目的AppendEntries RPC
+	go rf.LeaderAppendEntriesParallel(me, serverNum, command)
+
 	return index, term, isLeader
+}
+
+func (rf *Raft) LeaderAppendEntriesParallel(me, serverNum int, command interface{}) {
+	for i := 0; i < serverNum; i++ {
+		if i == me {
+			continue
+		}
+
+		go func(me int) {
+			rf.mu.Lock()
+			
+			args := AppendEntriesArgs{
+				Term: rf.CurrentTerm,
+				LeaderID: rf.me,
+				PrevLogIndex: rf.MatchIndex[],
+				Entries: ,
+			}
+			rf.mu.Unlock()
+		}(me)
+	}
 }
 
 // the tester doesn't halt goroutines created by Raft after each test,
