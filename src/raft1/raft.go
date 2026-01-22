@@ -250,6 +250,7 @@ type AppendEntriesReply struct {
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	rf.mu.Lock()
 	curTerm := rf.CurrentTerm
+	Debug(dTrace, "S%d At T%d Recive AppendEntries RPC From Leader S%d In T%d, Entries Len %d", rf.me, rf.CurrentTerm, args.LeaderID, args.Term, len(args.Entries))
 	rf.mu.Unlock()
 
 	// 首先确认RPC的任期是否合法
@@ -257,76 +258,68 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		// 如果Leader的任期小于自己的任期，不合法，返回false
 		reply.Success = false
 		reply.Term = curTerm
-	} else if curTerm == args.Term {
-		// 如果Leader的任期与自己相同，合法
-		// 首先接收心跳，重置计时器
-		
-		// 开一个线程，用于应对领导人选举相关
-		go func() {
-
-		}
-
-		// 确认自己存在prevLogIndex、prevLogTerm日志
-		rf.mu.Lock()
-		// 如果prevLogIndex小于等于当前Server的Log长度，那么可以说明prevLogIndex在这个server上存在;否则不存在
-		if args.PrevLogIndex <= len(rf.Log)-1 && rf.Log[args.PrevLogIndex].Term == args.PrevLogTerm {
-			// 该Server的Log与prevLogIndex、prevLogTerm适配，可以开始处理args中的entries新条目
-			for i := 0; i < len(args.Entries); i++ {
-				// 计算下一个新日志条目需要插入的位置
-				toInsertIndex := args.PrevLogIndex + 1 + i
-
-				// 如果下一个新日志条目要插入的位置，超过了目前log的容量，也就是该插入位置后面都是空的，那么将后续新条目直接append到log后面，不用再循环了
-				if toInsertIndex > len(rf.Log)-1 {
-					toAppend := args.Entries[i:]
-					rf.Log = append(rf.Log, toAppend...)
-					break
-				} else if rf.Log[toInsertIndex].Term != args.Entries[i].Term {
-					// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
-					rf.Log = rf.Log[toInsertIndex:]      // 将冲突条目及其后面的条目都删除
-					toAppend := args.Entries[i:]         // 或许后续新条目
-					rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
-					break                                // 所有新条目追加完毕，跳出循环
-				} else {
-					// 需要追加的条目，在该Server上是已有条目，不用处理
-					continue
-				}
-			}
-			reply.Success = true
-			reply.Term = curTerm
-		} else {
-			reply.Success = false
-			reply.Term = curTerm
-		}
-		rf.mu.Unlock()
-	} else {
-
+	}
+	// 其他情况下，Leader的任期都是合法的
+	// 首先接收心跳，重置计时器
+	// 给自己的timeChan管道发送一个信息，重置倒计时,不论自己是follower还是candidate，都需要重置倒计时
+	select {
+	case rf.TimeOutChan <- 1:
+	default:
 	}
 
-	//接收到AppendEntries RPC，确认自己存在prevLogIndex、prevLongTerm日志
-
-	// 如果log参数为nil，说明这是leader的心跳信息，
-	if args.Entries == nil {
-		Debug(dTrace, "S%d At T%d Recive Heart Beat From Leader S%d In T%d", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
-
-		// 如果leader的Term大于自己的Term，更新自己的Term，并将身份转换为follower，重置投票项
-		if args.Term > rf.CurrentTerm {
+	// 开一个线程，用于应对领导人选举相关
+	go func(curTerm int) {
+		rf.mu.Lock()
+		if curTerm == args.Term {
+			// 如果leader的Term和自己的一样，说明自己和leader是同时期的candidate，确认自己的身份是candidate，服从先自己一步成为leader的server
+			if rf.State == CANDIDATE {
+				rf.State = FOLLOWER
+				Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert From Candidate to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+			}
+		} else {
+			// 如果leader的Term大于自己的Term，更新自己的Term，并将身份转换为follower，重置投票项
 			rf.CurrentTerm = args.Term
 			rf.VoteFor = -1
 			rf.State = FOLLOWER
-			Debug(dTrace, "S%d At T%d Recive Heart Beat From Leader S%d In T%d, Convert to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
-		} else if args.Term == rf.CurrentTerm && rf.State == 1 {
-			// 如果leader的Term和自己的一样，说明自己和leader是同时期的candidate，确认自己的身份是candidate，服从先自己一步成为leader的server
-			rf.State = 0
-			Debug(dTrace, "S%d At T%d Recive Heart Beat From Leader S%d In T%d, Convert From Candidate to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+		}
+		rf.mu.Unlock()
+	}(curTerm)
+
+	// 不论任期是大于还是等于自己的任期，都需要处理发送来的新增日志条目，不同的是，针对选举的处理
+	// 确认自己存在prevLogIndex、prevLogTerm日志
+	rf.mu.Lock()
+	// 如果prevLogIndex小于等于当前Server的Log长度，那么可以说明prevLogIndex在这个server上存在;否则不存在
+	if args.PrevLogIndex <= len(rf.Log)-1 && rf.Log[args.PrevLogIndex].Term == args.PrevLogTerm {
+		// 该Server的Log与prevLogIndex、prevLogTerm适配，可以开始处理args中的entries新条目
+		Debug(dLog, "S%d At T%d Satisfied prevLogIndex:%d, prevLogTerm:%d, Start AppendEntries(Len%d)", rf.me, rf.CurrentTerm, args.PrevLogIndex, args.PrevLogTerm, len(args.Entries))
+		for i := 0; i < len(args.Entries); i++ {
+			// 计算下一个新日志条目需要插入的位置
+			toInsertIndex := args.PrevLogIndex + 1 + i
+
+			// 如果下一个新日志条目要插入的位置，超过了目前log的容量，也就是该插入位置后面都是空的，那么将后续新条目直接append到log后面，不用再循环了
+			if toInsertIndex > len(rf.Log)-1 {
+				toAppend := args.Entries[i:]
+				rf.Log = append(rf.Log, toAppend...)
+				break
+			} else if rf.Log[toInsertIndex].Term != args.Entries[i].Term {
+				// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
+				rf.Log = rf.Log[toInsertIndex:]      // 将冲突条目及其后面的条目都删除
+				toAppend := args.Entries[i:]         // 或许后续新条目
+				rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
+				break                                // 所有新条目追加完毕，跳出循环
+			} else {
+				// 需要追加的条目，在该Server上是已有条目，不用处理
+				continue
+			}
 		}
 		reply.Success = true
-		reply.Term = rf.CurrentTerm
-		// 给自己的timeChan管道发送一个信息，重置倒计时,不论自己是follower还是candidate，都需要重置倒计时
-		select {
-		case rf.TimeOutChan <- 1:
-		default:
-		}
+		reply.Term = curTerm
+	} else {
+		reply.Success = false
+		reply.Term = curTerm
 	}
+	rf.mu.Unlock()
 }
 
 // example code to send a RequestVote RPC to a server.
