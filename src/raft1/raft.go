@@ -64,6 +64,7 @@ type Raft struct {
 
 	State       ServerState // 当前服务器的角色状态，0是follower、1是candidate、2是leader
 	TimeOutChan chan int
+	NewLogChan  chan int // 当Leader收到一个新日志，并添加到自己的Log中时，需要触发此channel，跳过Leader心跳发送完毕的睡眠时间，直接进行下一轮的新日志发送
 }
 
 type LogEntry struct {
@@ -248,7 +249,60 @@ type AppendEntriesReply struct {
 // AppendEntries 实现
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	rf.mu.Lock()
-	defer rf.mu.Unlock()
+	curTerm := rf.CurrentTerm
+	rf.mu.Unlock()
+
+	// 首先确认RPC的任期是否合法
+	if curTerm > args.Term {
+		// 如果Leader的任期小于自己的任期，不合法，返回false
+		reply.Success = false
+		reply.Term = curTerm
+	} else if curTerm == args.Term {
+		// 如果Leader的任期与自己相同，合法
+		// 首先接收心跳，重置计时器
+		
+		// 开一个线程，用于应对领导人选举相关
+		go func() {
+
+		}
+
+		// 确认自己存在prevLogIndex、prevLogTerm日志
+		rf.mu.Lock()
+		// 如果prevLogIndex小于等于当前Server的Log长度，那么可以说明prevLogIndex在这个server上存在;否则不存在
+		if args.PrevLogIndex <= len(rf.Log)-1 && rf.Log[args.PrevLogIndex].Term == args.PrevLogTerm {
+			// 该Server的Log与prevLogIndex、prevLogTerm适配，可以开始处理args中的entries新条目
+			for i := 0; i < len(args.Entries); i++ {
+				// 计算下一个新日志条目需要插入的位置
+				toInsertIndex := args.PrevLogIndex + 1 + i
+
+				// 如果下一个新日志条目要插入的位置，超过了目前log的容量，也就是该插入位置后面都是空的，那么将后续新条目直接append到log后面，不用再循环了
+				if toInsertIndex > len(rf.Log)-1 {
+					toAppend := args.Entries[i:]
+					rf.Log = append(rf.Log, toAppend...)
+					break
+				} else if rf.Log[toInsertIndex].Term != args.Entries[i].Term {
+					// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
+					rf.Log = rf.Log[toInsertIndex:]      // 将冲突条目及其后面的条目都删除
+					toAppend := args.Entries[i:]         // 或许后续新条目
+					rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
+					break                                // 所有新条目追加完毕，跳出循环
+				} else {
+					// 需要追加的条目，在该Server上是已有条目，不用处理
+					continue
+				}
+			}
+			reply.Success = true
+			reply.Term = curTerm
+		} else {
+			reply.Success = false
+			reply.Term = curTerm
+		}
+		rf.mu.Unlock()
+	} else {
+
+	}
+
+	//接收到AppendEntries RPC，确认自己存在prevLogIndex、prevLongTerm日志
 
 	// 如果log参数为nil，说明这是leader的心跳信息，
 	if args.Entries == nil {
@@ -340,33 +394,53 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	}
 	rf.mu.Lock()
 	rf.Log = append(rf.Log, newLog)
-	me := rf.me
-	serverNum := len(rf.peers)
 	rf.mu.Unlock()
 
 	// Leader并行向所有Follower发送新条目的AppendEntries RPC
-	go rf.LeaderAppendEntriesParallel(me, serverNum, command)
+	// 但是其实不应该在这里触发AppendEntriesRPC发送，而是在Leader的Ticker周期触发中，与心跳发送机制融合
+	// Leader每轮检查是否存在新日志，如果没有新日志，就发送心跳，否则发送新日志，同时也作为发送心跳
+	// go rf.LeaderAppendEntriesParallelToFollower()
+
+	// 触发新日志到达channel，
+	select {
+	case rf.NewLogChan <- 1:
+	default:
+	}
 
 	return index, term, isLeader
 }
 
-func (rf *Raft) LeaderAppendEntriesParallel(me, serverNum int, command interface{}) {
+func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
+	rf.mu.Lock()
+	me := rf.me
+	serverNum := len(rf.peers)
+	rf.mu.Unlock()
+
 	for i := 0; i < serverNum; i++ {
 		if i == me {
 			continue
 		}
 
-		go func(me int) {
-			rf.mu.Lock()
-			
-			args := AppendEntriesArgs{
-				Term: rf.CurrentTerm,
-				LeaderID: rf.me,
-				PrevLogIndex: rf.MatchIndex[],
-				Entries: ,
-			}
-			rf.mu.Unlock()
-		}(me)
+		rf.mu.Lock()
+		logFrom := rf.NextIndex[i] // 包含该下标日志
+		logTo := len(rf.Log)       // 不包含该下标日志
+		prevLogIndex := rf.NextIndex[i] - 1
+		prevLogTerm := rf.Log[prevLogIndex].Term
+
+		args := AppendEntriesArgs{
+			Term:         rf.CurrentTerm,
+			LeaderID:     rf.me,
+			PrevLogIndex: prevLogIndex,
+			PrevLogTerm:  prevLogTerm,
+			Entries:      rf.Log[logFrom:logTo],
+			LeaderCommit: rf.CommitIndex,
+		}
+		rf.mu.Unlock()
+		reply := AppendEntriesReply{}
+		Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d", me, i, args.Term, len(args.Entries))
+		go func() {
+			rf.peers[i].Call("Raft.AppendEntries", &args, &reply)
+		}()
 	}
 }
 
@@ -478,6 +552,7 @@ func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, se
 				rf.State = LEADER
 				rf.NextIndex = make([]int, len(rf.peers))
 				rf.MatchIndex = make([]int, len(rf.peers))
+				rf.NewLogChan = make(chan int, 1) // 初始化新日志到达通知通道
 				for i := 0; i < len(rf.peers); i++ {
 					rf.NextIndex[i] = len(rf.Log)
 					rf.MatchIndex[i] = 0
@@ -595,16 +670,29 @@ func (rf *Raft) ticker() {
 		case CANDIDATE:
 			rf.CandidateCase(me)
 		case LEADER:
-			rf.LeaderCase()
+			// rf.LeaderCase()	// 在3A测试中，没有实现日志相关操作时，使用LeaderCase
+			// 在3B部分，由于实现了日志相关操作，心跳发送其实包含在日志操作中，使用Replicator
+			rf.LeaderAppendEntriesParallelToFollower()
 		}
 
 		// pause for a random amount of time between 50 and 350
 		// milliseconds.
-		if enableSleep {
+
+		// 该睡眠时间需要默认开启，否则一方面导致ticker CPU占用拉满，CPU无空余处理其他RPC请求，另一方面导致领导人选举出现逻辑错误
+		// if enableSleep {
+		// 	ms := 50 + (rand.Int63() % 300)
+		// 	time.Sleep(time.Duration(ms) * time.Millisecond)
+		// }
+		// 如此计算，leader每次发送心跳的时间间隔大概为100ms-400ms，而本设计的follower超时选举时间在1.5-3s，应该不会出问题
+
+		select {
+		// 如果有新日志到达，触发该channel，直接跳过睡眠，进入Leader下一轮发送日志
+		case <-rf.NewLogChan:
+			continue
+		default:
 			ms := 50 + (rand.Int63() % 300)
 			time.Sleep(time.Duration(ms) * time.Millisecond)
 		}
-		// 如此计算，leader每次发送心跳的时间间隔大概为100ms-400ms，而本设计的follower超时选举时间在1.5-3s，应该不会出问题
 	}
 }
 
