@@ -10,6 +10,7 @@ import (
 	//	"bytes"
 
 	"context"
+	"math"
 	"math/rand"
 	"sync"
 	"sync/atomic"
@@ -28,7 +29,6 @@ const SERVER_TIMEOUT = 500
 // S0:1500ms, S1:2000ms, S2:2500ms
 const SERVER_BASE_TIMEOUT = 1000
 const isRandom = true
-const enableSleep = true
 
 type ServerState int
 
@@ -258,6 +258,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		// 如果Leader的任期小于自己的任期，不合法，返回false
 		reply.Success = false
 		reply.Term = curTerm
+		return
 	}
 	// 其他情况下，Leader的任期都是合法的
 	// 首先接收心跳，重置计时器
@@ -267,24 +268,39 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	default:
 	}
 
-	// 开一个线程，用于应对领导人选举相关
-	go func(curTerm int) {
-		rf.mu.Lock()
-		if curTerm == args.Term {
-			// 如果leader的Term和自己的一样，说明自己和leader是同时期的candidate，确认自己的身份是candidate，服从先自己一步成为leader的server
-			if rf.State == CANDIDATE {
-				rf.State = FOLLOWER
-				Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert From Candidate to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
-			}
-		} else {
-			// 如果leader的Term大于自己的Term，更新自己的Term，并将身份转换为follower，重置投票项
-			rf.CurrentTerm = args.Term
-			rf.VoteFor = -1
+	rf.mu.Lock()
+	if curTerm == args.Term {
+		// 如果leader的Term和自己的一样，说明自己和leader是同时期的candidate，确认自己的身份是candidate，服从先自己一步成为leader的server
+		if rf.State == CANDIDATE {
 			rf.State = FOLLOWER
-			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert From Candidate to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
 		}
-		rf.mu.Unlock()
-	}(curTerm)
+	} else {
+		// 如果leader的Term大于自己的Term，更新自己的Term，并将身份转换为follower，重置投票项
+		rf.CurrentTerm = args.Term
+		rf.VoteFor = -1
+		rf.State = FOLLOWER
+		Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+	}
+	rf.mu.Unlock()
+	// // 开一个线程，用于应对领导人选举相关
+	// go func(curTerm int) {
+	// 	rf.mu.Lock()
+	// 	if curTerm == args.Term {
+	// 		// 如果leader的Term和自己的一样，说明自己和leader是同时期的candidate，确认自己的身份是candidate，服从先自己一步成为leader的server
+	// 		if rf.State == CANDIDATE {
+	// 			rf.State = FOLLOWER
+	// 			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert From Candidate to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+	// 		}
+	// 	} else {
+	// 		// 如果leader的Term大于自己的Term，更新自己的Term，并将身份转换为follower，重置投票项
+	// 		rf.CurrentTerm = args.Term
+	// 		rf.VoteFor = -1
+	// 		rf.State = FOLLOWER
+	// 		Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+	// 	}
+	// 	rf.mu.Unlock()
+	// }(curTerm)
 
 	// 不论任期是大于还是等于自己的任期，都需要处理发送来的新增日志条目，不同的是，针对选举的处理
 	// 确认自己存在prevLogIndex、prevLogTerm日志
@@ -301,13 +317,15 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			if toInsertIndex > len(rf.Log)-1 {
 				toAppend := args.Entries[i:]
 				rf.Log = append(rf.Log, toAppend...)
+				Debug(dLog2, "S%d At T%d, NewEntries:%d Exceed, toInsertIndex:%d, appendLength:%d", rf.me, rf.CurrentTerm, i, toInsertIndex, len(toAppend))
 				break
 			} else if rf.Log[toInsertIndex].Term != args.Entries[i].Term {
 				// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
 				rf.Log = rf.Log[toInsertIndex:]      // 将冲突条目及其后面的条目都删除
 				toAppend := args.Entries[i:]         // 或许后续新条目
 				rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
-				break                                // 所有新条目追加完毕，跳出循环
+				Debug(dLog2, "S%d At T%d, NewEntries:%d TermConfilict, toInsertIndex:%d, appendLength:%d", rf.me, rf.CurrentTerm, i, toInsertIndex, len(toAppend))
+				break // 所有新条目追加完毕，跳出循环
 			} else {
 				// 需要追加的条目，在该Server上是已有条目，不用处理
 				continue
@@ -315,6 +333,13 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		}
 		reply.Success = true
 		reply.Term = curTerm
+
+		// 检查Follower和Leader的CommitIndex
+		CommitAppendLogIndex := args.PrevLogIndex + len(args.Entries)
+		if args.LeaderCommit > rf.CommitIndex {
+			rf.CommitIndex = int(math.Min(float64(args.LeaderCommit), float64(CommitAppendLogIndex)))
+		}
+		Debug(dCommit, "S%d At T%d, CommitIndex=%d, args.LeaderCommit=%d, appendLogIndex=%d", rf.me, rf.CurrentTerm, rf.CommitIndex, args.LeaderCommit, CommitAppendLogIndex)
 	} else {
 		reply.Success = false
 		reply.Term = curTerm
@@ -387,6 +412,7 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	}
 	rf.mu.Lock()
 	rf.Log = append(rf.Log, newLog)
+	Debug(dLog, "Leader S%d At T%d, Receive Log, CurLogLength:%d", rf.me, rf.CurrentTerm, len(rf.Log)-1)
 	rf.mu.Unlock()
 
 	// Leader并行向所有Follower发送新条目的AppendEntries RPC
@@ -407,33 +433,98 @@ func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
 	rf.mu.Lock()
 	me := rf.me
 	serverNum := len(rf.peers)
+	curTerm := rf.CurrentTerm
 	rf.mu.Unlock()
 
+	// 既是发送心跳，也是发送日志追加RPC
 	for i := 0; i < serverNum; i++ {
 		if i == me {
 			continue
 		}
 
-		rf.mu.Lock()
-		logFrom := rf.NextIndex[i] // 包含该下标日志
-		logTo := len(rf.Log)       // 不包含该下标日志
-		prevLogIndex := rf.NextIndex[i] - 1
-		prevLogTerm := rf.Log[prevLogIndex].Term
+		// 由于要处理如果给一个Server附加日志失败的情况，也就是nextIndex不匹配的情况
+		// 所以需要每个Server单独一个线程，用于循环回退Leader针对这个Sever的NextIndex
+		go func() {
+			for {
+				rf.mu.Lock()
+				logFrom := rf.NextIndex[i] // 包含该下标日志
+				prevLogIndex := rf.NextIndex[i] - 1
+				prevLogTerm := rf.Log[prevLogIndex].Term
 
-		args := AppendEntriesArgs{
-			Term:         rf.CurrentTerm,
-			LeaderID:     rf.me,
-			PrevLogIndex: prevLogIndex,
-			PrevLogTerm:  prevLogTerm,
-			Entries:      rf.Log[logFrom:logTo],
-			LeaderCommit: rf.CommitIndex,
+				args := AppendEntriesArgs{
+					Term:         rf.CurrentTerm,
+					LeaderID:     rf.me,
+					PrevLogIndex: prevLogIndex,
+					PrevLogTerm:  prevLogTerm,
+					Entries:      rf.Log[logFrom:],
+					LeaderCommit: rf.CommitIndex,
+				}
+				rf.mu.Unlock()
+				reply := AppendEntriesReply{}
+
+				Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, prevLogIndex:%d", me, i, args.Term, len(args.Entries), args.PrevLogIndex)
+				if ok := rf.peers[i].Call("Raft.AppendEntries", &args, &reply); ok {
+					// 如果发送AppendEntries RPC返回了失败，那么说明prevLogIndex或者prevLogTerm匹配失败，将Leader针对该Server纪律的nextIndex向前调整一个
+					if !reply.Success {
+						// 加上这个当前任期>=reply任期是因为，如果作为Leader掉线，再发送AppendEntries，收到reply为false的原因是任期不合法，而不是nextIndex不匹配,在这种情况下，不更新nextIndex
+						// 把这个条件判断放到里面，是因为，可能会出现reply=false，但是任期小于Follower任期的情况，被判定为AppendEntries RPC成功
+						if curTerm >= reply.Term {
+							rf.mu.Lock()
+							rf.NextIndex[i] -= 1
+							Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, i, args.Term, len(args.Entries), rf.NextIndex[i])
+							rf.mu.Unlock()
+						}
+					} else {
+						// 如果Follower成功追加，需要Leader更新对应的matchIndex、nextIndex，甚至commitIndex
+						rf.mu.Lock()
+						rf.MatchIndex[i] = args.PrevLogIndex + len(args.Entries)
+						rf.NextIndex[i] = rf.MatchIndex[i] + 1
+						Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d,Success, new NextIndex:%d", me, i, args.Term, len(args.Entries), rf.NextIndex[i])
+						rf.mu.Unlock()
+						return
+					}
+				} else {
+					// 如果 RPC发送失败，即没有回复，那么跳出该次发送循环，等待下一次Leader心跳周期再发送日志
+					return
+				}
+			}
+		}()
+	}
+}
+
+func (rf *Raft) LeaderRefreshCommitIndex() {
+	rf.mu.Lock()
+	targetCommitIndex := rf.CommitIndex + 1
+	logLen := len(rf.Log)
+	serverNum := len(rf.peers)
+	rf.mu.Unlock()
+
+	var effectiveNum int = 0
+	if serverNum%2 == 0 {
+		effectiveNum = serverNum / 2
+	} else {
+		effectiveNum = serverNum/2 + 1
+	}
+
+	for ; targetCommitIndex < logLen; targetCommitIndex++ {
+		count := 0
+		// 检查每个Server已经复制的Log数量，如果满足大多数都复制的情况，就可以进行下一个索引位置的检查
+		rf.mu.Lock()
+		for i := 0; i < serverNum; i++ {
+			if rf.MatchIndex[i] >= targetCommitIndex && rf.Log[targetCommitIndex].Term == rf.CurrentTerm {
+				count++
+			}
 		}
 		rf.mu.Unlock()
-		reply := AppendEntriesReply{}
-		Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d", me, i, args.Term, len(args.Entries))
-		go func() {
-			rf.peers[i].Call("Raft.AppendEntries", &args, &reply)
-		}()
+
+		// 如果该索引位置的日志大多数服务器没有复制，就停止检查，并且将Leader的CommitIndex更新至此
+		if count < effectiveNum {
+			rf.mu.Lock()
+			rf.CommitIndex = targetCommitIndex - 1
+			Debug(dCommit, "Leader S%d At T%d, Refresh CommitIndex:%d", rf.me, rf.CurrentTerm, rf.CommitIndex)
+			rf.mu.Unlock()
+			break
+		}
 	}
 }
 
@@ -616,7 +707,7 @@ func (rf *Raft) CandidateCase(me int) {
 	}
 }
 
-func (rf *Raft) LeaderCase() {
+func (rf *Raft) LeaderCaseBackup() {
 	// 如果为leader状态，需要向每个server发送心跳，心跳使用AppendEntries RPC代替
 	rf.mu.Lock()
 	me := rf.me
@@ -648,6 +739,12 @@ func (rf *Raft) LeaderCase() {
 	// time.Sleep(100 * time.Millisecond)
 }
 
+func (rf *Raft) LeaderCase() {
+	go rf.LeaderAppendEntriesParallelToFollower()
+
+	go rf.LeaderRefreshCommitIndex()
+}
+
 func (rf *Raft) ticker() {
 	for !rf.killed() {
 		Debug(dTrace, "S%d is Status %d, At T%d Debug", rf.me, rf.State, rf.CurrentTerm)
@@ -665,7 +762,7 @@ func (rf *Raft) ticker() {
 		case LEADER:
 			// rf.LeaderCase()	// 在3A测试中，没有实现日志相关操作时，使用LeaderCase
 			// 在3B部分，由于实现了日志相关操作，心跳发送其实包含在日志操作中，使用Replicator
-			rf.LeaderAppendEntriesParallelToFollower()
+			rf.LeaderCase()
 		}
 
 		// pause for a random amount of time between 50 and 350
