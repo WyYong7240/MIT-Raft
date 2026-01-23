@@ -1,0 +1,272 @@
+000005 INFO S0 Server initialized success, run ticker
+000008 INFO S1 Server initialized success, run ticker
+000008 INFO S2 Server initialized success, run ticker
+Test (3A): election after network failure (reliable network)...
+000010 TRCE S1 is Status 0, At T0 Debug
+000009 TRCE S0 is Status 0, At T0 Debug
+000010 TRCE S2 is Status 0, At T0 Debug
+018247 TIMR S0 TimeOut Convert State From Follower to Candidate At T1
+020081 TRCE S0 is Status 1, At T1 Debug
+020087 TRCE S0 Candidate SendRequestVote To S1 At T1
+020087 TRCE S0 Candidate SendRequestVote To S2 At T1
+020098 VOTE S2 Granting Vote to S0 at T1
+020101 TRCE S0 Candidate Recevie RequestVoteReply From S2 At T1
+020101 TRCE S0 Candidate SendRequestVote Done At T1, Success Come Leader
+
+020099 VOTE S1 Granting Vote to S0 at T1
+020105 TRCE S0 Candidate Recevie RequestVoteReply From S1 At T1
+
+021082 ERRO 3A Leader1 S0 DisconnentAll
+021291 TRCE S0 is Status 2, At T1 Debug
+021294 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+021296 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+021403 TRCE S2 is Status 0, At T1 Debug
+021803 TRCE S0 is Status 2, At T1 Debug
+021804 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+021805 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+021912 TRCE S1 is Status 0, At T1 Debug
+023942 TRCE S0 is Status 2, At T1 Debug
+023945 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+023946 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+026274 TRCE S0 is Status 2, At T1 Debug
+026275 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+026276 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+028163 TRCE S0 is Status 2, At T1 Debug
+028166 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+028166 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+030829 TRCE S0 is Status 2, At T1 Debug
+030832 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+030832 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+032060 TRCE S0 is Status 2, At T1 Debug
+032063 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+032064 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+034849 TRCE S0 is Status 2, At T1 Debug
+034853 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+034854 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+037033 TRCE S0 is Status 2, At T1 Debug
+037036 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+037037 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+037987 TRCE S0 is Status 2, At T1 Debug
+037989 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+037990 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+038813 TRCE S0 is Status 2, At T1 Debug
+038816 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+038817 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+039402 TRCE S0 is Status 2, At T1 Debug
+039404 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+039405 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+
+040167 TIMR S1 TimeOut Convert State From Follower to Candidate At T2
+041352 TRCE S0 is Status 2, At T1 Debug
+041357 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+041359 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+041909 TRCE S1 is Status 1, At T2 Debug
+041911 TRCE S1 Candidate SendRequestVote To S2 At T2
+041911 TRCE S1 Candidate SendRequestVote To S0 At T2
+041912 VOTE S2 Granting Vote to S1 at T2
+041913 TRCE S1 Candidate Recevie RequestVoteReply From S2 At T2
+041914 TRCE S1 Candidate SendRequestVote Done At T2, Success Come Leader
+
+042452 TRCE S1 is Status 2, At T2 Debug
+042456 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+042456 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+042461 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+042461 LOG1 S2 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+042461 CMIT S2 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+042463 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:1
+
+042822 TRCE S2 is Status 0, At T2 Debug
+043658 TRCE S0 is Status 2, At T1 Debug
+043663 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+043664 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+044394 TRCE S2 is Status 0, At T2 Debug
+044802 TRCE S0 is Status 2, At T1 Debug
+044804 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+044804 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+045741 TRCE S1 is Status 2, At T2 Debug
+045745 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+045746 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+045748 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+045748 LOG1 S2 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+045749 CMIT S2 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+045749 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:1
+
+046776 ERRO 3A Leader1 S0 Reconnect
+046985 TRCE S0 is Status 2, At T1 Debug
+046987 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:0
+046987 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+046989 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+046990 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:1
+046991 TRCE S2 At T2 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+046992 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0,Success, new NextIndex:1
+
+048342 TRCE S2 is Status 0, At T2 Debug
+048738 TRCE S1 is Status 2, At T2 Debug
+048740 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+048741 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+048743 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+048743 TRCE S0 At T1 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+048744 TRCE S0 At T2 Recive AppendEntries From Leader S1 In T2, Convert to Follower
+048744 LOG1 S0 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+048744 CMIT S0 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+048744 LOG1 S2 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+048744 CMIT S2 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+048745 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0,Success, new NextIndex:1
+048745 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:1
+049455 TRCE S2 is Status 0, At T2 Debug
+050468 TRCE S0 is Status 0, At T2 Debug
+051422 TRCE S1 is Status 2, At T2 Debug
+051423 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+051424 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+051425 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+051425 LOG1 S2 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+051425 CMIT S2 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+051425 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:1
+051426 TRCE S0 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+051426 LOG1 S0 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+051426 CMIT S0 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+051427 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0,Success, new NextIndex:1
+052099 ERRO 3A Leader2 S1 and another Server DisconnentAll
+052847 TRCE S2 is Status 0, At T2 Debug
+053329 TRCE S0 is Status 0, At T2 Debug
+054514 TRCE S0 is Status 0, At T2 Debug
+054641 TRCE S1 is Status 2, At T2 Debug
+054643 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+054644 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+056735 TRCE S1 is Status 2, At T2 Debug
+056738 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+056739 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+058554 TRCE S1 is Status 2, At T2 Debug
+058557 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+058557 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+059185 TRCE S1 is Status 2, At T2 Debug
+059190 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+059190 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+060689 TRCE S1 is Status 2, At T2 Debug
+060691 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+060692 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+063612 TRCE S1 is Status 2, At T2 Debug
+063614 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+063614 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+066962 TRCE S1 is Status 2, At T2 Debug
+066965 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+066967 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+067942 TIMR S2 TimeOut Convert State From Follower to Candidate At T3
+069269 TRCE S1 is Status 2, At T2 Debug
+069272 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+069273 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+069999 TRCE S2 is Status 1, At T3 Debug
+070000 TRCE S2 Candidate SendRequestVote To S1 At T3
+070001 TRCE S2 Candidate SendRequestVote To S0 At T3
+070440 TRCE S1 is Status 2, At T2 Debug
+070441 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+070442 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+072112 ERRO 3A Leader2 S1 Reconnect
+072365 TRCE S1 is Status 2, At T2 Debug
+072367 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+072369 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+073383 TIMR S0 TimeOut Convert State From Follower to Candidate At T3
+073591 TRCE S1 is Status 2, At T2 Debug
+073594 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+073595 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+076845 TRCE S0 is Status 1, At T3 Debug
+076848 TRCE S0 Candidate SendRequestVote To S2 At T3
+076848 TRCE S0 Candidate SendRequestVote To S1 At T3
+076855 VOTE S2 Refuse Vote to S0 at T3
+076858 TRCE S0 Candidate Recevie RequestVoteReply From S2 At T3
+076882 TRCE S1 is Status 2, At T2 Debug
+076883 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+076884 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+079467 TRCE S1 is Status 2, At T2 Debug
+079472 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+079473 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+082519 TRCE S1 is Status 2, At T2 Debug
+082521 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+082522 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+083648 TRCE S1 is Status 2, At T2 Debug
+083659 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+083658 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+085063 TRCE S1 is Status 2, At T2 Debug
+085068 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+085068 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+088423 TRCE S1 is Status 2, At T2 Debug
+088425 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+088427 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+090412 TRCE S1 is Status 2, At T2 Debug
+090416 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+090417 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+092956 TRCE S1 is Status 2, At T2 Debug
+092958 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+092959 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+093162 TRCE S2 Candidate TimeOut Increate Term From T3 to T4
+093503 TRCE S0 Candidate TimeOut Increate Term From T3 to T4
+093692 TRCE S1 is Status 2, At T2 Debug
+093695 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+093695 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+094258 TRCE S1 is Status 2, At T2 Debug
+094259 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+094260 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+095510 TRCE S1 is Status 2, At T2 Debug
+095512 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+095513 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+095888 TRCE S0 is Status 1, At T4 Debug
+095891 TRCE S0 Candidate SendRequestVote To S2 At T4
+095891 TRCE S0 Candidate SendRequestVote To S1 At T4
+095895 VOTE S2 Refuse Vote to S0 at T4
+095898 TRCE S0 Candidate Recevie RequestVoteReply From S2 At T4
+095934 TRCE S2 is Status 1, At T4 Debug
+095936 TRCE S2 Candidate SendRequestVote To S1 At T4
+095937 TRCE S2 Candidate SendRequestVote To S0 At T4
+095941 VOTE S0 Refuse Vote to S2 at T4
+095944 TRCE S2 Candidate Recevie RequestVoteReply From S0 At T4
+098800 TRCE S1 is Status 2, At T2 Debug
+098804 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+098805 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+101982 TRCE S1 is Status 2, At T2 Debug
+101984 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+101985 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+104127 TRCE S1 is Status 2, At T2 Debug
+104130 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+104132 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+107509 TRCE S1 is Status 2, At T2 Debug
+107511 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+107511 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+108539 TRCE S1 is Status 2, At T2 Debug
+108541 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+108541 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+110891 TRCE S1 is Status 2, At T2 Debug
+110895 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+110895 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+112184 TRCE S1 is Status 2, At T2 Debug
+112186 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+112186 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+112718 TRCE S1 is Status 2, At T2 Debug
+112721 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+112722 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+114843 TRCE S1 is Status 2, At T2 Debug
+114846 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+114847 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+117350 TRCE S1 is Status 2, At T2 Debug
+117352 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+117353 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+119502 TRCE S1 is Status 2, At T2 Debug
+119504 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+119505 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+119628 TRCE S2 Candidate TimeOut Increate Term From T4 to T5
+122524 TRCE S0 Candidate TimeOut Increate Term From T4 to T5
+122915 TRCE S1 is Status 2, At T2 Debug
+122917 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+122919 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:0, prevLogIndex:0
+123011 TRCE S2 is Status 1, At T5 Debug
+123012 TRCE S2 Candidate SendRequestVote To S1 At T5
+123014 TRCE S2 Candidate SendRequestVote To S0 At T5
+123016 VOTE S0 Refuse Vote to S2 at T5
+123018 TRCE S2 Candidate Recevie RequestVoteReply From S0 At T5
+Fatal: expected one leader, got none
+        /root/Golang/MIT-Raft/src/raft1/test.go:100
+        /root/Golang/MIT-Raft/src/raft1/raft_test.go:98
+info: wrote visualization to /tmp/porcupine-1062721890.html
+--- FAIL: TestReElection3A (12.33s)
+FAIL
+exit status 1
+FAIL	6.5840/raft1	12.336s

@@ -148,11 +148,13 @@ func TestBasicAgree3B(t *testing.T) {
 	iters := 3
 	for index := 1; index < iters+1; index++ {
 		nd, _ := ts.nCommitted(index)
+		Debug(dError, "当前节点有%d个节点提交了索引为%d的条目", nd, index)
 		if nd > 0 {
 			t.Fatalf("some have committed before Start()")
 		}
 
 		xindex := ts.one(index*100, servers, false)
+		Debug(dError, "插入第%d个日志后，获取其在集群中的索引为%d", index, xindex)
 		if xindex != index {
 			t.Fatalf("got index %v but expected %v", xindex, index)
 		}
