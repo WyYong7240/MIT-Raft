@@ -1,0 +1,66 @@
+000005 INFO S0 Server initialized success, run ticker
+000008 INFO S1 Server initialized success, run ticker
+000008 INFO S2 Server initialized success, run ticker
+000008 TRCE S0 is Status 0, At T0 Debug
+Test (3B): basic agreement (reliable network)...
+000009 ERRO 当前节点有0个节点提交了索引为1的条目
+000009 TRCE S2 is Status 0, At T0 Debug
+000010 TRCE S1 is Status 0, At T0 Debug
+017921 TRCE S1 is Status 1, At T1 Debug
+018259 TRCE S0 is Status 1, At T1 Debug
+018434 LOG1 Leader S1 At T1, Receive Log, CurLogLength:2
+
+019903 TRCE S1 is Status 2, At T1 Debug
+019904 TRCE S1 is Status 2, At T1 Debug
+019904 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=0, LogTerm=1, curCount=0, effctiveNum=2
+019905 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=0, LogTerm=1, curCount=0, effctiveNum=2
+019905 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=0, LogTerm=1, curCount=0, effctiveNum=2
+019905 CMIT Leader S1 At T1, Refresh CommitIndex:0
+019905 LEAD S1 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:0
+019905 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=0, LogTerm=1, curCount=0, effctiveNum=2
+019906 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=0, LogTerm=1, curCount=0, effctiveNum=2
+019906 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=0, LogTerm=1, curCount=0, effctiveNum=2
+019906 CMIT Leader S1 At T1, Refresh CommitIndex:0
+
+019906 LEAD S1 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:0
+019906 LEAD S1 Sending AppendEntries RPC to S0 At T1, Log Length:1, prevLogIndex:0
+019906 LEAD S1 Sending AppendEntries RPC to S0 At T1, Log Length:1, prevLogIndex:0
+
+019909 TRCE S2 At T1 Recive AppendEntries RPC From Leader S1 In T1, Entries Len 1
+019909 LOG1 S2 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+019909 LOG2 S2 At T1, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+019909 CMIT S2 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+019909 TRCE S2 At T1 Recive AppendEntries RPC From Leader S1 In T1, Entries Len 1
+019910 LOG1 S2 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+019910 CMIT S2 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+// S2 接收日志成功
+019910 LEAD S1 Sending AppendEntries RPC to S2 At T1, Log Length:1,Success, new NextIndex:2
+019910 LEAD S1 Sending AppendEntries RPC to S2 At T1, Log Length:1,Success, new NextIndex:2
+019911 TRCE S0 At T1 Recive AppendEntries RPC From Leader S1 In T1, Entries Len 1
+019911 LOG1 S0 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+019911 LOG2 S0 At T1, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+019911 CMIT S0 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+// S0 接收日志成功
+019911 LEAD S1 Sending AppendEntries RPC to S0 At T1, Log Length:1,Success, new NextIndex:2
+019912 TRCE S0 At T1 Recive AppendEntries RPC From Leader S1 In T1, Entries Len 1
+019912 LOG1 S0 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+019912 CMIT S0 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+019913 LEAD S1 Sending AppendEntries RPC to S0 At T1, Log Length:1,Success, new NextIndex:2
+
+020203 TRCE S2 is Status 0, At T1 Debug
+020872 TRCE S1 is Status 2, At T1 Debug
+// Leader S1 开始检查CommitIndex
+020874 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=1, LogTerm=1, curCount=1, effctiveNum=2
+020875 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=0, LogTerm=1, curCount=1, effctiveNum=2
+020875 CMIT Leader S1 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=1, LogTerm=1, curCount=2, effctiveNum=2
+// 显而易见，由于targetCommitIndex变为了2，超出日志范围，未做安全检查
+// 还是改为一次targetCommitIndex检查，只要满足要求就更新一次commitIndex，并改为 targetCommitIndex < len(rf.log) 、 count >= effctiveNum
+panic: runtime error: index out of range [2] with length 2
+
+goroutine 13 [running]:
+6.5840/raft1.(*Raft).LeaderRefreshCommitIndex(0xc0001e00c0)
+	/root/Golang/MIT-Raft/src/raft1/raft.go:545 +0x4a6
+created by 6.5840/raft1.(*Raft).LeaderCase in goroutine 23
+	/root/Golang/MIT-Raft/src/raft1/raft.go:789 +0x96
+exit status 2
+FAIL	6.5840/raft1	2.096s
