@@ -258,7 +258,7 @@ func (ts *Test) one(cmd any, expectedServers int, retry bool) int {
 			for time.Since(t1).Seconds() < 2 {
 				nd, cmd1 := ts.nCommitted(index)
 
-				Debug(dError, "Tester: curIndex:%d has been %d ServerCommitted, expected %d ServerCommit, Content:%v", index, nd, expectedServers, cmd1)
+				// Debug(dError, "Tester: curIndex:%d has been %d ServerCommitted, expected %d ServerCommit, Content:%v", index, nd, expectedServers, cmd1)
 
 				if nd > 0 && nd >= expectedServers {
 					// committed

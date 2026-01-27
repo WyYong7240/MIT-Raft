@@ -120,6 +120,7 @@ func TestManyElections3A(t *testing.T) {
 		i1 := rand.Int() % servers
 		i2 := rand.Int() % servers
 		i3 := rand.Int() % servers
+		Debug(dError, "Tester： 断开S%d,S%d,S%d 的连接", i1, i2, i3)
 		ts.g.DisconnectAll(i1)
 		ts.g.DisconnectAll(i2)
 		ts.g.DisconnectAll(i3)
@@ -129,6 +130,7 @@ func TestManyElections3A(t *testing.T) {
 		// or the remaining four should elect a new one.
 		ts.checkOneLeader()
 
+		Debug(dError, "Tester： 重连S%d,S%d,S%d 的连接", i1, i2, i3)
 		ts.g.ConnectOne(i1)
 		ts.g.ConnectOne(i2)
 		ts.g.ConnectOne(i3)
@@ -203,26 +205,32 @@ func TestFollowerFailure3B(t *testing.T) {
 	tester.AnnotateTest("TestFollowerFailure3B", servers)
 	ts.Begin("Test (3B): test progressive failure of followers")
 
+	Debug(dError, "Tester: 提交命令：101")
 	ts.one(101, servers, false)
 
 	// disconnect one follower from the network.
 	leader1 := ts.checkOneLeader()
+	Debug(dError, "Tester: 断开一个follower： %d", (leader1+1)%servers)
 	ts.g.DisconnectAll((leader1 + 1) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// the leader and remaining follower should be
 	// able to agree despite the disconnected follower.
+	Debug(dError, "Tester: 提交命令：102")
 	ts.one(102, servers-1, false)
 	time.Sleep(RaftElectionTimeout)
+	Debug(dError, "Tester: 提交命令：103")
 	ts.one(103, servers-1, false)
 
 	// disconnect the remaining follower
 	leader2 := ts.checkOneLeader()
+	Debug(dError, "Tester: 断开两个follower")
 	ts.g.DisconnectAll((leader2 + 1) % servers)
 	ts.g.DisconnectAll((leader2 + 2) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// submit a command.
+	Debug(dError, "Tester: 提交命令：104, Start应当接收，但104无法提交")
 	index, _, ok := ts.srvs[leader2].Raft().Start(104)
 	if ok != true {
 		t.Fatalf("leader rejected Start()")
@@ -231,6 +239,7 @@ func TestFollowerFailure3B(t *testing.T) {
 		t.Fatalf("expected index 4, got %v", index)
 	}
 
+	Debug(dError, "Tester: FollowerFailure Final Sleep")
 	time.Sleep(2 * RaftElectionTimeout)
 
 	// check that command 104 did not commit.
@@ -246,25 +255,31 @@ func TestLeaderFailure3B(t *testing.T) {
 	tester.AnnotateTest("TestLeaderFailure3B", servers)
 	ts.Begin("Test (3B): test failure of leaders")
 
+	Debug(dError, "Tester: 提交命令：101")
 	ts.one(101, servers, false)
 
 	// disconnect the first leader.
 	leader1 := ts.checkOneLeader()
+	Debug(dError, "Tester: 断开第一个Leader S%d 的连接", leader1)
 	ts.g.DisconnectAll(leader1)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// the remaining followers should elect
 	// a new leader.
+	Debug(dError, "Tester: 提交命令：102")
 	ts.one(102, servers-1, false)
 	time.Sleep(RaftElectionTimeout)
+	Debug(dError, "Tester: 提交命令：103")
 	ts.one(103, servers-1, false)
 
 	// disconnect the new leader.
 	leader2 := ts.checkOneLeader()
+	Debug(dError, "Tester: 断开第二个Leader S%d 的连接", leader1)
 	ts.g.DisconnectAll(leader2)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// submit a command to each server.
+	Debug(dError, "Tester: 提交命令：104")
 	for i := 0; i < servers; i++ {
 		ts.srvs[i].Raft().Start(104)
 	}
@@ -285,30 +300,39 @@ func TestFailAgree3B(t *testing.T) {
 	tester.AnnotateTest("TestFailAgree3B", servers)
 	ts.Begin("Test (3B): agreement after follower reconnects")
 
+	Debug(dError, "Tester: 提交命令：101")
 	ts.one(101, servers, false)
 
 	// disconnect one follower from the network.
 	leader := ts.checkOneLeader()
+	Debug(dError, "Tester: 断开 S%d 的连接", (leader+1)%servers)
 	ts.g.DisconnectAll((leader + 1) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// the leader and remaining follower should be
 	// able to agree despite the disconnected follower.
+	Debug(dError, "Tester: 提交命令：102")
 	ts.one(102, servers-1, false)
+	Debug(dError, "Tester: 提交命令：103")
 	ts.one(103, servers-1, false)
 	time.Sleep(RaftElectionTimeout)
+	Debug(dError, "Tester: 提交命令：104")
 	ts.one(104, servers-1, false)
+	Debug(dError, "Tester: 提交命令：105")
 	ts.one(105, servers-1, false)
 
 	// re-connect
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader+1)%servers)
 	ts.g.ConnectOne((leader + 1) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// the full set of servers should preserve
 	// previous agreements, and be able to agree
 	// on new commands.
+	Debug(dError, "Tester: 提交命令：106")
 	ts.one(106, servers, true)
 	time.Sleep(RaftElectionTimeout)
+	Debug(dError, "Tester: 提交命令：107")
 	ts.one(107, servers, true)
 }
 
@@ -320,15 +344,20 @@ func TestFailNoAgree3B(t *testing.T) {
 	tester.AnnotateTest("TestFailNoAgree3B", servers)
 	ts.Begin("Test (3B): no agreement if too many followers disconnect")
 
+	Debug(dError, "Tester: 提交命令：10")
 	ts.one(10, servers, false)
 
 	// 3 of 5 followers disconnect
 	leader := ts.checkOneLeader()
+	Debug(dError, "Tester: 断连 S%d 的连接", (leader+1)%servers)
 	ts.g.DisconnectAll((leader + 1) % servers)
+	Debug(dError, "Tester: 断连 S%d 的连接", (leader+2)%servers)
 	ts.g.DisconnectAll((leader + 2) % servers)
+	Debug(dError, "Tester: 断连 S%d 的连接", (leader+3)%servers)
 	ts.g.DisconnectAll((leader + 3) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
+	Debug(dError, "Tester: 提交命令：20")
 	index, _, ok := ts.srvs[leader].Raft().Start(20)
 	if ok != true {
 		t.Fatalf("leader rejected Start()")
@@ -345,14 +374,18 @@ func TestFailNoAgree3B(t *testing.T) {
 	}
 
 	// repair
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader+1)%servers)
 	ts.g.ConnectOne((leader + 1) % servers)
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader+2)%servers)
 	ts.g.ConnectOne((leader + 2) % servers)
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader+3)%servers)
 	ts.g.ConnectOne((leader + 3) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// the disconnected majority may have chosen a leader from
 	// among their own ranks, forgetting index 2.
 	leader2 := ts.checkOneLeader()
+	Debug(dError, "Tester: 提交命令：30")
 	index2, _, ok2 := ts.srvs[leader2].Raft().Start(30)
 	if ok2 == false {
 		t.Fatalf("leader2 rejected Start()")
@@ -361,6 +394,7 @@ func TestFailNoAgree3B(t *testing.T) {
 		t.Fatalf("unexpected index %v", index2)
 	}
 
+	Debug(dError, "Tester: 提交命令：1000")
 	ts.one(1000, servers, true)
 }
 
@@ -495,38 +529,50 @@ func TestRejoin3B(t *testing.T) {
 	tester.AnnotateTest("TestRejoin3B", servers)
 	ts.Begin("Test (3B): rejoin of partitioned leader")
 
+	Debug(dError, "Tester: 提交命令：101")
 	ts.one(101, servers, true)
 
 	// leader network failure
 	leader1 := ts.checkOneLeader()
+	Debug(dError, "Tester: 断连 Leader S%d 的连接", leader1)
 	ts.g.DisconnectAll(leader1)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// make old leader try to agree on some entries
 	start := tester.GetAnnotateTimestamp()
+	Debug(dError, "Tester: 向Leader S%d 提交命令：102", leader1)
 	ts.srvs[leader1].Raft().Start(102)
+	Debug(dError, "Tester: 向Leader S%d 提交命令：103", leader1)
 	ts.srvs[leader1].Raft().Start(103)
+	Debug(dError, "Tester: 向Leader S%d 提交命令：104", leader1)
 	ts.srvs[leader1].Raft().Start(104)
 	text := fmt.Sprintf("submitted commands [102 103 104] to %v", leader1)
 	tester.AnnotateInfoInterval(start, text, text)
 
 	// new leader commits, also for index=2
+	Debug(dError, "Tester: 提交命令：103")
 	ts.one(103, 2, true)
 
 	// new leader network failure
 	leader2 := ts.checkOneLeader()
+	Debug(dError, "Tester: 断连 Leader2 S%d 的连接", leader2)
 	ts.g.DisconnectAll(leader2)
 
 	// old leader connected again
+	Debug(dError, "Tester: 重连 Leader1 S%d 的连接", leader1)
+	// Leader1 重连后，应该将后来单独给其发的日志删除，并添加上后来给Leader2 发送的103,应该没有102
 	ts.g.ConnectOne(leader1)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
+	Debug(dError, "Tester: 提交命令：104")
 	ts.one(104, 2, true)
 
 	// all together now
+	Debug(dError, "Tester: 重连 Leader2 S%d 的连接", leader2)
 	ts.g.ConnectOne(leader2)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
+	Debug(dError, "Tester: 提交命令：105")
 	ts.one(105, servers, true)
 }
 
@@ -538,38 +584,52 @@ func TestBackup3B(t *testing.T) {
 	tester.AnnotateTest("TestBackup3B", servers)
 	ts.Begin("Test (3B): leader backs up quickly over incorrect follower logs")
 
-	ts.one(rand.Int(), servers, true)
+	Debug(dError, "Tester: 提交命令：100")
+	ts.one(100, servers, true)
+	// ts.one(rand.Int(), servers, true)
 
 	// put leader and one follower in a partition
 	leader1 := ts.checkOneLeader()
+	Debug(dError, "Tester: 断连 S%d 的连接", (leader1+2)%servers)
 	ts.g.DisconnectAll((leader1 + 2) % servers)
+	Debug(dError, "Tester: 断连 S%d 的连接", (leader1+3)%servers)
 	ts.g.DisconnectAll((leader1 + 3) % servers)
+	Debug(dError, "Tester: 断连 S%d 的连接", (leader1+4)%servers)
 	ts.g.DisconnectAll((leader1 + 4) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// submit lots of commands that won't commit
 	start := tester.GetAnnotateTimestamp()
 	for i := 0; i < 50; i++ {
-		ts.srvs[leader1].Raft().Start(rand.Int())
+		// ts.srvs[leader1].Raft().Start(rand.Int())
+		ts.srvs[leader1].Raft().Start(i)
 	}
+	Debug(dError, "Tester: 提交50个命令到 Leader S%d", leader1)
 	text := fmt.Sprintf("submitted 50 commands to %v", leader1)
 	tester.AnnotateInfoInterval(start, text, text)
 
 	time.Sleep(RaftElectionTimeout / 2)
 
+	Debug(dError, "Tester: 断连 S%d 的连接", (leader1+0)%servers)
 	ts.g.DisconnectAll((leader1 + 0) % servers)
+	Debug(dError, "Tester: 断连 S%d 的连接", (leader1+1)%servers)
 	ts.g.DisconnectAll((leader1 + 1) % servers)
 
 	// allow other partition to recover
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader1+2)%servers)
 	ts.g.ConnectOne((leader1 + 2) % servers)
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader1+3)%servers)
 	ts.g.ConnectOne((leader1 + 3) % servers)
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader1+4)%servers)
 	ts.g.ConnectOne((leader1 + 4) % servers)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// lots of successful commands to new group.
 	for i := 0; i < 50; i++ {
-		ts.one(rand.Int(), 3, true)
+		// ts.one(rand.Int(), 3, true)
+		ts.one(200+i, 3, true)
 	}
+	Debug(dError, "Tester: 提交50个命令")
 
 	// now another partitioned leader and one follower
 	leader2 := ts.checkOneLeader()

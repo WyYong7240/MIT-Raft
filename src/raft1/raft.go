@@ -29,8 +29,10 @@ const SERVER_TIMEOUT = 500
 // S0:1500ms, S1:2000ms, S2:2500ms
 const SERVER_BASE_TIMEOUT = 1000
 const isRandom = true
-const LeaderElectionDebug = false
+const LeaderElectionDebug = true
 const LogAppendDebug = true
+
+var ME int
 
 type ServerState int
 
@@ -264,6 +266,7 @@ type AppendEntriesReply struct {
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	rf.mu.Lock()
 	curTerm := rf.CurrentTerm
+	me := rf.me
 	Debug(dTrace, "S%d At T%d Recive AppendEntries RPC From Leader S%d In T%d, Entries Len %d", rf.me, rf.CurrentTerm, args.LeaderID, args.Term, len(args.Entries))
 	rf.mu.Unlock()
 
@@ -272,6 +275,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		// 如果Leader的任期小于自己的任期，不合法，返回false
 		reply.Success = false
 		reply.Term = curTerm
+		Debug(dTrace, "S%d At T%d Refuse AppendEntries RPC From Leader S%d In T%d, Entries Len %d", me, curTerm, args.LeaderID, args.Term, len(args.Entries))
 		return
 	}
 	// 其他情况下，Leader的任期都是合法的
@@ -343,7 +347,7 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 				break
 			} else if rf.Log[toInsertIndex].Term != args.Entries[i].Term {
 				// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
-				rf.Log = rf.Log[toInsertIndex:]      // 将冲突条目及其后面的条目都删除
+				rf.Log = rf.Log[:toInsertIndex]      // 将冲突条目及其后面的条目都删除
 				toAppend := args.Entries[i:]         // 或许后续新条目
 				rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
 				if LogAppendDebug {
@@ -439,6 +443,10 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	}
 	rf.mu.Lock()
 	rf.Log = append(rf.Log, newLog)
+	// 更新Leader的MatchIndex、nextIndex，虽然自己不是follower，但是commitIndex检查中会用到
+	// rf.MatchIndex[rf.me] += rf.NextIndex[rf.me] // 将Leader自己的MatchIndex更新为已经复制的日志的长度
+	rf.MatchIndex[rf.me] = len(rf.Log) - 1
+	rf.NextIndex[rf.me] += 1
 	if LogAppendDebug {
 		Debug(dLog, "Leader S%d At T%d, Receive Log, CurLogLength:%d", rf.me, rf.CurrentTerm, len(rf.Log))
 	}
@@ -494,6 +502,7 @@ func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
 				Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, prevLogIndex:%d", me, i, args.Term, len(args.Entries), args.PrevLogIndex)
 				if ok := rf.peers[i].Call("Raft.AppendEntries", &args, &reply); ok {
 					// 如果发送AppendEntries RPC返回了失败，那么说明prevLogIndex或者prevLogTerm匹配失败，将Leader针对该Server纪律的nextIndex向前调整一个
+					// 失败还有一种情况，就是自己是过期的Leader，对方Follower的Term比自己的高
 					if !reply.Success {
 						// 加上这个当前任期>=reply任期是因为，如果作为Leader掉线，再发送AppendEntries，收到reply为false的原因是任期不合法，而不是nextIndex不匹配,在这种情况下，不更新nextIndex
 						// 把这个条件判断放到里面，是因为，可能会出现reply=false，但是任期小于Follower任期的情况，被判定为AppendEntries RPC成功
@@ -502,6 +511,17 @@ func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
 							rf.NextIndex[i] -= 1
 							Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, i, args.Term, len(args.Entries), rf.NextIndex[i])
 							rf.mu.Unlock()
+						} else {
+							// 处理自己是过期Leader的情况,原本这种情况，都是由其他几个Server选出更高Term的Leader，由新Leader向自己发送高Term心跳，在AppendEntries中进行身份转换的
+							// 但是，在这里处理的情况就是，当剩余Server不足以选出新Leader发出高Term心跳的情况（其实就算只剩下一个Server，只要那个Server超时，发出高Term的拉票请求，应该也能身份转换）
+
+							// rf.mu.Lock()
+							// rf.State = FOLLOWER
+							// rf.CurrentTerm = reply.Term
+							// Debug(dLeader, "S%d Convert to Follower At T%d", rf.me, rf.CurrentTerm)
+							// rf.mu.Unlock()
+
+							return
 						}
 					} else {
 						// 如果Follower成功追加，需要Leader更新对应的matchIndex、nextIndex，甚至commitIndex
@@ -621,6 +641,9 @@ func (rf *Raft) FollowerCase(me int) {
 	select {
 	case <-rf.TimeOutChan:
 		// 收到leader的心跳，重置倒计时，即进入下一轮倒计时
+		if LeaderElectionDebug {
+			Debug(dTrace, "S%d Receive HeatBeat", me)
+		}
 		return
 	case <-time.After(curDuration):
 		// 如果超时没有收到leader的心跳，将自己转换身份为candidate，并将自己的term+1
@@ -873,6 +896,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.peers = peers
 	rf.persister = persister
 	rf.me = me
+	ME = me
 
 	// Your initialization code here (3A, 3B, 3C).
 	rf.CurrentTerm = 0

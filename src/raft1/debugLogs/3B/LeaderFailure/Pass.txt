@@ -1,0 +1,509 @@
+000004 INFO S0 Server initialized success, run ticker
+000007 INFO S1 Server initialized success, run ticker
+000008 INFO S2 Server initialized success, run ticker
+000008 TRCE S0 is Status 0, At T0 Debug
+000009 TRCE S1 is Status 0, At T0 Debug
+Test (3B): test failure of leaders (reliable network)...
+000010 ERRO Tester: 提交命令：101
+000009 TRCE S2 is Status 0, At T0 Debug
+018074 TRCE S0 is Status 1, At T1 Debug
+018289 LOG1 Leader S0 At T1, Receive Log, CurLogLength:2
+018289 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+018496 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+018702 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+018909 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+019117 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+019324 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+019531 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+019738 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+019843 TRCE S0 is Status 2, At T1 Debug
+019846 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=1, LogTerm=1, curCount=1, effctiveNum=2
+019846 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=0, LogTerm=1, curCount=1, effctiveNum=2
+019846 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=0, LogTerm=1, curCount=1, effctiveNum=2
+019847 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:0
+019847 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:0
+019851 TRCE S2 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 1
+019851 LOG1 S2 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+019851 LOG2 S2 At T1, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+019851 CMIT S2 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+019851 TRCE S1 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 1
+019852 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1,Success, new NextIndex:2
+019852 LOG1 S1 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+019852 LOG2 S1 At T1, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+019853 CMIT S1 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+019854 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1,Success, new NextIndex:2
+019948 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020153 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020361 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020415 TRCE S2 is Status 0, At T1 Debug
+020569 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020776 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020985 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+021050 TRCE S1 is Status 0, At T1 Debug
+021062 TRCE S2 is Status 0, At T1 Debug
+021187 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+021396 ERRO Tester: curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+021570 TRCE S0 is Status 2, At T1 Debug
+021571 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=1, LogTerm=1, curCount=1, effctiveNum=2
+021571 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=1, LogTerm=1, curCount=2, effctiveNum=2
+021571 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=1, LogTerm=1, curCount=3, effctiveNum=2
+021571 CMIT Leader S0 At T1, Refresh CommitIndex:1
+021571 LOG2 S0 At T1, Apply Index:1, LogTerm:1, LogCommand:101
+021572 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+021573 TRCE S2 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+021573 LOG1 S2 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+021573 CMIT S2 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+021573 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+021574 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0,Success, new NextIndex:2
+021578 TRCE S1 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+021579 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+021579 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+021581 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+021607 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+021813 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+022021 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+022227 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+022435 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+022641 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+022850 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+023057 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+023266 ERRO Tester: curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:101
+023312 TRCE S1 is Status 0, At T1 Debug
+023314 LOG2 S1 At T1, Apply Index:1, LogTerm:1, LogCommand:101
+023468 ERRO Tester: curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:101
+023675 ERRO Tester: curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:101
+023675 TRCE S2 is Status 0, At T1 Debug
+023676 LOG2 S2 At T1, Apply Index:1, LogTerm:1, LogCommand:101
+023880 ERRO Tester: curIndex:1 has been 3 ServerCommitted, expected 3 ServerCommit, Content:101
+024235 TRCE S0 is Status 2, At T1 Debug
+024238 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+024239 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+024244 TRCE S2 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+024244 LOG1 S2 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+024244 CMIT S2 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+024244 TRCE S1 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+024245 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+024245 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+024245 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0,Success, new NextIndex:2
+024245 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+025140 TRCE S2 is Status 0, At T1 Debug
+026735 TRCE S1 is Status 0, At T1 Debug
+027609 TRCE S0 is Status 2, At T1 Debug
+027611 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+027611 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+027614 TRCE S1 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+027614 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+027614 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+027614 TRCE S2 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+027615 LOG1 S2 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+027615 CMIT S2 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+027615 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+027616 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0,Success, new NextIndex:2
+028715 TRCE S1 is Status 0, At T1 Debug
+028728 TRCE S2 is Status 0, At T1 Debug
+028833 TRCE S0 is Status 2, At T1 Debug
+028834 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+028835 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+028835 TRCE S2 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+028836 LOG1 S2 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+028836 CMIT S2 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+028836 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0,Success, new NextIndex:2
+028837 TRCE S1 At T1 Recive AppendEntries RPC From Leader S0 In T1, Entries Len 0
+028837 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+028837 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+028839 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+029372 ERRO Tester: 断开第一个Leader S0 的连接
+029372 ERRO Tester: 提交命令：102
+030688 TRCE S1 is Status 0, At T1 Debug
+031022 TRCE S0 is Status 2, At T1 Debug
+031022 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+031023 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+031817 TRCE S2 is Status 0, At T1 Debug
+032443 TRCE S1 is Status 0, At T1 Debug
+033428 TRCE S0 is Status 2, At T1 Debug
+033429 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+033430 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+036200 TRCE S0 is Status 2, At T1 Debug
+036201 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+036202 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+038418 TRCE S0 is Status 2, At T1 Debug
+038419 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+038419 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+039320 TRCE S0 is Status 2, At T1 Debug
+039321 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+039322 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+042274 TRCE S0 is Status 2, At T1 Debug
+042277 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+042277 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+044247 TRCE S0 is Status 2, At T1 Debug
+044251 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+044251 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+046730 TRCE S0 is Status 2, At T1 Debug
+046731 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+046732 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+049055 TRCE S0 is Status 2, At T1 Debug
+049056 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+049057 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+052246 TRCE S0 is Status 2, At T1 Debug
+052249 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+052249 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+055430 TRCE S0 is Status 2, At T1 Debug
+055433 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+055434 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+056709 TRCE S1 is Status 1, At T2 Debug
+057188 LOG1 Leader S1 At T2, Receive Log, CurLogLength:3
+057190 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+057397 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+057607 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+057650 TRCE S2 is Status 0, At T2 Debug
+057685 TRCE S0 is Status 2, At T1 Debug
+057687 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+057687 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+057822 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+058030 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+058236 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+058444 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+058652 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+058858 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+059063 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+059267 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+059473 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+059558 TRCE S0 is Status 2, At T1 Debug
+059559 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+059560 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+059684 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+059891 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+059986 TRCE S1 is Status 2, At T2 Debug
+059987 CMIT Leader S1 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+059987 CMIT Leader S1 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=2, LogTerm=2, curCount=1, effctiveNum=2
+059988 CMIT Leader S1 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=0, LogTerm=2, curCount=1, effctiveNum=2
+059988 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:1
+059988 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+059989 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 1
+059990 LOG1 S2 At T2 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len1)
+059990 LOG2 S2 At T2, NewEntries:0 Exceed, toInsertIndex:2, appendLength:1
+059990 CMIT S2 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=2
+059990 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1,Success, new NextIndex:3
+060103 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+060310 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+060522 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+060727 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+060936 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+061144 ERRO Tester: curIndex:2 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+061289 TRCE S1 is Status 2, At T2 Debug
+061291 CMIT Leader S1 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+061292 CMIT Leader S1 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=2, LogTerm=2, curCount=1, effctiveNum=2
+061292 CMIT Leader S1 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=2, LogTerm=2, curCount=2, effctiveNum=2
+061292 CMIT Leader S1 At T2, Refresh CommitIndex:2
+061292 LOG2 S1 At T2, Apply Index:2, LogTerm:2, LogCommand:102
+061293 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:2
+061293 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+061295 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+061295 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len0)
+061295 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=2
+061295 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:3
+061355 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+061564 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+061774 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+061985 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+062010 TRCE S0 is Status 2, At T1 Debug
+062012 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+062014 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+062196 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+062402 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+062608 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+062641 TRCE S1 is Status 2, At T2 Debug
+062642 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:2
+062644 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+062644 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+062644 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len0)
+062647 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=2
+062649 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:3
+062815 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+063022 ERRO Tester: curIndex:2 has been 1 ServerCommitted, expected 2 ServerCommit, Content:102
+063057 TRCE S2 is Status 0, At T2 Debug
+063057 LOG2 S2 At T2, Apply Index:2, LogTerm:2, LogCommand:102
+063234 ERRO Tester: curIndex:2 has been 2 ServerCommitted, expected 2 ServerCommit, Content:102
+064339 TRCE S0 is Status 2, At T1 Debug
+064340 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+064341 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+065406 TRCE S1 is Status 2, At T2 Debug
+065407 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:2
+065409 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+065409 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+065410 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len0)
+065410 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=2
+065411 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:3
+066266 TRCE S2 is Status 0, At T2 Debug
+066475 TRCE S0 is Status 2, At T1 Debug
+066476 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+066477 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+067208 TRCE S1 is Status 2, At T2 Debug
+067210 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:2
+067211 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+067214 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+067215 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len0)
+067215 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=2
+067218 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:3
+068087 TRCE S2 is Status 0, At T2 Debug
+069122 TRCE S1 is Status 2, At T2 Debug
+069123 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:2
+069124 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+069125 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+069125 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len0)
+069125 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=2
+069126 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:3
+069127 TRCE S0 is Status 2, At T1 Debug
+069127 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+069128 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+069875 TRCE S1 is Status 2, At T2 Debug
+069877 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:2
+069878 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+069880 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+069880 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len0)
+069880 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=2
+069881 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:3
+070857 TRCE S0 is Status 2, At T1 Debug
+070858 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+070859 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+071436 TRCE S2 is Status 0, At T2 Debug
+072440 TRCE S1 is Status 2, At T2 Debug
+072443 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:2
+072444 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+072446 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+072446 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len0)
+072446 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=2
+072448 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:3
+072681 TRCE S0 is Status 2, At T1 Debug
+072682 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+072683 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+072792 TRCE S2 is Status 0, At T2 Debug
+073228 TRCE S1 is Status 2, At T2 Debug
+073229 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:2
+073230 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:1, prevLogIndex:1
+073234 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+073234 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len0)
+073234 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=2
+073237 ERRO Tester: 提交命令：103
+073237 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:3
+073239 LOG1 Leader S1 At T2, Receive Log, CurLogLength:4
+073239 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+073440 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+073646 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+073854 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+074060 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+074268 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+074472 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+074678 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+074889 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+075100 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+075233 TRCE S1 is Status 2, At T2 Debug
+075235 CMIT Leader S1 Check CommitIndex, targetCommitIndex=3, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+075235 CMIT Leader S1 Check CommitIndex, targetCommitIndex=3, MatchIndex[1]=3, LogTerm=2, curCount=1, effctiveNum=2
+075235 CMIT Leader S1 Check CommitIndex, targetCommitIndex=3, MatchIndex[2]=2, LogTerm=2, curCount=1, effctiveNum=2
+075235 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:2
+075236 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:2, prevLogIndex:1
+075238 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 1
+075238 LOG1 S2 At T2 Satisfied prevLogIndex:2, prevLogTerm:2, Start AppendEntries(Len1)
+075238 LOG2 S2 At T2, NewEntries:0 Exceed, toInsertIndex:3, appendLength:1
+075239 CMIT S2 At T2, CommitIndex=2, args.LeaderCommit=2, appendLogIndex=3
+075240 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1,Success, new NextIndex:4
+075312 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+075404 TRCE S2 is Status 0, At T2 Debug
+075515 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+075726 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+075937 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+076050 TRCE S0 is Status 2, At T1 Debug
+076051 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+076052 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+076141 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+076352 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+076560 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+076773 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+076982 ERRO Tester: curIndex:3 has been 0 ServerCommitted, expected 2 ServerCommit, Content:<nil>
+077094 TRCE S1 is Status 2, At T2 Debug
+077096 CMIT Leader S1 Check CommitIndex, targetCommitIndex=3, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+077098 CMIT Leader S1 Check CommitIndex, targetCommitIndex=3, MatchIndex[1]=3, LogTerm=2, curCount=1, effctiveNum=2
+077098 CMIT Leader S1 Check CommitIndex, targetCommitIndex=3, MatchIndex[2]=3, LogTerm=2, curCount=2, effctiveNum=2
+077099 CMIT Leader S1 At T2, Refresh CommitIndex:3
+077100 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:3
+077100 LOG2 S1 At T2, Apply Index:3, LogTerm:2, LogCommand:103
+077101 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:2, prevLogIndex:1
+077101 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+077102 LOG1 S2 At T2 Satisfied prevLogIndex:3, prevLogTerm:2, Start AppendEntries(Len0)
+077102 CMIT S2 At T2, CommitIndex=3, args.LeaderCommit=3, appendLogIndex=3
+077103 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:4
+077194 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+077403 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+077606 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+077815 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+078029 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+078238 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+078448 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+078657 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+078868 ERRO Tester: curIndex:3 has been 1 ServerCommitted, expected 2 ServerCommit, Content:103
+078894 TRCE S2 is Status 0, At T2 Debug
+078895 LOG2 S2 At T2, Apply Index:3, LogTerm:2, LogCommand:103
+078973 TRCE S0 is Status 2, At T1 Debug
+078976 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+078977 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+079074 ERRO Tester: curIndex:3 has been 2 ServerCommitted, expected 2 ServerCommit, Content:103
+079982 TRCE S2 is Status 0, At T2 Debug
+080072 TRCE S1 is Status 2, At T2 Debug
+080073 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:3
+080075 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:2, prevLogIndex:1
+080076 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+080077 LOG1 S2 At T2 Satisfied prevLogIndex:3, prevLogTerm:2, Start AppendEntries(Len0)
+080077 CMIT S2 At T2, CommitIndex=3, args.LeaderCommit=3, appendLogIndex=3
+080079 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:4
+080675 TRCE S0 is Status 2, At T1 Debug
+080676 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+080678 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+081455 TRCE S1 is Status 2, At T2 Debug
+081456 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:3
+081457 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:2, prevLogIndex:1
+081458 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+081458 LOG1 S2 At T2 Satisfied prevLogIndex:3, prevLogTerm:2, Start AppendEntries(Len0)
+081458 CMIT S2 At T2, CommitIndex=3, args.LeaderCommit=3, appendLogIndex=3
+081459 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:4
+083233 TRCE S1 is Status 2, At T2 Debug
+083235 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:3
+083236 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:2, prevLogIndex:1
+083236 TRCE S2 At T2 Recive AppendEntries RPC From Leader S1 In T2, Entries Len 0
+083237 LOG1 S2 At T2 Satisfied prevLogIndex:3, prevLogTerm:2, Start AppendEntries(Len0)
+083237 CMIT S2 At T2, CommitIndex=3, args.LeaderCommit=3, appendLogIndex=3
+083238 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:4
+083347 TRCE S0 is Status 2, At T1 Debug
+083350 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:0, prevLogIndex:1
+083352 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+083524 TRCE S2 is Status 0, At T2 Debug
+083733 ERRO Tester: 断开第二个Leader S1 的连接
+083735 ERRO Tester: 提交命令：104
+083735 LOG1 Leader S0 At T1, Receive Log, CurLogLength:3
+083736 LOG1 Leader S1 At T2, Receive Log, CurLogLength:5
+085500 TRCE S2 is Status 0, At T2 Debug
+085644 TRCE S0 is Status 2, At T1 Debug
+// S0 作为Leader1，本来的MatchIndex应该是1，1，1；但是查看测试代码，最后一个104是针对每个Server都调用了Start，由于Leader1断链，不知道自己不是Leader，因此还是接收了104，因此变为2，1，1
+085648 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+085649 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+085649 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+085649 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+085649 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+085757 TRCE S1 is Status 2, At T2 Debug
+// S1 作为Leader2，本来的MatchIndex应该是0，3，3，与S0同理，也接收了104
+085758 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+085758 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+085759 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+085759 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+085759 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+086906 TRCE S0 is Status 2, At T1 Debug
+086908 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+086909 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+086909 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+086909 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+086909 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+087323 TRCE S1 is Status 2, At T2 Debug
+087325 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+087326 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+087326 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+087326 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+087328 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+087960 TRCE S1 is Status 2, At T2 Debug
+087963 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+087964 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+087964 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+087964 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+087965 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+089594 TRCE S1 is Status 2, At T2 Debug
+089597 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+089597 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+089598 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+089598 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+089598 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+090219 TRCE S0 is Status 2, At T1 Debug
+090221 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+090222 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+090222 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+090223 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+090223 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+092464 TRCE S1 is Status 2, At T2 Debug
+092467 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+092582 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+092582 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+092583 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+092584 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+093638 TRCE S0 is Status 2, At T1 Debug
+093641 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+093641 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+093641 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+093642 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+093642 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+095186 TRCE S0 is Status 2, At T1 Debug
+095187 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+095187 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+095187 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+095187 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+095188 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+095479 TRCE S1 is Status 2, At T2 Debug
+095481 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+095482 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+095482 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+095482 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+095482 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+095994 TRCE S1 is Status 2, At T2 Debug
+095995 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+095996 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+095996 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+095996 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+095997 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+096510 TRCE S0 is Status 2, At T1 Debug
+096511 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+096511 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+096511 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+096512 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+096512 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+097042 TRCE S0 is Status 2, At T1 Debug
+097044 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+097045 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+097045 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+097045 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+097046 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+097827 TRCE S1 is Status 2, At T2 Debug
+097828 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+097828 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+097828 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+097829 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+097829 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+099422 TRCE S1 is Status 2, At T2 Debug
+099423 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+099424 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+099424 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+099424 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+099424 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+099846 TRCE S0 is Status 2, At T1 Debug
+099848 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+099852 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+099852 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+099853 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+099854 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+101347 TRCE S0 is Status 2, At T1 Debug
+101348 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+101348 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+101348 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+101348 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+101349 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+101657 TRCE S1 is Status 2, At T2 Debug
+101658 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[0]=0, LogTerm=2, curCount=0, effctiveNum=2
+101659 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[1]=4, LogTerm=2, curCount=1, effctiveNum=2
+101659 CMIT Leader S1 Check CommitIndex, targetCommitIndex=4, MatchIndex[2]=3, LogTerm=2, curCount=1, effctiveNum=2
+101659 LEAD S1 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:3
+101659 LEAD S1 Sending AppendEntries RPC to S0 At T2, Log Length:3, prevLogIndex:1
+102397 TRCE S0 is Status 2, At T1 Debug
+102399 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=2, LogTerm=1, curCount=1, effctiveNum=2
+102399 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, LogTerm=1, curCount=1, effctiveNum=2
+102399 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, LogTerm=1, curCount=1, effctiveNum=2
+102400 LEAD S0 Sending AppendEntries RPC to S2 At T1, Log Length:1, prevLogIndex:1
+102400 LEAD S0 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:1
+  ... Passed --  time 10.4s #peers 3 #RPCs   128 #Ops    0
+PASS
+ok  	6.5840/raft1	10.378s
