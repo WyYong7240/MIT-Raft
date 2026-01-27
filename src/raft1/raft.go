@@ -577,6 +577,9 @@ func (rf *Raft) LeaderRefreshCommitIndex() {
 				Debug(dCommit, "Leader S%d At T%d, Refresh CommitIndex:%d", rf.me, rf.CurrentTerm, rf.CommitIndex)
 			}
 			rf.mu.Unlock()
+		} else {
+			// 如果索引位置的日志，大多数服务器都没有复制，那targetCommitIndex的检查到此结束
+			break
 		}
 	}
 }

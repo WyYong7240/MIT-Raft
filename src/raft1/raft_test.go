@@ -604,7 +604,7 @@ func TestBackup3B(t *testing.T) {
 		// ts.srvs[leader1].Raft().Start(rand.Int())
 		ts.srvs[leader1].Raft().Start(i)
 	}
-	Debug(dError, "Tester: 提交50个命令到 Leader S%d", leader1)
+	Debug(dError, "Tester: 提交50个命令到 Leader S%d, 0+", leader1)
 	text := fmt.Sprintf("submitted 50 commands to %v", leader1)
 	tester.AnnotateInfoInterval(start, text, text)
 
@@ -629,7 +629,7 @@ func TestBackup3B(t *testing.T) {
 		// ts.one(rand.Int(), 3, true)
 		ts.one(200+i, 3, true)
 	}
-	Debug(dError, "Tester: 提交50个命令")
+	Debug(dError, "Tester: 提交50个命令, 200+")
 
 	// now another partitioned leader and one follower
 	leader2 := ts.checkOneLeader()
@@ -637,14 +637,17 @@ func TestBackup3B(t *testing.T) {
 	if leader2 == other {
 		other = (leader2 + 1) % servers
 	}
+	Debug(dError, "Tester: 断连 S%d 的连接", other)
 	ts.g.DisconnectAll(other)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// lots more commands that won't commit
 	start = tester.GetAnnotateTimestamp()
 	for i := 0; i < 50; i++ {
-		ts.srvs[leader2].Raft().Start(rand.Int())
+		// ts.srvs[leader2].Raft().Start(rand.Int())
+		ts.srvs[leader2].Raft().Start(300 + i)
 	}
+	Debug(dError, "Tester: 提交50个命令到 Leader S%d, 300+", leader2)
 	text = fmt.Sprintf("submitted 50 commands to %v", leader2)
 	tester.AnnotateInfoInterval(start, text, text)
 
@@ -652,24 +655,33 @@ func TestBackup3B(t *testing.T) {
 
 	// bring original leader back to life,
 	for i := 0; i < servers; i++ {
+		Debug(dError, "Tester: 断连 S%d 的连接", i)
 		ts.g.DisconnectAll(i)
 	}
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader1+0)%servers)
 	ts.g.ConnectOne((leader1 + 0) % servers)
+	Debug(dError, "Tester: 重连 S%d 的连接", (leader1+1)%servers)
 	ts.g.ConnectOne((leader1 + 1) % servers)
+	Debug(dError, "Tester: 重连 S%d 的连接", other)
 	ts.g.ConnectOne(other)
 	tester.AnnotateConnection(ts.g.GetConnected())
 
 	// lots of successful commands to new group.
 	for i := 0; i < 50; i++ {
-		ts.one(rand.Int(), 3, true)
+		// ts.one(rand.Int(), 3, true)
+		ts.one(400+i, 3, true)
 	}
+	Debug(dError, "Tester: 提交50个命令, 400+")
 
 	// now everyone
 	for i := 0; i < servers; i++ {
+		Debug(dError, "Tester: 重连 S%d 的连接", i)
 		ts.g.ConnectOne(i)
 	}
 	tester.AnnotateConnection(ts.g.GetConnected())
-	ts.one(rand.Int(), servers, true)
+	Debug(dError, "Tester: 提交命令500")
+	// ts.one(rand.Int(), servers, true)
+	ts.one(500, servers, true)
 }
 
 func TestCount3B(t *testing.T) {
