@@ -167,6 +167,86 @@ type RequestVoteReply struct {
 
 // example RequestVote RPC handler.
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
+	rf.mu.Lock()
+	defer rf.mu.Unlock()
+
+	// 首先排除对方Term小于自己Term的情况
+	if args.Term < rf.CurrentTerm {
+		reply.Term = rf.CurrentTerm
+		reply.VoteGranted = false
+	}
+
+	// 其次，再检查对方日志是否比自己的日志更新
+	var isHeLogNewer bool = false
+	myLastLogIndex := len(rf.Log) - 1
+	myLastLogTerm := rf.Log[myLastLogIndex].Term
+	if args.LastLogTerm > myLastLogTerm {
+		isHeLogNewer = true
+	} else if myLastLogTerm == args.LastLogTerm && args.LastLogIndex >= myLastLogIndex {
+		isHeLogNewer = true
+	}
+
+	// 最后，处理对方Term比自己大、相等的情况
+	if args.Term > rf.CurrentTerm {
+		rf.CurrentTerm = args.Term
+		rf.State = FOLLOWER
+
+		if isHeLogNewer {
+			// 如果对方日志更新，我投票，并更新自己的Term，转为Follower
+			reply.Term = args.Term
+			reply.VoteGranted = true
+			rf.VoteFor = args.CandidateID
+
+			// 我投票，因此重置自己的计时器
+			select {
+			case rf.TimeOutChan <- 1:
+			default:
+			}
+
+			if LeaderElectionDebug {
+				Debug(dVote, "S%d Granting Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
+			}
+		} else {
+			// 如果我的日志更新，我拒绝投票，但是我要更新我的Term，并转为Follower
+			reply.Term = args.Term
+			reply.VoteGranted = false
+
+			if LeaderElectionDebug {
+				Debug(dVote, "S%d Refuse to Vote for S%d at T%d, but Refresh Term to T%d", rf.me, args.CandidateID, args.Term, rf.CurrentTerm)
+			}
+		}
+	} else if rf.VoteFor == -1 || rf.VoteFor == args.CandidateID{
+		// 如果Term相同，并且没有投过票，或者给对方投过票
+
+		if isHeLogNewer {
+			// 如果对方日志更新，我投票，转为Follower
+			reply.Term = args.Term
+			reply.VoteGranted = true
+			rf.VoteFor = args.CandidateID
+			rf.State = FOLLOWER
+
+			// 我投票，因此重置自己的计时器
+			select {
+			case rf.TimeOutChan <- 1:
+			default:
+			}
+
+			if LeaderElectionDebug {
+				Debug(dVote, "S%d Granting Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
+			}
+		} else {
+			// 如果我的日志更新，我拒绝投票
+			reply.Term = args.Term
+			reply.VoteGranted = false
+
+			if LeaderElectionDebug {
+				Debug(dVote, "S%d Refuse to Vote for S%d at T%d, but Refresh Term to T%d", rf.me, args.CandidateID, args.Term, rf.CurrentTerm)
+			}
+		}
+	}
+}
+
+func (rf *Raft) RequestVoteOLD(args *RequestVoteArgs, reply *RequestVoteReply) {
 	// Your code here (3A, 3B).
 	rf.mu.Lock()
 	defer rf.mu.Unlock()
@@ -560,7 +640,8 @@ func (rf *Raft) LeaderRefreshCommitIndex() {
 		// 检查每个Server已经复制的Log数量，如果满足大多数都复制的情况，就可以进行下一个索引位置的检查
 		rf.mu.Lock()
 		for i := 0; i < serverNum; i++ {
-			if rf.MatchIndex[i] >= targetCommitIndex && rf.Log[targetCommitIndex].Term == rf.CurrentTerm {
+			// 不能将任期检查放在这里，否则无法处理 T1的0~49， T13的400都被大多数服务器复制，但是检查却检查不到T13的400，而无法一次性提交前面所有的日志的情况
+			if rf.MatchIndex[i] >= targetCommitIndex {
 				count++
 			}
 			if LogAppendDebug {
@@ -569,12 +650,15 @@ func (rf *Raft) LeaderRefreshCommitIndex() {
 		}
 		rf.mu.Unlock()
 
-		// 如果该索引位置的日志大多数服务器有复制，就将Leader的CommitIndex更新至此，再开启下一个targetCommitIndex的检查
+		// 如果该索引位置的日志大多数服务器有复制，就再次检查该index的任期是否与当前任期相同，相同则更新
+		// 不同则继续检查，万一现在检查的都是过去任期的日志，但是都被复制，但是没有提交，而在最后又来一个当前任期的日志都被复制，就都要一次性提交了
 		if count >= effectiveNum {
 			rf.mu.Lock()
-			rf.CommitIndex = targetCommitIndex
-			if LogAppendDebug {
-				Debug(dCommit, "Leader S%d At T%d, Refresh CommitIndex:%d", rf.me, rf.CurrentTerm, rf.CommitIndex)
+			if rf.Log[targetCommitIndex].Term == rf.CurrentTerm {
+				rf.CommitIndex = targetCommitIndex
+				if LogAppendDebug {
+					Debug(dCommit, "Leader S%d At T%d, Refresh CommitIndex:%d", rf.me, rf.CurrentTerm, rf.CommitIndex)
+				}
 			}
 			rf.mu.Unlock()
 		} else {
