@@ -22,15 +22,18 @@ import (
 	tester "6.5840/tester1"
 )
 
-const TIMTOUTDURATION = 1500 // 选举超时基础时间，单位毫秒
-const SERVER_TIMEOUT = 500
+// 由于设定最久200ms一个心跳，因此，Follower超时时间设定为250ms~350ms
+const TIMTOUTDURATION_INTERVAL = 100 // 选举超时基础时间，单位毫秒
+const BASE_TIMEOUT_DURATION = 300
 
 // 每个服务器基础的TIMEOUT时间，适用于<4个服务器情况
 // S0:1500ms, S1:2000ms, S2:2500ms
+const SERVER_TIMEOUT = 500
 const SERVER_BASE_TIMEOUT = 1000
 const isRandom = true
 const LeaderElectionDebug = true
 const LogAppendDebug = true
+const EnableDebug = true
 
 var ME int
 
@@ -168,18 +171,25 @@ type RequestVoteReply struct {
 // example RequestVote RPC handler.
 func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	rf.mu.Lock()
-	defer rf.mu.Unlock()
+	// Debug 所用信息
+	me := rf.me
+
+	// 函数逻辑所用信息
+	curTerm := rf.CurrentTerm
+	myLastLogIndex := len(rf.Log) - 1
+	myLastLogTerm := rf.Log[myLastLogIndex].Term
+	voteFor := rf.VoteFor
+
+	rf.mu.Unlock()
 
 	// 首先排除对方Term小于自己Term的情况
-	if args.Term < rf.CurrentTerm {
-		reply.Term = rf.CurrentTerm
+	if args.Term < curTerm {
+		reply.Term = curTerm
 		reply.VoteGranted = false
 	}
 
 	// 其次，再检查对方日志是否比自己的日志更新
 	var isHeLogNewer bool = false
-	myLastLogIndex := len(rf.Log) - 1
-	myLastLogTerm := rf.Log[myLastLogIndex].Term
 	if args.LastLogTerm > myLastLogTerm {
 		isHeLogNewer = true
 	} else if myLastLogTerm == args.LastLogTerm && args.LastLogIndex >= myLastLogIndex {
@@ -187,15 +197,18 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 
 	// 最后，处理对方Term比自己大、相等的情况
-	if args.Term > rf.CurrentTerm {
-		rf.CurrentTerm = args.Term
-		rf.State = FOLLOWER
+	if args.Term > curTerm {
 
 		if isHeLogNewer {
 			// 如果对方日志更新，我投票，并更新自己的Term，转为Follower
 			reply.Term = args.Term
 			reply.VoteGranted = true
+
+			rf.mu.Lock()
 			rf.VoteFor = args.CandidateID
+			rf.CurrentTerm = args.Term
+			rf.State = FOLLOWER
+			rf.mu.Unlock()
 
 			// 我投票，因此重置自己的计时器
 			select {
@@ -203,27 +216,34 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 			default:
 			}
 
-			if LeaderElectionDebug {
-				Debug(dVote, "S%d Granting Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
+			if LeaderElectionDebug && EnableDebug {
+				Debug(dVote, "S%d Granting Vote to S%d at T%d", me, args.CandidateID, args.Term)
 			}
 		} else {
 			// 如果我的日志更新，我拒绝投票，但是我要更新我的Term，并转为Follower
 			reply.Term = args.Term
 			reply.VoteGranted = false
 
-			if LeaderElectionDebug {
-				Debug(dVote, "S%d Refuse to Vote for S%d at T%d, but Refresh Term to T%d", rf.me, args.CandidateID, args.Term, rf.CurrentTerm)
+			rf.mu.Lock()
+			rf.CurrentTerm = args.Term
+			rf.State = FOLLOWER
+			rf.mu.Unlock()
+
+			if LeaderElectionDebug && EnableDebug {
+				Debug(dVote, "S%d Refuse to Vote for S%d at T%d, but Refresh Term to T%d", me, args.CandidateID, args.Term, args.Term)
 			}
 		}
-	} else if rf.VoteFor == -1 || rf.VoteFor == args.CandidateID{
+	} else if voteFor == -1 || voteFor == args.CandidateID {
 		// 如果Term相同，并且没有投过票，或者给对方投过票
 
 		if isHeLogNewer {
 			// 如果对方日志更新，我投票，转为Follower
 			reply.Term = args.Term
 			reply.VoteGranted = true
+			rf.mu.Lock()
 			rf.VoteFor = args.CandidateID
 			rf.State = FOLLOWER
+			rf.mu.Unlock()
 
 			// 我投票，因此重置自己的计时器
 			select {
@@ -231,16 +251,16 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 			default:
 			}
 
-			if LeaderElectionDebug {
-				Debug(dVote, "S%d Granting Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
+			if LeaderElectionDebug && EnableDebug {
+				Debug(dVote, "S%d Granting Vote to S%d at T%d", me, args.CandidateID, args.Term)
 			}
 		} else {
 			// 如果我的日志更新，我拒绝投票
 			reply.Term = args.Term
 			reply.VoteGranted = false
 
-			if LeaderElectionDebug {
-				Debug(dVote, "S%d Refuse to Vote for S%d at T%d, but Refresh Term to T%d", rf.me, args.CandidateID, args.Term, rf.CurrentTerm)
+			if LeaderElectionDebug && EnableDebug {
+				Debug(dVote, "S%d Refuse to Vote for S%d at T%d", me, args.CandidateID, args.Term)
 			}
 		}
 	}
@@ -345,17 +365,26 @@ type AppendEntriesReply struct {
 // AppendEntries 实现
 func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply) {
 	rf.mu.Lock()
+	// Debug信息
 	curTerm := rf.CurrentTerm
 	me := rf.me
-	Debug(dTrace, "S%d At T%d Recive AppendEntries RPC From Leader S%d In T%d, Entries Len %d", rf.me, rf.CurrentTerm, args.LeaderID, args.Term, len(args.Entries))
+
+	// 代码逻辑所用信息
+	state := rf.State
 	rf.mu.Unlock()
+
+	if EnableDebug {
+		Debug(dTrace, "S%d At T%d Recive AppendEntries RPC From Leader S%d In T%d, Entries Len %d", me, curTerm, args.LeaderID, args.Term, len(args.Entries))
+	}
 
 	// 首先确认RPC的任期是否合法
 	if curTerm > args.Term {
 		// 如果Leader的任期小于自己的任期，不合法，返回false
 		reply.Success = false
 		reply.Term = curTerm
-		Debug(dTrace, "S%d At T%d Refuse AppendEntries RPC From Leader S%d In T%d, Entries Len %d", me, curTerm, args.LeaderID, args.Term, len(args.Entries))
+		if EnableDebug {
+			Debug(dTrace, "S%d At T%d Refuse AppendEntries RPC From Leader S%d In T%d, Entries Len %d", me, curTerm, args.LeaderID, args.Term, len(args.Entries))
+		}
 		return
 	}
 	// 其他情况下，Leader的任期都是合法的
@@ -366,25 +395,35 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	default:
 	}
 
-	rf.mu.Lock()
 	if curTerm == args.Term {
 		// 如果leader的Term和自己的一样，说明自己和leader是同时期的candidate，确认自己的身份是candidate，服从先自己一步成为leader的server
-		if rf.State == CANDIDATE {
+		if state == CANDIDATE {
+			rf.mu.Lock()
 			rf.State = FOLLOWER
-			if LeaderElectionDebug {
-				Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert From Candidate to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+
+			// 更新之前的信息
+			state = rf.State
+			rf.mu.Unlock()
+
+			if LeaderElectionDebug && EnableDebug {
+				Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert From Candidate to Follower", me, curTerm, args.LeaderID, args.Term)
 			}
 		}
 	} else {
 		// 如果leader的Term大于自己的Term，更新自己的Term，并将身份转换为follower，重置投票项
+		rf.mu.Lock()
 		rf.CurrentTerm = args.Term
 		rf.VoteFor = -1
 		rf.State = FOLLOWER
-		if LeaderElectionDebug {
-			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
+
+		// Refresh ReadInfo
+		curTerm = rf.CurrentTerm
+		rf.mu.Unlock()
+
+		if LeaderElectionDebug && EnableDebug {
+			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", me, curTerm, args.LeaderID, args.Term)
 		}
 	}
-	rf.mu.Unlock()
 	// // 开一个线程，用于应对领导人选举相关
 	// go func(curTerm int) {
 	// 	rf.mu.Lock()
@@ -405,33 +444,53 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 	// }(curTerm)
 
 	// 不论任期是大于还是等于自己的任期，都需要处理发送来的新增日志条目，不同的是，针对选举的处理
-	// 确认自己存在prevLogIndex、prevLogTerm日志
+	var myPrevLogTerm int = 0
 	rf.mu.Lock()
+	logLen := len(rf.Log)
+	if args.PrevLogIndex <= logLen-1 {
+		myPrevLogTerm = rf.Log[args.PrevLogIndex].Term
+	}
+	rf.mu.Unlock()
+
+	// 确认自己存在prevLogIndex、prevLogTerm日志
 	// 如果prevLogIndex小于等于当前Server的Log长度，那么可以说明prevLogIndex在这个server上存在;否则不存在
-	if args.PrevLogIndex <= len(rf.Log)-1 && rf.Log[args.PrevLogIndex].Term == args.PrevLogTerm {
+	if args.PrevLogIndex <= logLen-1 && myPrevLogTerm == args.PrevLogTerm {
 		// 该Server的Log与prevLogIndex、prevLogTerm适配，可以开始处理args中的entries新条目
-		if LogAppendDebug {
-			Debug(dLog, "S%d At T%d Satisfied prevLogIndex:%d, prevLogTerm:%d, Start AppendEntries(Len%d)", rf.me, rf.CurrentTerm, args.PrevLogIndex, args.PrevLogTerm, len(args.Entries))
+		if LogAppendDebug && EnableDebug {
+			Debug(dLog, "S%d At T%d Satisfied prevLogIndex:%d, prevLogTerm:%d, Start AppendEntries(Len%d)", me, curTerm, args.PrevLogIndex, args.PrevLogTerm, len(args.Entries))
 		}
 		for i := 0; i < len(args.Entries); i++ {
 			// 计算下一个新日志条目需要插入的位置
 			toInsertIndex := args.PrevLogIndex + 1 + i
 
+			var toInsertIndexLogTerm int = 0
+			if toInsertIndex <= logLen-1 {
+				rf.mu.Lock()
+				toInsertIndexLogTerm = rf.Log[toInsertIndex].Term
+				rf.mu.Unlock()
+			}
+
 			// 如果下一个新日志条目要插入的位置，超过了目前log的容量，也就是该插入位置后面都是空的，那么将后续新条目直接append到log后面，不用再循环了
-			if toInsertIndex > len(rf.Log)-1 {
+			if toInsertIndex > logLen-1 {
 				toAppend := args.Entries[i:]
+				rf.mu.Lock()
 				rf.Log = append(rf.Log, toAppend...)
-				if LogAppendDebug {
-					Debug(dLog2, "S%d At T%d, NewEntries:%d Exceed, toInsertIndex:%d, appendLength:%d", rf.me, rf.CurrentTerm, i, toInsertIndex, len(toAppend))
+				rf.mu.Unlock()
+
+				if LogAppendDebug && EnableDebug {
+					Debug(dLog2, "S%d At T%d, NewEntries:%d Exceed, toInsertIndex:%d, appendLength:%d", me, curTerm, i, toInsertIndex, len(toAppend))
 				}
 				break
-			} else if rf.Log[toInsertIndex].Term != args.Entries[i].Term {
+			} else if toInsertIndexLogTerm != args.Entries[i].Term {
 				// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
+				toAppend := args.Entries[i:] // 获取后续新条目
+				rf.mu.Lock()
 				rf.Log = rf.Log[:toInsertIndex]      // 将冲突条目及其后面的条目都删除
-				toAppend := args.Entries[i:]         // 或许后续新条目
 				rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
-				if LogAppendDebug {
-					Debug(dLog2, "S%d At T%d, NewEntries:%d TermConfilict, toInsertIndex:%d, appendLength:%d", rf.me, rf.CurrentTerm, i, toInsertIndex, len(toAppend))
+				rf.mu.Unlock()
+
+				if LogAppendDebug && EnableDebug {
+					Debug(dLog2, "S%d At T%d, NewEntries:%d TermConfilict, toInsertIndex:%d, appendLength:%d", me, curTerm, i, toInsertIndex, len(toAppend))
 				}
 				break // 所有新条目追加完毕，跳出循环
 			} else {
@@ -444,18 +503,22 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 		// 检查Follower和Leader的CommitIndex
 		CommitAppendLogIndex := args.PrevLogIndex + len(args.Entries)
+		targetCommitIndex := int(math.Min(float64(args.LeaderCommit), float64(CommitAppendLogIndex)))
+		rf.mu.Lock()
 		if args.LeaderCommit > rf.CommitIndex {
-			rf.CommitIndex = int(math.Min(float64(args.LeaderCommit), float64(CommitAppendLogIndex)))
+			rf.CommitIndex = targetCommitIndex
 		}
+		// Debug Info
+		curCommitIndex := rf.CommitIndex
+		rf.mu.Unlock()
 
-		if LogAppendDebug {
-			Debug(dCommit, "S%d At T%d, CommitIndex=%d, args.LeaderCommit=%d, appendLogIndex=%d", rf.me, rf.CurrentTerm, rf.CommitIndex, args.LeaderCommit, CommitAppendLogIndex)
+		if LogAppendDebug && EnableDebug {
+			Debug(dCommit, "S%d At T%d, CommitIndex=%d, args.LeaderCommit=%d, appendLogIndex=%d", me, curTerm, curCommitIndex, args.LeaderCommit, CommitAppendLogIndex)
 		}
 	} else {
 		reply.Success = false
 		reply.Term = curTerm
 	}
-	rf.mu.Unlock()
 }
 
 // example code to send a RequestVote RPC to a server.
@@ -538,10 +601,10 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	// go rf.LeaderAppendEntriesParallelToFollower()
 
 	// 触发新日志到达channel，
-	// select {
-	// case rf.NewLogChan <- 1:
-	// default:
-	// }
+	select {
+	case rf.NewLogChan <- 1:
+	default:
+	}
 
 	return index, term, isLeader
 }
@@ -579,7 +642,9 @@ func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
 				rf.mu.Unlock()
 				reply := AppendEntriesReply{}
 
-				Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, prevLogIndex:%d", me, i, args.Term, len(args.Entries), args.PrevLogIndex)
+				if EnableDebug {
+					Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, prevLogIndex:%d", me, i, args.Term, len(args.Entries), args.PrevLogIndex)
+				}
 				if ok := rf.peers[i].Call("Raft.AppendEntries", &args, &reply); ok {
 					// 如果发送AppendEntries RPC返回了失败，那么说明prevLogIndex或者prevLogTerm匹配失败，将Leader针对该Server纪律的nextIndex向前调整一个
 					// 失败还有一种情况，就是自己是过期的Leader，对方Follower的Term比自己的高
@@ -589,8 +654,14 @@ func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
 						if curTerm >= reply.Term {
 							rf.mu.Lock()
 							rf.NextIndex[i] -= 1
-							Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, i, args.Term, len(args.Entries), rf.NextIndex[i])
+
+							// DebugInfo
+							nextIndex := rf.NextIndex[i]
 							rf.mu.Unlock()
+
+							if EnableDebug {
+								Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, i, args.Term, len(args.Entries), nextIndex)
+							}
 						} else {
 							// 处理自己是过期Leader的情况,原本这种情况，都是由其他几个Server选出更高Term的Leader，由新Leader向自己发送高Term心跳，在AppendEntries中进行身份转换的
 							// 但是，在这里处理的情况就是，当剩余Server不足以选出新Leader发出高Term心跳的情况（其实就算只剩下一个Server，只要那个Server超时，发出高Term的拉票请求，应该也能身份转换）
@@ -608,8 +679,14 @@ func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
 						rf.mu.Lock()
 						rf.MatchIndex[i] = args.PrevLogIndex + len(args.Entries)
 						rf.NextIndex[i] = rf.MatchIndex[i] + 1
-						Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d,Success, new NextIndex:%d", me, i, args.Term, len(args.Entries), rf.NextIndex[i])
+
+						// DebugInfo
+						nextIndex := rf.NextIndex[i]
 						rf.mu.Unlock()
+
+						if EnableDebug {
+							Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d,Success, new NextIndex:%d", me, i, args.Term, len(args.Entries), nextIndex)
+						}
 						return
 					}
 				} else {
@@ -623,6 +700,10 @@ func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
 
 func (rf *Raft) LeaderRefreshCommitIndex() {
 	rf.mu.Lock()
+	// Debug Info
+	me := rf.me
+
+	// Code Logic Info
 	targetCommitIndex := rf.CommitIndex + 1
 	logLen := len(rf.Log)
 	serverNum := len(rf.peers)
@@ -639,28 +720,34 @@ func (rf *Raft) LeaderRefreshCommitIndex() {
 		count := 0
 		// 检查每个Server已经复制的Log数量，如果满足大多数都复制的情况，就可以进行下一个索引位置的检查
 		rf.mu.Lock()
+		matchIndex := rf.MatchIndex
+		rf.mu.Unlock()
 		for i := 0; i < serverNum; i++ {
 			// 不能将任期检查放在这里，否则无法处理 T1的0~49， T13的400都被大多数服务器复制，但是检查却检查不到T13的400，而无法一次性提交前面所有的日志的情况
-			if rf.MatchIndex[i] >= targetCommitIndex {
+			if matchIndex[i] >= targetCommitIndex {
 				count++
 			}
-			if LogAppendDebug {
-				Debug(dCommit, "Leader S%d Check CommitIndex, targetCommitIndex=%d, MatchIndex[%d]=%d, LogTerm=%d, curCount=%d, effctiveNum=%d", rf.me, targetCommitIndex, i, rf.MatchIndex[i], rf.Log[targetCommitIndex].Term, count, effectiveNum)
+			if LogAppendDebug && EnableDebug {
+				Debug(dCommit, "Leader S%d Check CommitIndex, targetCommitIndex=%d, MatchIndex[%d]=%d, curCount=%d, effctiveNum=%d", me, targetCommitIndex, i, matchIndex[i], count, effectiveNum)
 			}
 		}
-		rf.mu.Unlock()
 
 		// 如果该索引位置的日志大多数服务器有复制，就再次检查该index的任期是否与当前任期相同，相同则更新
 		// 不同则继续检查，万一现在检查的都是过去任期的日志，但是都被复制，但是没有提交，而在最后又来一个当前任期的日志都被复制，就都要一次性提交了
 		if count >= effectiveNum {
 			rf.mu.Lock()
-			if rf.Log[targetCommitIndex].Term == rf.CurrentTerm {
+			targetLogTerm := rf.Log[targetCommitIndex].Term
+			curTerm := rf.CurrentTerm
+			rf.mu.Unlock()
+
+			if targetLogTerm == curTerm {
+				rf.mu.Lock()
 				rf.CommitIndex = targetCommitIndex
-				if LogAppendDebug {
-					Debug(dCommit, "Leader S%d At T%d, Refresh CommitIndex:%d", rf.me, rf.CurrentTerm, rf.CommitIndex)
+				rf.mu.Unlock()
+				if LogAppendDebug && EnableDebug {
+					Debug(dCommit, "Leader S%d At T%d, Refresh CommitIndex:%d", me, curTerm, targetCommitIndex)
 				}
 			}
-			rf.mu.Unlock()
 		} else {
 			// 如果索引位置的日志，大多数服务器都没有复制，那targetCommitIndex的检查到此结束
 			break
@@ -692,23 +779,27 @@ func (rf *Raft) ServerApplyCommittedLogs() {
 	rf.mu.Lock()
 	applyIndex := rf.LastApplied + 1
 	targetApplyIndex := rf.CommitIndex
+	logTemp := rf.Log
+	rf.mu.Unlock()
+
 	for ; applyIndex <= targetApplyIndex; applyIndex++ {
 		applyMsg := raftapi.ApplyMsg{
 			CommandValid:  true,
-			Command:       rf.Log[applyIndex].Command,
+			Command:       logTemp[applyIndex].Command,
 			CommandIndex:  applyIndex,
 			SnapshotValid: false,
 			Snapshot:      nil,
 			SnapshotTerm:  0,
 			SnapshotIndex: 0,
 		}
-		if LogAppendDebug {
-			Debug(dLog2, "S%d At T%d, Apply Index:%d, LogTerm:%d, LogCommand:%v", rf.me, rf.CurrentTerm, applyIndex, rf.Log[applyIndex].Term, applyMsg.Command)
+		if LogAppendDebug && EnableDebug {
+			Debug(dLog2, "S%d At T%d, Apply Index:%d, LogTerm:%d, LogCommand:%v", rf.me, rf.CurrentTerm, applyIndex, logTemp[applyIndex].Term, applyMsg.Command)
 		}
 		rf.ApplyChan <- applyMsg
 	}
 	// 更新该Server已经Apply的Logs
-	rf.LastApplied = rf.CommitIndex
+	rf.mu.Lock()
+	rf.LastApplied = targetApplyIndex
 	rf.mu.Unlock()
 }
 
@@ -720,7 +811,8 @@ func (rf *Raft) FollowerCase(me int) {
 
 	var curDuration time.Duration
 	if isRandom {
-		curDuration = time.Duration(TIMTOUTDURATION * (rand.Float32() + 1) * float32(time.Millisecond))
+		// 设定超时时间为250~350ms
+		curDuration = time.Duration((TIMTOUTDURATION_INTERVAL*rand.Float32() + BASE_TIMEOUT_DURATION) * float32(time.Millisecond))
 	} else {
 		curDuration = time.Duration((SERVER_TIMEOUT*float32(me+1) + SERVER_BASE_TIMEOUT) * float32(time.Millisecond))
 	}
@@ -728,7 +820,7 @@ func (rf *Raft) FollowerCase(me int) {
 	select {
 	case <-rf.TimeOutChan:
 		// 收到leader的心跳，重置倒计时，即进入下一轮倒计时
-		if LeaderElectionDebug {
+		if LeaderElectionDebug && EnableDebug {
 			Debug(dTrace, "S%d Receive HeatBeat", me)
 		}
 		return
@@ -739,10 +831,14 @@ func (rf *Raft) FollowerCase(me int) {
 		rf.CurrentTerm += 1
 		rf.VoteFor = rf.me
 		rf.State = CANDIDATE
-		if LeaderElectionDebug {
-			Debug(dTimer, "S%d TimeOut Convert State From Follower to Candidate At T%d", rf.me, rf.CurrentTerm)
-		}
+
+		// DebugInfo
+		curTerm := rf.CurrentTerm
 		rf.mu.Unlock()
+
+		if LeaderElectionDebug && EnableDebug {
+			Debug(dTimer, "S%d TimeOut Convert State From Follower to Candidate At T%d", me, curTerm)
+		}
 	}
 }
 
@@ -783,12 +879,12 @@ func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, se
 			case <-ctx.Done():
 				return
 			default:
-				if LeaderElectionDebug {
+				if LeaderElectionDebug && EnableDebug {
 					Debug(dTrace, "S%d Candidate SendRequestVote To S%d At T%d", args.CandidateID, i, args.Term)
 				}
 				if ok := rf.sendRequestVote(i, &args, &reply); ok {
 					requestVoteReplyChan <- reply
-					if LeaderElectionDebug {
+					if LeaderElectionDebug && EnableDebug {
 						Debug(dTrace, "S%d Candidate Recevie RequestVoteReply From S%d At T%d", args.CandidateID, i, args.Term)
 					}
 				}
@@ -815,10 +911,11 @@ func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, se
 					rf.NextIndex[i] = len(rf.Log)
 					rf.MatchIndex[i] = 0
 				}
-				if LeaderElectionDebug {
-					Debug(dTrace, "S%d Candidate SendRequestVote Done At T%d, Success Come Leader", rf.me, rf.CurrentTerm)
-				}
 				rf.mu.Unlock()
+
+				if LeaderElectionDebug && EnableDebug {
+					Debug(dTrace, "S%d Candidate SendRequestVote Done At T%d, Success Come Leader", me, curTerm)
+				}
 
 				select {
 				case rf.TimeOutChan <- 1:
@@ -833,10 +930,11 @@ func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, se
 				rf.State = FOLLOWER
 				rf.CurrentTerm = reply.Term
 				rf.VoteFor = -1
-				if LeaderElectionDebug {
-					Debug(dTrace, "S%d Candidate SendRequestVote Receive Higher Term At T%d, Convert to Follower", me, rf.CurrentTerm)
-				}
 				rf.mu.Unlock()
+
+				if LeaderElectionDebug && EnableDebug {
+					Debug(dTrace, "S%d Candidate SendRequestVote Receive Higher Term At T%d, Convert to Follower", me, reply.Term)
+				}
 
 				select {
 				case rf.TimeOutChan <- 1:
@@ -868,7 +966,7 @@ func (rf *Raft) CandidateCase(me int) {
 
 	var curDuration time.Duration
 	if isRandom {
-		curDuration = time.Duration(TIMTOUTDURATION * (rand.Float32() + 1) * float32(time.Millisecond))
+		curDuration = time.Duration((TIMTOUTDURATION_INTERVAL*rand.Float32() + BASE_TIMEOUT_DURATION) * float32(time.Millisecond))
 	} else {
 		curDuration = time.Duration((SERVER_TIMEOUT*float32(me+1) + SERVER_BASE_TIMEOUT) * float32(time.Millisecond))
 	}
@@ -880,10 +978,14 @@ func (rf *Raft) CandidateCase(me int) {
 		// 如果拉票环节超时，将自己的term+1，进入下一轮的拉票环节
 		rf.mu.Lock()
 		rf.CurrentTerm += 1
-		if LeaderElectionDebug {
-			Debug(dTrace, "S%d Candidate TimeOut Increate Term From T%d to T%d", rf.me, rf.CurrentTerm-1, rf.CurrentTerm)
-		}
+
+		//DebugInfo
+		curTerm := rf.CurrentTerm
 		rf.mu.Unlock()
+
+		if LeaderElectionDebug && EnableDebug {
+			Debug(dTrace, "S%d Candidate TimeOut Increate Term From T%d to T%d", me, curTerm-1, curTerm)
+		}
 	}
 }
 
@@ -962,7 +1064,8 @@ func (rf *Raft) ticker() {
 		case <-rf.NewLogChan:
 			continue
 		default:
-			ms := 50 + (rand.Int63() % 300)
+			// 由于3B测试时间要求，自主设计，Leader每秒最多10个心跳，最少5个心跳
+			ms := 100 + (rand.Int63() % 100)
 			time.Sleep(time.Duration(ms) * time.Millisecond)
 		}
 	}
