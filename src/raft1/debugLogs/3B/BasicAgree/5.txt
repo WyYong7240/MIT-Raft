@@ -1,0 +1,217 @@
+000004 INFO S0 Server initialized success, run ticker
+000006 TRCE S0 is Status 0, At T0 Debug
+000008 INFO S1 Server initialized success, run ticker
+000009 INFO S2 Server initialized success, run ticker
+Test (3B): basic agreement (reliable network)...
+000009 ERRO 当前节点有0个节点提交了索引为1的条目
+000010 TRCE S2 is Status 0, At T0 Debug
+000009 TRCE S1 is Status 0, At T0 Debug
+019275 TRCE S2 is Status 1, At T1 Debug
+019545 LOG1 Leader S2 At T1, Receive Log, CurLogLength:2
+019546 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+019755 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+019953 TRCE S1 is Status 0, At T1 Debug
+019967 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020173 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020384 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020594 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+020804 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+021014 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+021016 TRCE S0 is Status 0, At T1 Debug
+021225 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+021435 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+021647 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+021858 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+022068 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+022277 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+022489 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+022701 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+022781 TRCE S2 is Status 2, At T1 Debug
+022783 CMIT Leader S2 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=0, LogTerm=1, curCount=0, effctiveNum=2
+022784 CMIT Leader S2 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=0, LogTerm=1, curCount=0, effctiveNum=2
+022784 CMIT Leader S2 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=0, LogTerm=1, curCount=0, effctiveNum=2
+022785 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:1, prevLogIndex:0
+022786 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:1, prevLogIndex:0
+022791 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 1
+022793 LOG1 S1 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+022793 LOG2 S1 At T1, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+022793 CMIT S1 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+022792 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 1
+022794 LOG1 S0 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+022794 LOG2 S0 At T1, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+022795 CMIT S0 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+022794 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:1,Success, new NextIndex:2
+022795 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:1,Success, new NextIndex:2
+022913 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+023121 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+023333 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+023537 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+023749 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+023959 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+024162 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+024373 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+024576 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+024782 ERRO curIndex:1 has been 0 ServerCommitted, expected 3 ServerCommit, Content:<nil>
+024783 TRCE S2 is Status 2, At T1 Debug
+024784 CMIT Leader S2 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=1, LogTerm=1, curCount=1, effctiveNum=2
+024784 CMIT Leader S2 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=1, LogTerm=1, curCount=2, effctiveNum=2
+024784 CMIT Leader S2 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=0, LogTerm=1, curCount=2, effctiveNum=2
+024785 CMIT Leader S2 At T1, Refresh CommitIndex:1
+024785 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+024786 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:1
+024788 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+024789 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+024789 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+024789 LOG1 S0 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+024789 CMIT S0 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+024789 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+024790 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0,Success, new NextIndex:2
+024791 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+024942 TRCE S1 is Status 0, At T1 Debug
+024943 LOG2 S1 At T1, Apply Index:1, LogTerm:1, LogCommand:100
+024986 ERRO curIndex:1 has been 1 ServerCommitted, expected 3 ServerCommit, Content:100
+025086 TRCE S0 is Status 0, At T1 Debug
+025089 LOG2 S0 At T1, Apply Index:1, LogTerm:1, LogCommand:100
+025192 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+025400 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+025608 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+025817 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+025994 TRCE S1 is Status 0, At T1 Debug
+026030 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+026242 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+026453 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+026656 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+026868 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+027078 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+027285 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+027495 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+027704 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+027890 TRCE S2 is Status 2, At T1 Debug
+027892 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+027893 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:1
+027894 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+027894 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+027894 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+027895 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+027895 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+027896 LOG1 S0 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+027896 CMIT S0 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+027897 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0,Success, new NextIndex:2
+027919 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+028132 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+028346 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+028391 TRCE S0 is Status 0, At T1 Debug
+028561 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+028764 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+028968 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+029178 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+029388 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+029596 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+029807 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+030018 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+030227 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+030438 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+030594 TRCE S2 is Status 2, At T1 Debug
+030595 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+030596 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:1
+030597 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+030597 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+030597 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+030598 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+030600 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+030601 LOG1 S0 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+030601 CMIT S0 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+030603 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0,Success, new NextIndex:2
+030651 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+030727 TRCE S0 is Status 0, At T1 Debug
+030857 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+031067 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+031206 TRCE S1 is Status 0, At T1 Debug
+031273 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+031416 TRCE S2 is Status 2, At T1 Debug
+031418 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+031419 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:1
+031420 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+031420 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+031420 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+031420 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+031421 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+031421 LOG1 S0 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+031421 CMIT S0 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+031422 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0,Success, new NextIndex:2
+031485 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+031695 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+031773 TRCE S0 is Status 0, At T1 Debug
+031906 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+032116 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+032326 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+032538 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+032742 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+032844 TRCE S1 is Status 0, At T1 Debug
+032957 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+033093 TRCE S0 is Status 0, At T1 Debug
+033168 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+033371 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+033580 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+033790 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+034001 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+034213 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+034423 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+034633 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+034710 TRCE S2 is Status 2, At T1 Debug
+034711 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+034713 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+034713 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+034714 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+034714 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:1
+034714 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+034718 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+034720 LOG1 S0 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+034720 CMIT S0 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+034722 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0,Success, new NextIndex:2
+034842 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+035052 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+035264 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+035343 TRCE S1 is Status 0, At T1 Debug
+035468 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+035678 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+035889 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+036100 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+036312 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+036523 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+036732 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+036942 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+037154 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+037364 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+037573 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+037677 TRCE S0 is Status 0, At T1 Debug
+037777 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+037844 TRCE S2 is Status 2, At T1 Debug
+037846 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:1
+037846 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:1
+037848 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+037848 LOG1 S1 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+037849 CMIT S1 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+037850 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:2
+037853 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+037855 LOG1 S0 At T1 Satisfied prevLogIndex:1, prevLogTerm:1, Start AppendEntries(Len0)
+037855 CMIT S0 At T1, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+037857 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0,Success, new NextIndex:2
+037990 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+038198 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+038406 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+038615 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+038651 TRCE S1 is Status 0, At T1 Debug
+038817 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+039023 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+039235 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+039443 ERRO curIndex:1 has been 2 ServerCommitted, expected 3 ServerCommit, Content:100
+039512 TRCE S1 is Status 0, At T1 Debug
+Fatal: one(100) failed to reach agreement
+        /root/Golang/MIT-Raft/src/raft1/test.go:275
+        /root/Golang/MIT-Raft/src/raft1/raft_test.go:156
+info: wrote visualization to /tmp/porcupine-636716732.html
+--- FAIL: TestBasicAgree3B (3.97s)
+FAIL
+exit status 1
+FAIL	6.5840/raft1	3.971s
