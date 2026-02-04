@@ -71,7 +71,7 @@ type Raft struct {
 
 	State       ServerState // 当前服务器的角色状态，0是follower、1是candidate、2是leader
 	TimeOutChan chan int
-	NewLogChan  chan int              // 当Leader收到一个新日志，并添加到自己的Log中时，需要触发此channel，跳过Leader心跳发送完毕的睡眠时间，直接进行下一轮的新日志发送
+	NewLogChan  []chan int            // 当Leader收到一个新日志，并添加到自己的Log中时，需要触发此channel，跳过Leader心跳发送完毕的睡眠时间，直接进行下一轮的新日志发送,每个Follower对应一个发送协程，也即一个通道
 	ApplyChan   chan raftapi.ApplyMsg // 用于将已经被多数server复制的logs提交到状态机的管道，不通过该管道发送已提交日志，无法通过3B测
 }
 
@@ -266,88 +266,6 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 	}
 }
 
-func (rf *Raft) RequestVoteOLD(args *RequestVoteArgs, reply *RequestVoteReply) {
-	// Your code here (3A, 3B).
-	rf.mu.Lock()
-	defer rf.mu.Unlock()
-
-	if args.Term > rf.CurrentTerm {
-		// 如果拉票请求的任务term大于自己的term，直接同意，并将自己转为follower
-		// 拉票请求回复
-		reply.Term = args.Term
-		reply.VoteGranted = true
-
-		// 将自己转为Follower
-		rf.CurrentTerm = args.Term    // 更新自己的任期
-		rf.State = FOLLOWER           // 将自己转换为follower
-		rf.VoteFor = args.CandidateID // 将投票记录修改
-
-		// 自己已经投票，重置自己的timeOut计时器
-		// 使用非阻塞的重置信号发送方式，保证最近有一次倒计时重置即可
-		select {
-		case rf.TimeOutChan <- 1:
-		default:
-		}
-
-		if LeaderElectionDebug {
-			Debug(dVote, "S%d Granting Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
-		}
-	} else if args.Term == rf.CurrentTerm && (rf.VoteFor == -1 || rf.VoteFor == args.CandidateID) {
-		// 如果两者的任期term是一样的，比较该server是否已经投过票，如果投过是否是该拉票请求的发起者
-		// 如果没投过，或者之前给该请求发起者透过票，再次进行比较
-		myLastLogIndex := len(rf.Log) - 1
-		if args.LastLogTerm > rf.Log[myLastLogIndex].Term {
-			// 如果最后日志term大于自己的最后日志任期term，允许成为leader
-			reply.VoteGranted = true
-
-			rf.State = FOLLOWER
-			rf.VoteFor = args.CandidateID
-
-			// 自己已经投票，重置自己的timeOut计时器
-			// 使用非阻塞的重置信号发送方式，保证最近有一次倒计时重置即可
-			select {
-			case rf.TimeOutChan <- 1:
-			default:
-			}
-
-			if LeaderElectionDebug {
-				Debug(dVote, "S%d Granting Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
-			}
-		} else if args.LastLogTerm == rf.Log[myLastLogIndex].Term && args.LastLogIndex >= myLastLogIndex {
-			// 如果最后日志任务term等于自己最后日志任期term，并且最后日志索引大于自己的最后日志索引，允许成为leader
-			reply.VoteGranted = true
-
-			rf.State = FOLLOWER
-			rf.VoteFor = args.CandidateID
-
-			// 自己已经投票，重置自己的timeOut计时器，防止自己刚投完票后就成为大一个Term的Candidate，最终出现一个小一个Term的leader和自己这个大一轮的Candidate
-			// 使用非阻塞的重置信号发送方式，保证最近有一次倒计时重置即可
-			select {
-			case rf.TimeOutChan <- 1:
-			default:
-			}
-			if LeaderElectionDebug {
-				Debug(dVote, "S%d Granting Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
-			}
-		} else {
-			// 否则不允许成为leader
-			reply.VoteGranted = false
-			if LeaderElectionDebug {
-				Debug(dVote, "S%d Refuse Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
-			}
-		}
-		reply.Term = rf.CurrentTerm
-	} else {
-		// 或者如果任期小于自己的任期，拒绝拉票请求
-		// 如果投过票，且不是该请求的发起者，那么拒绝该请求的拉票请求
-		reply.Term = rf.CurrentTerm
-		reply.VoteGranted = false
-		if LeaderElectionDebug {
-			Debug(dVote, "S%d Refuse Vote to S%d at T%d", rf.me, args.CandidateID, rf.CurrentTerm)
-		}
-	}
-}
-
 type AppendEntriesArgs struct {
 	Term         int        // 领导人任期
 	LeaderID     int        // 领导人ID，据此follower可以对客户端进行重定向
@@ -424,24 +342,6 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", me, curTerm, args.LeaderID, args.Term)
 		}
 	}
-	// // 开一个线程，用于应对领导人选举相关
-	// go func(curTerm int) {
-	// 	rf.mu.Lock()
-	// 	if curTerm == args.Term {
-	// 		// 如果leader的Term和自己的一样，说明自己和leader是同时期的candidate，确认自己的身份是candidate，服从先自己一步成为leader的server
-	// 		if rf.State == CANDIDATE {
-	// 			rf.State = FOLLOWER
-	// 			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert From Candidate to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
-	// 		}
-	// 	} else {
-	// 		// 如果leader的Term大于自己的Term，更新自己的Term，并将身份转换为follower，重置投票项
-	// 		rf.CurrentTerm = args.Term
-	// 		rf.VoteFor = -1
-	// 		rf.State = FOLLOWER
-	// 		Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", rf.me, rf.CurrentTerm, args.LeaderID, args.Term)
-	// 	}
-	// 	rf.mu.Unlock()
-	// }(curTerm)
 
 	// 不论任期是大于还是等于自己的任期，都需要处理发送来的新增日志条目，不同的是，针对选举的处理
 	var myPrevLogTerm int = 0
@@ -570,6 +470,9 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	index := len(rf.Log)           // 第一个表示将要添加的日志条目在该Server Log中的位置,由于Log从1开始，并且Log默认有一个占位的条目，因此不需要-1
 	term := rf.CurrentTerm         // 表示当前任期
 	isLeader := rf.State == LEADER // 表示自己是否是Leader
+
+	me := rf.me
+	serverNum := len(rf.peers)
 	rf.mu.Unlock()
 
 	// Your code here (3B).
@@ -587,114 +490,140 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	rf.mu.Lock()
 	rf.Log = append(rf.Log, newLog)
 	// 更新Leader的MatchIndex、nextIndex，虽然自己不是follower，但是commitIndex检查中会用到
-	// rf.MatchIndex[rf.me] += rf.NextIndex[rf.me] // 将Leader自己的MatchIndex更新为已经复制的日志的长度
 	rf.MatchIndex[rf.me] = len(rf.Log) - 1
 	rf.NextIndex[rf.me] += 1
-	if LogAppendDebug {
-		Debug(dLog, "Leader S%d At T%d, Receive Log, CurLogLength:%d", rf.me, rf.CurrentTerm, len(rf.Log))
-	}
 	rf.mu.Unlock()
+
+	if LogAppendDebug && EnableDebug {
+		Debug(dLog, "Leader S%d At T%d, Receive Log", me, term)
+	}
 
 	// Leader并行向所有Follower发送新条目的AppendEntries RPC
 	// 但是其实不应该在这里触发AppendEntriesRPC发送，而是在Leader的Ticker周期触发中，与心跳发送机制融合
 	// Leader每轮检查是否存在新日志，如果没有新日志，就发送心跳，否则发送新日志，同时也作为发送心跳
 	// go rf.LeaderAppendEntriesParallelToFollower()
 
-	// 触发新日志到达channel，
-	select {
-	case rf.NewLogChan <- 1:
-	default:
+	// 向Leader的每个Follower replicator协程发送新日志到达请求
+	for i := 0; i < serverNum; i++ {
+		if i == me {
+			continue
+		}
+		select {
+		case rf.NewLogChan[i] <- 1:
+		default:
+		}
 	}
 
 	return index, term, isLeader
 }
 
-func (rf *Raft) LeaderAppendEntriesParallelToFollower() {
-	rf.mu.Lock()
-	me := rf.me
-	serverNum := len(rf.peers)
-	curTerm := rf.CurrentTerm
-	rf.mu.Unlock()
+func (rf *Raft) replicator(peer int) {
+	if EnableDebug {
+		Debug(dTrace, "Leader Start Replicator For Follower S%d", peer)
+	}
 
-	// 既是发送心跳，也是发送日志追加RPC
-	for i := 0; i < serverNum; i++ {
-		if i == me {
-			continue
+	// 刚启动时，需要立即触发一次，用于发送Leader心跳
+	rf.NewLogChan[peer] <- 1
+
+	for !rf.killed() {
+		ms := 100 + (rand.Int63() % 100)
+		duration := time.Duration(ms) * time.Millisecond
+
+		select {
+		// 收到新日志，开始发送
+		case <-rf.NewLogChan[peer]:
+			// 超时了，需要发送心跳信息
+		case <-time.After(duration):
 		}
 
-		// 由于要处理如果给一个Server附加日志失败的情况，也就是nextIndex不匹配的情况
-		// 所以需要每个Server单独一个线程，用于循环回退Leader针对这个Sever的NextIndex
-		go func() {
-			for {
-				rf.mu.Lock()
-				logFrom := rf.NextIndex[i] // 包含该下标日志
-				prevLogIndex := rf.NextIndex[i] - 1
-				prevLogTerm := rf.Log[prevLogIndex].Term
+		// 如果发现自己不是Leader了，那么就退出该协程
+		rf.mu.Lock()
+		if rf.State != LEADER {
+			rf.mu.Unlock()
+			return
+		}
 
-				args := AppendEntriesArgs{
-					Term:         rf.CurrentTerm,
-					LeaderID:     rf.me,
-					PrevLogIndex: prevLogIndex,
-					PrevLogTerm:  prevLogTerm,
-					Entries:      rf.Log[logFrom:],
-					LeaderCommit: rf.CommitIndex,
-				}
-				rf.mu.Unlock()
-				reply := AppendEntriesReply{}
+		curTerm := rf.CurrentTerm
+		me := rf.me
 
-				if EnableDebug {
-					Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, prevLogIndex:%d", me, i, args.Term, len(args.Entries), args.PrevLogIndex)
-				}
-				if ok := rf.peers[i].Call("Raft.AppendEntries", &args, &reply); ok {
-					// 如果发送AppendEntries RPC返回了失败，那么说明prevLogIndex或者prevLogTerm匹配失败，将Leader针对该Server纪律的nextIndex向前调整一个
-					// 失败还有一种情况，就是自己是过期的Leader，对方Follower的Term比自己的高
-					if !reply.Success {
-						// 加上这个当前任期>=reply任期是因为，如果作为Leader掉线，再发送AppendEntries，收到reply为false的原因是任期不合法，而不是nextIndex不匹配,在这种情况下，不更新nextIndex
-						// 把这个条件判断放到里面，是因为，可能会出现reply=false，但是任期小于Follower任期的情况，被判定为AppendEntries RPC成功
-						if curTerm >= reply.Term {
-							rf.mu.Lock()
-							rf.NextIndex[i] -= 1
+		logFrom := rf.NextIndex[peer] // 包含该下标日志
+		prevLogIndex := rf.NextIndex[peer] - 1
+		prevLogTerm := rf.Log[prevLogIndex].Term
 
-							// DebugInfo
-							nextIndex := rf.NextIndex[i]
-							rf.mu.Unlock()
+		args := AppendEntriesArgs{
+			Term:         rf.CurrentTerm,
+			LeaderID:     rf.me,
+			PrevLogIndex: prevLogIndex,
+			PrevLogTerm:  prevLogTerm,
+			Entries:      rf.Log[logFrom:],
+			LeaderCommit: rf.CommitIndex,
+		}
+		rf.mu.Unlock()
+		reply := AppendEntriesReply{}
 
-							if EnableDebug {
-								Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, i, args.Term, len(args.Entries), nextIndex)
-							}
-						} else {
-							// 处理自己是过期Leader的情况,原本这种情况，都是由其他几个Server选出更高Term的Leader，由新Leader向自己发送高Term心跳，在AppendEntries中进行身份转换的
-							// 但是，在这里处理的情况就是，当剩余Server不足以选出新Leader发出高Term心跳的情况（其实就算只剩下一个Server，只要那个Server超时，发出高Term的拉票请求，应该也能身份转换）
+		if EnableDebug {
+			Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, prevLogIndex:%d", me, peer, args.Term, len(args.Entries), args.PrevLogIndex)
+		}
+		if ok := rf.peers[peer].Call("Raft.AppendEntries", &args, &reply); ok {
+			// 如果发送AppendEntries RPC返回了失败，那么说明prevLogIndex或者prevLogTerm匹配失败，将Leader针对该Server纪律的nextIndex向前调整一个
+			// 失败还有一种情况，就是自己是过期的Leader，对方Follower的Term比自己的高
+			if !reply.Success {
+				// 加上这个当前任期>=reply任期是因为，如果作为Leader掉线，再发送AppendEntries，收到reply为false的原因是任期不合法，而不是nextIndex不匹配,在这种情况下，不更新nextIndex
+				// 把这个条件判断放到里面，是因为，可能会出现reply=false，但是任期小于Follower任期的情况，被判定为AppendEntries RPC成功
+				if curTerm >= reply.Term {
+					rf.mu.Lock()
+					rf.NextIndex[peer] -= 1
 
-							// rf.mu.Lock()
-							// rf.State = FOLLOWER
-							// rf.CurrentTerm = reply.Term
-							// Debug(dLeader, "S%d Convert to Follower At T%d", rf.me, rf.CurrentTerm)
-							// rf.mu.Unlock()
+					// DebugInfo
+					nextIndex := rf.NextIndex[peer]
+					rf.mu.Unlock()
 
-							return
-						}
-					} else {
-						// 如果Follower成功追加，需要Leader更新对应的matchIndex、nextIndex，甚至commitIndex
-						rf.mu.Lock()
-						rf.MatchIndex[i] = args.PrevLogIndex + len(args.Entries)
-						rf.NextIndex[i] = rf.MatchIndex[i] + 1
-
-						// DebugInfo
-						nextIndex := rf.NextIndex[i]
-						rf.mu.Unlock()
-
-						if EnableDebug {
-							Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d,Success, new NextIndex:%d", me, i, args.Term, len(args.Entries), nextIndex)
-						}
-						return
+					if EnableDebug {
+						Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, peer, args.Term, len(args.Entries), nextIndex)
 					}
 				} else {
-					// 如果 RPC发送失败，即没有回复，那么跳出该次发送循环，等待下一次Leader心跳周期再发送日志
+					// 处理自己是过期Leader的情况,原本这种情况，都是由其他几个Server选出更高Term的Leader，由新Leader向自己发送高Term心跳，在AppendEntries中进行身份转换的
+					// 但是，在这里处理的情况就是，当剩余Server不足以选出新Leader发出高Term心跳的情况（其实就算只剩下一个Server，只要那个Server超时，发出高Term的拉票请求，应该也能身份转换）
+					rf.mu.Lock()
+					rf.State = FOLLOWER
+					rf.CurrentTerm = reply.Term
+					if EnableDebug {
+						Debug(dLeader, "S%d Convert to Follower At T%d", rf.me, rf.CurrentTerm)
+					}
+					rf.mu.Unlock()
 					return
 				}
+			} else {
+				// 如果Follower成功追加，需要Leader更新对应的matchIndex、nextIndex，甚至commitIndex
+				rf.mu.Lock()
+				rf.MatchIndex[peer] = args.PrevLogIndex + len(args.Entries)
+				rf.NextIndex[peer] = rf.MatchIndex[peer] + 1
+
+				// DebugInfo
+				nextIndex := rf.NextIndex[peer]
+				rf.mu.Unlock()
+
+				if EnableDebug {
+					Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d,Success, new NextIndex:%d", me, peer, args.Term, len(args.Entries), nextIndex)
+				}
+
+				// 调用Leader的commitIndex更新函数
+				rf.LeaderRefreshCommitIndex()
+
+				// 发送完成本轮日志后，如果发现又增加了新日志，那么跳过睡眠，直接发送下一轮新日志
+				rf.mu.Lock()
+				if rf.NextIndex[peer] < len(rf.Log) {
+					select {
+					case rf.NewLogChan[peer] <- 1:
+					default:
+					}
+				}
+				rf.mu.Unlock()
 			}
-		}()
+		} else {
+			// 如果 RPC发送失败，即没有回复，那么跳出该次发送循环，等待下一次Leader心跳周期再发送日志
+			continue
+		}
 	}
 }
 
@@ -709,12 +638,7 @@ func (rf *Raft) LeaderRefreshCommitIndex() {
 	serverNum := len(rf.peers)
 	rf.mu.Unlock()
 
-	var effectiveNum int = 0
-	if serverNum%2 == 0 {
-		effectiveNum = serverNum / 2
-	} else {
-		effectiveNum = serverNum/2 + 1
-	}
+	var effectiveNum int = int(math.Ceil(float64(serverNum) / 2))
 
 	for ; targetCommitIndex < logLen; targetCommitIndex++ {
 		count := 0
@@ -906,10 +830,16 @@ func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, se
 				rf.State = LEADER
 				rf.NextIndex = make([]int, len(rf.peers))
 				rf.MatchIndex = make([]int, len(rf.peers))
-				rf.NewLogChan = make(chan int, 1) // 初始化新日志到达通知通道
+				rf.NewLogChan = make([]chan int, len(rf.peers))
 				for i := 0; i < len(rf.peers); i++ {
 					rf.NextIndex[i] = len(rf.Log)
 					rf.MatchIndex[i] = 0
+					rf.NewLogChan[i] = make(chan int, 1) // 为每个向Follower发送协程初始化日志到达管道
+
+					// 启动Leader针对该follower的日志/心跳发送协程
+					if i != me {
+						go rf.replicator(i)
+					}
 				}
 				rf.mu.Unlock()
 
@@ -989,49 +919,13 @@ func (rf *Raft) CandidateCase(me int) {
 	}
 }
 
-func (rf *Raft) LeaderCaseBackup() {
-	// 如果为leader状态，需要向每个server发送心跳，心跳使用AppendEntries RPC代替
-	rf.mu.Lock()
-	me := rf.me
-	serverNum := len(rf.peers)
-	rf.mu.Unlock()
-
-	for i := 0; i < serverNum; i++ {
-		if i == me { // 不向自己发送心跳
-			continue
-		}
-
-		rf.mu.Lock()
-		args := AppendEntriesArgs{
-			Term:         rf.CurrentTerm,
-			LeaderID:     me,
-			PrevLogIndex: len(rf.Log) - 1,            // 作为leader，默认认为leader的最后一个日志索引就是其他follower相匹配的最后日志索引，不一样再前推
-			PrevLogTerm:  rf.Log[len(rf.Log)-1].Term, // 与prevLogIndex一样
-			Entries:      nil,
-			LeaderCommit: rf.CommitIndex,
-		}
-		reply := AppendEntriesReply{}
-		Debug(dLeader, "S%d Sending Heart Beat to S%d At T%d", me, i, rf.CurrentTerm)
-		rf.mu.Unlock()
-		go func() {
-			rf.peers[i].Call("Raft.AppendEntries", &args, &reply)
-		}()
-	}
-	// 由于实验要求leader每秒钟发送心跳不能超过10次，即睡眠随机睡眠时长至少为100ms，而下面的随机睡眠时长范围是50-350ms，因此在这里睡眠50ms
-	// time.Sleep(100 * time.Millisecond)
-}
-
 func (rf *Raft) LeaderCase() {
-	go rf.LeaderAppendEntriesParallelToFollower()
-
-	go rf.LeaderRefreshCommitIndex()
+	time.Sleep(50 * time.Millisecond)
 }
 
 func (rf *Raft) ticker() {
 	for !rf.killed() {
 		Debug(dTrace, "S%d is Status %d, At T%d Debug", rf.me, rf.State, rf.CurrentTerm)
-
-		go rf.ServerApplyCommittedLogs()
 
 		rf.mu.Lock()
 		curState := rf.State
@@ -1045,7 +939,7 @@ func (rf *Raft) ticker() {
 			rf.CandidateCase(me)
 		case LEADER:
 			// rf.LeaderCase()	// 在3A测试中，没有实现日志相关操作时，使用LeaderCase
-			// 在3B部分，由于实现了日志相关操作，心跳发送其实包含在日志操作中，使用Replicator
+			// 在3B部分，由于实现了日志相关操作，心跳发送其实包含在日志操作中，使用Replicator， Leader需要做的所有事情都在replicator中了
 			rf.LeaderCase()
 		}
 
@@ -1058,16 +952,6 @@ func (rf *Raft) ticker() {
 		// 	time.Sleep(time.Duration(ms) * time.Millisecond)
 		// }
 		// 如此计算，leader每次发送心跳的时间间隔大概为100ms-400ms，而本设计的follower超时选举时间在1.5-3s，应该不会出问题
-
-		select {
-		// 如果有新日志到达，触发该channel，直接跳过睡眠，进入Leader下一轮发送日志
-		case <-rf.NewLogChan:
-			continue
-		default:
-			// 由于3B测试时间要求，自主设计，Leader每秒最多10个心跳，最少5个心跳
-			ms := 100 + (rand.Int63() % 100)
-			time.Sleep(time.Duration(ms) * time.Millisecond)
-		}
 	}
 }
 
@@ -1099,7 +983,6 @@ func Make(peers []*labrpc.ClientEnd, me int,
 
 	rf.State = 0                       // 服务器状态初始化为follower
 	rf.TimeOutChan = make(chan int, 1) // 初始化一个通道，防止发送方阻塞
-	rf.NewLogChan = make(chan int, 1)  // 新日志到来管道，用于通知Leader及时发送新日志
 	rf.ApplyChan = applyCh             // 初始化状态机提交管道
 
 	// initialize from state persisted before a crash
