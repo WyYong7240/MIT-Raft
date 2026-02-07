@@ -69,10 +69,11 @@ type Raft struct {
 	NextIndex  []int // 对于每台服务器，发送到该服务器的下一个日志条目索引，初始值为领导人最后的日志条的索引+1
 	MatchIndex []int // 对于每台服务器，已知的已经复制到该服务器的最高日志条目索引
 
-	State       ServerState // 当前服务器的角色状态，0是follower、1是candidate、2是leader
-	TimeOutChan chan int
-	NewLogChan  []chan int            // 当Leader收到一个新日志，并添加到自己的Log中时，需要触发此channel，跳过Leader心跳发送完毕的睡眠时间，直接进行下一轮的新日志发送,每个Follower对应一个发送协程，也即一个通道
-	ApplyChan   chan raftapi.ApplyMsg // 用于将已经被多数server复制的logs提交到状态机的管道，不通过该管道发送已提交日志，无法通过3B测
+	State           ServerState // 当前服务器的角色状态，0是follower、1是candidate、2是leader
+	TimeOutChan     chan int
+	NewLogChan      []chan int            // 当Leader收到一个新日志，并添加到自己的Log中时，需要触发此channel，跳过Leader心跳发送完毕的睡眠时间，直接进行下一轮的新日志发送,每个Follower对应一个发送协程，也即一个通道
+	ApplyChan       chan raftapi.ApplyMsg // 用于将已经被多数server复制的logs提交到状态机的管道，不通过该管道发送已提交日志，无法通过3B测
+	ApplierSyncCond sync.Cond             // 用于每个Server当发现自己的CommitIndex被更新后，通知Applier协程，将已经被提交的log，应用到服务器
 }
 
 type LogEntry struct {
@@ -278,6 +279,9 @@ type AppendEntriesArgs struct {
 type AppendEntriesReply struct {
 	Term    int  // 当前任期，对于领导人而言，其会更新自己的任期
 	Success bool // 如果follower所含有的条目和prevLogIndex和prevLogTerm匹配上了，则为true
+
+	ConfilictTerm  int // 用于实现快速回退机制的冲突任期标识
+	ConfilictIndex int // 用于实现快速回退机制的当前冲突任期在Follower的第一个Index
 }
 
 // AppendEntries 实现
@@ -300,6 +304,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		// 如果Leader的任期小于自己的任期，不合法，返回false
 		reply.Success = false
 		reply.Term = curTerm
+		reply.ConfilictIndex = -1
+		reply.ConfilictTerm = -1
 		if EnableDebug {
 			Debug(dTrace, "S%d At T%d Refuse AppendEntries RPC From Leader S%d In T%d, Entries Len %d", me, curTerm, args.LeaderID, args.Term, len(args.Entries))
 		}
@@ -354,70 +360,91 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 	// 确认自己存在prevLogIndex、prevLogTerm日志
 	// 如果prevLogIndex小于等于当前Server的Log长度，那么可以说明prevLogIndex在这个server上存在;否则不存在
-	if args.PrevLogIndex <= logLen-1 && myPrevLogTerm == args.PrevLogTerm {
-		// 该Server的Log与prevLogIndex、prevLogTerm适配，可以开始处理args中的entries新条目
-		if LogAppendDebug && EnableDebug {
-			Debug(dLog, "S%d At T%d Satisfied prevLogIndex:%d, prevLogTerm:%d, Start AppendEntries(Len%d)", me, curTerm, args.PrevLogIndex, args.PrevLogTerm, len(args.Entries))
-		}
-		for i := 0; i < len(args.Entries); i++ {
-			// 计算下一个新日志条目需要插入的位置
-			toInsertIndex := args.PrevLogIndex + 1 + i
-
-			var toInsertIndexLogTerm int = 0
-			if toInsertIndex <= logLen-1 {
-				rf.mu.Lock()
-				toInsertIndexLogTerm = rf.Log[toInsertIndex].Term
-				rf.mu.Unlock()
+	if args.PrevLogIndex <= logLen-1 {
+		if myPrevLogTerm == args.PrevLogTerm {
+			// 该Server的Log与prevLogIndex、prevLogTerm适配，可以开始处理args中的entries新条目
+			if LogAppendDebug && EnableDebug {
+				Debug(dLog, "S%d At T%d Satisfied prevLogIndex:%d, prevLogTerm:%d, Start AppendEntries(Len%d)", me, curTerm, args.PrevLogIndex, args.PrevLogTerm, len(args.Entries))
 			}
+			for i := 0; i < len(args.Entries); i++ {
+				// 计算下一个新日志条目需要插入的位置
+				toInsertIndex := args.PrevLogIndex + 1 + i
 
-			// 如果下一个新日志条目要插入的位置，超过了目前log的容量，也就是该插入位置后面都是空的，那么将后续新条目直接append到log后面，不用再循环了
-			if toInsertIndex > logLen-1 {
-				toAppend := args.Entries[i:]
-				rf.mu.Lock()
-				rf.Log = append(rf.Log, toAppend...)
-				rf.mu.Unlock()
-
-				if LogAppendDebug && EnableDebug {
-					Debug(dLog2, "S%d At T%d, NewEntries:%d Exceed, toInsertIndex:%d, appendLength:%d", me, curTerm, i, toInsertIndex, len(toAppend))
+				var toInsertIndexLogTerm int = 0
+				if toInsertIndex <= logLen-1 {
+					rf.mu.Lock()
+					toInsertIndexLogTerm = rf.Log[toInsertIndex].Term
+					rf.mu.Unlock()
 				}
-				break
-			} else if toInsertIndexLogTerm != args.Entries[i].Term {
-				// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
-				toAppend := args.Entries[i:] // 获取后续新条目
-				rf.mu.Lock()
-				rf.Log = rf.Log[:toInsertIndex]      // 将冲突条目及其后面的条目都删除
-				rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
-				rf.mu.Unlock()
 
-				if LogAppendDebug && EnableDebug {
-					Debug(dLog2, "S%d At T%d, NewEntries:%d TermConfilict, toInsertIndex:%d, appendLength:%d", me, curTerm, i, toInsertIndex, len(toAppend))
+				// 如果下一个新日志条目要插入的位置，超过了目前log的容量，也就是该插入位置后面都是空的，那么将后续新条目直接append到log后面，不用再循环了
+				if toInsertIndex > logLen-1 {
+					toAppend := args.Entries[i:]
+					rf.mu.Lock()
+					rf.Log = append(rf.Log, toAppend...)
+					rf.mu.Unlock()
+
+					if LogAppendDebug && EnableDebug {
+						Debug(dLog2, "S%d At T%d, NewEntries:%d Exceed, toInsertIndex:%d, appendLength:%d", me, curTerm, i, toInsertIndex, len(toAppend))
+					}
+					break
+				} else if toInsertIndexLogTerm != args.Entries[i].Term {
+					// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
+					toAppend := args.Entries[i:] // 获取后续新条目
+					rf.mu.Lock()
+					rf.Log = rf.Log[:toInsertIndex]      // 将冲突条目及其后面的条目都删除
+					rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
+					rf.mu.Unlock()
+
+					if LogAppendDebug && EnableDebug {
+						Debug(dLog2, "S%d At T%d, NewEntries:%d TermConfilict, toInsertIndex:%d, appendLength:%d", me, curTerm, i, toInsertIndex, len(toAppend))
+					}
+					break // 所有新条目追加完毕，跳出循环
+				} else {
+					// 需要追加的条目，在该Server上是已有条目，不用处理
+					break
 				}
-				break // 所有新条目追加完毕，跳出循环
-			} else {
-				// 需要追加的条目，在该Server上是已有条目，不用处理
-				continue
 			}
-		}
-		reply.Success = true
-		reply.Term = curTerm
+			reply.Success = true
+			reply.Term = curTerm
 
-		// 检查Follower和Leader的CommitIndex
-		CommitAppendLogIndex := args.PrevLogIndex + len(args.Entries)
-		targetCommitIndex := int(math.Min(float64(args.LeaderCommit), float64(CommitAppendLogIndex)))
-		rf.mu.Lock()
-		if args.LeaderCommit > rf.CommitIndex {
-			rf.CommitIndex = targetCommitIndex
-		}
-		// Debug Info
-		curCommitIndex := rf.CommitIndex
-		rf.mu.Unlock()
+			// 检查Follower和Leader的CommitIndex
+			CommitAppendLogIndex := args.PrevLogIndex + len(args.Entries)
+			targetCommitIndex := int(math.Min(float64(args.LeaderCommit), float64(CommitAppendLogIndex)))
 
-		if LogAppendDebug && EnableDebug {
-			Debug(dCommit, "S%d At T%d, CommitIndex=%d, args.LeaderCommit=%d, appendLogIndex=%d", me, curTerm, curCommitIndex, args.LeaderCommit, CommitAppendLogIndex)
+			rf.mu.Lock()
+			if args.LeaderCommit > rf.CommitIndex {
+				rf.CommitIndex = targetCommitIndex
+
+				// 通知本Server的applier 应用已经提交的日志
+				rf.ApplierSyncCond.Signal()
+			}
+			// Debug Info
+			curCommitIndex := rf.CommitIndex
+			rf.mu.Unlock()
+
+			if LogAppendDebug && EnableDebug {
+				Debug(dCommit, "S%d At T%d, CommitIndex=%d, args.LeaderCommit=%d, appendLogIndex=%d", me, curTerm, curCommitIndex, args.LeaderCommit, CommitAppendLogIndex)
+			}
+		} else {
+			// 如果上述if条件都不满足，说明是发生了任期冲突，告诉Leader将nextIndex设置为当前任期的第一个日志的Index
+			// 也就是下次尝试从上一任期的日志的最后开始
+			rf.mu.Lock()
+			reply.ConfilictTerm = rf.Log[args.PrevLogIndex].Term
+
+			index := args.PrevLogIndex
+			for index > 0 && rf.Log[index].Term == reply.ConfilictTerm {
+				index--
+			}
+			rf.mu.Unlock()
+			reply.ConfilictIndex = index + 1
 		}
 	} else {
+		// 如果是prevLogIndex大于自己的日志长度，让Leader下次设置nextIndex为logLen，也就是下次从日志末尾尝试
 		reply.Success = false
 		reply.Term = curTerm
+		reply.ConfilictIndex = logLen
+		reply.ConfilictTerm = -1
 	}
 }
 
@@ -571,12 +598,41 @@ func (rf *Raft) replicator(peer int) {
 				// 加上这个当前任期>=reply任期是因为，如果作为Leader掉线，再发送AppendEntries，收到reply为false的原因是任期不合法，而不是nextIndex不匹配,在这种情况下，不更新nextIndex
 				// 把这个条件判断放到里面，是因为，可能会出现reply=false，但是任期小于Follower任期的情况，被判定为AppendEntries RPC成功
 				if curTerm >= reply.Term {
-					rf.mu.Lock()
-					rf.NextIndex[peer] -= 1
+					// 首先判断是不是preLogIndex大于其日志长度，如果是，则将nextIndex设置为其日志长度
+					var nextIndex int = 0
+					if reply.ConfilictTerm == -1 {
+						rf.mu.Lock()
+						rf.NextIndex[peer] -= 1
 
-					// DebugInfo
-					nextIndex := rf.NextIndex[peer]
-					rf.mu.Unlock()
+						// DebugInfo
+						nextIndex = rf.NextIndex[peer]
+						rf.mu.Unlock()
+					} else {
+						// 否则就是发生了任期冲突，首先检查Leader自己是否有该冲突任期的日志
+						confilictTermIndex := -1
+
+						rf.mu.Lock()
+						for i := len(rf.Log) - 1; i > 0; i-- {
+							if rf.Log[i].Term == reply.ConfilictTerm {
+								confilictTermIndex = i
+								break
+							}
+						}
+
+						// 如果Leader存在该冲突任期的日志，那么就是该Follower掉线后，Leader日志更新并提交了，
+						if confilictTermIndex != -1 {
+							rf.NextIndex[peer] = confilictTermIndex + 1
+						} else {
+							rf.NextIndex[peer] = reply.ConfilictIndex
+						}
+
+						// nextIndex安全检查
+						if rf.NextIndex[peer] < 1 {
+							rf.NextIndex[peer] = 1
+						}
+						nextIndex = rf.NextIndex[peer]
+						rf.mu.Unlock()
+					}
 
 					if EnableDebug {
 						Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, peer, args.Term, len(args.Entries), nextIndex)
@@ -668,6 +724,10 @@ func (rf *Raft) LeaderRefreshCommitIndex() {
 				rf.mu.Lock()
 				rf.CommitIndex = targetCommitIndex
 				rf.mu.Unlock()
+
+				// 通知Leader的applier应用已经提交的日志
+				rf.ApplierSyncCond.Signal()
+
 				if LogAppendDebug && EnableDebug {
 					Debug(dCommit, "Leader S%d At T%d, Refresh CommitIndex:%d", me, curTerm, targetCommitIndex)
 				}
@@ -698,33 +758,49 @@ func (rf *Raft) killed() bool {
 	return z == 1
 }
 
-func (rf *Raft) ServerApplyCommittedLogs() {
+func (rf *Raft) applier() {
 	// 如果更新了commitIndex，就要将新提交的command应用到状态机
-	rf.mu.Lock()
-	applyIndex := rf.LastApplied + 1
-	targetApplyIndex := rf.CommitIndex
-	logTemp := rf.Log
-	rf.mu.Unlock()
+	if !rf.killed() {
+		// 启动时先获取锁，检查状态
+		rf.mu.Lock()
 
-	for ; applyIndex <= targetApplyIndex; applyIndex++ {
-		applyMsg := raftapi.ApplyMsg{
-			CommandValid:  true,
-			Command:       logTemp[applyIndex].Command,
-			CommandIndex:  applyIndex,
-			SnapshotValid: false,
-			Snapshot:      nil,
-			SnapshotTerm:  0,
-			SnapshotIndex: 0,
+		// 使用for循环，避免条件变量虚假唤醒
+		for rf.LastApplied >= rf.CommitIndex {
+			rf.ApplierSyncCond.Wait()
+
+			if rf.killed() {
+				rf.mu.Unlock()
+				return
+			}
 		}
-		if LogAppendDebug && EnableDebug {
-			Debug(dLog2, "S%d At T%d, Apply Index:%d, LogTerm:%d, LogCommand:%v", rf.me, rf.CurrentTerm, applyIndex, logTemp[applyIndex].Term, applyMsg.Command)
+
+		// 将需要提交的日志信息全部复制一份
+		lastApplied := rf.LastApplied
+		commitIndex := rf.CommitIndex
+
+		toApplyEntries := make([]LogEntry, commitIndex-lastApplied)
+		copy(toApplyEntries, rf.Log[lastApplied+1:commitIndex+1]) // 左闭右开
+
+		// 更新LastApplied的状态
+		rf.LastApplied = commitIndex
+		rf.mu.Unlock()
+
+		for i, entry := range toApplyEntries {
+			applyMsg := raftapi.ApplyMsg{
+				CommandValid:  true,
+				Command:       entry.Command,
+				CommandIndex:  lastApplied + 1 + i,
+				SnapshotValid: false,
+				Snapshot:      nil,
+				SnapshotTerm:  0,
+				SnapshotIndex: 0,
+			}
+			if LogAppendDebug && EnableDebug {
+				Debug(dLog2, "S%d At T%d, Apply Index:%d, LogTerm:%d, LogCommand:%v", rf.me, rf.CurrentTerm, lastApplied+1+i, entry.Term, applyMsg.Command)
+			}
+			rf.ApplyChan <- applyMsg
 		}
-		rf.ApplyChan <- applyMsg
 	}
-	// 更新该Server已经Apply的Logs
-	rf.mu.Lock()
-	rf.LastApplied = targetApplyIndex
-	rf.mu.Unlock()
 }
 
 func (rf *Raft) FollowerCase(me int) {
@@ -976,14 +1052,14 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	rf.CurrentTerm = 0
 	rf.VoteFor = -1
 	rf.Log = make([]LogEntry, 1)
-	rf.Log[0] = LogEntry{0, nil}
-	// rf.Log = append(rf.Log, LogEntry{0, nil}) // 该条用于占位，有效日志索引从1开始
+	rf.Log[0] = LogEntry{0, nil} // 该条用于占位，有效日志索引从1开始
 	rf.CommitIndex = 0
 	rf.LastApplied = 0
 
 	rf.State = 0                       // 服务器状态初始化为follower
 	rf.TimeOutChan = make(chan int, 1) // 初始化一个通道，防止发送方阻塞
 	rf.ApplyChan = applyCh             // 初始化状态机提交管道
+	rf.ApplierSyncCond = *sync.NewCond(&rf.mu)
 
 	// initialize from state persisted before a crash
 	rf.readPersist(persister.ReadRaftState())
@@ -991,6 +1067,7 @@ func Make(peers []*labrpc.ClientEnd, me int,
 	Debug(dInfo, "S%d Server initialized success, run ticker", rf.me)
 	// start ticker goroutine to start elections
 	go rf.ticker()
+	go rf.applier() // 应用已经被提交的日志
 
 	return rf
 }
