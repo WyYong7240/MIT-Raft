@@ -407,6 +407,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			}
 			reply.Success = true
 			reply.Term = curTerm
+			reply.ConfilictIndex = -1
+			reply.ConfilictTerm = -1
 
 			// 检查Follower和Leader的CommitIndex
 			CommitAppendLogIndex := args.PrevLogIndex + len(args.Entries)
@@ -429,6 +431,9 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 		} else {
 			// 如果上述if条件都不满足，说明是发生了任期冲突，告诉Leader将nextIndex设置为当前任期的第一个日志的Index
 			// 也就是下次尝试从上一任期的日志的最后开始
+			reply.Success = false
+			reply.Term = curTerm
+
 			rf.mu.Lock()
 			reply.ConfilictTerm = rf.Log[args.PrevLogIndex].Term
 
@@ -617,7 +622,7 @@ func (rf *Raft) replicator(peer int) {
 						var nextIndex int = 0
 						if reply.ConfilictTerm == -1 {
 							rf.mu.Lock()
-							rf.NextIndex[peer] -= reply.ConfilictIndex
+							rf.NextIndex[peer] = reply.ConfilictIndex
 
 							// DebugInfo
 							nextIndex = rf.NextIndex[peer]
@@ -783,14 +788,16 @@ func (rf *Raft) killed() bool {
 
 func (rf *Raft) applier() {
 	// 如果更新了commitIndex，就要将新提交的command应用到状态机
-	if !rf.killed() {
+	for !rf.killed() {
 		// 启动时先获取锁，检查状态
 		rf.mu.Lock()
 
 		// 使用for循环，避免条件变量虚假唤醒
 		for rf.LastApplied >= rf.CommitIndex {
 			rf.ApplierSyncCond.Wait()
-
+			if EnableDebug && LogAppendDebug {
+				Debug(dLog2, "S%d Applier Signaled lastApplied=%d, CommitIndex=%d", rf.me, rf.LastApplied, rf.CommitIndex)
+			}
 			if rf.killed() {
 				rf.mu.Unlock()
 				return
