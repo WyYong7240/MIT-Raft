@@ -66,7 +66,7 @@ func TestReElection3A(t *testing.T) {
 
 	// if the leader disconnects, a new one should be elected.
 	ts.g.DisconnectAll(leader1)
-	Debug(dError, "3A Leader1 S%d DisconnentAll", leader1)
+	Debug(dError, "Tester: 3A Leader1 S%d DisconnentAll", leader1)
 	tester.AnnotateConnection(ts.g.GetConnected())
 	ts.checkOneLeader()
 

@@ -33,7 +33,7 @@ const SERVER_BASE_TIMEOUT = 1000
 const isRandom = true
 const LeaderElectionDebug = true
 const LogAppendDebug = true
-const EnableDebug = true
+const EnableDebug = false
 
 var ME int
 
@@ -555,6 +555,9 @@ func (rf *Raft) replicator(peer int) {
 	for !rf.killed() {
 		ms := 100 + (rand.Int63() % 100)
 		duration := time.Duration(ms) * time.Millisecond
+		if EnableDebug {
+			Debug(dLeader, "Leader Replicator For Follower S%d Running", peer)
+		}
 
 		select {
 		// 收到新日志，开始发送
@@ -577,12 +580,15 @@ func (rf *Raft) replicator(peer int) {
 		prevLogIndex := rf.NextIndex[peer] - 1
 		prevLogTerm := rf.Log[prevLogIndex].Term
 
+		toSendLogs := make([]LogEntry, len(rf.Log)-logFrom)
+		copy(toSendLogs, rf.Log[logFrom:])
+
 		args := AppendEntriesArgs{
 			Term:         rf.CurrentTerm,
 			LeaderID:     rf.me,
 			PrevLogIndex: prevLogIndex,
 			PrevLogTerm:  prevLogTerm,
-			Entries:      rf.Log[logFrom:],
+			Entries:      toSendLogs,
 			LeaderCommit: rf.CommitIndex,
 		}
 		rf.mu.Unlock()
@@ -591,94 +597,111 @@ func (rf *Raft) replicator(peer int) {
 		if EnableDebug {
 			Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, prevLogIndex:%d", me, peer, args.Term, len(args.Entries), args.PrevLogIndex)
 		}
-		if ok := rf.peers[peer].Call("Raft.AppendEntries", &args, &reply); ok {
-			// 如果发送AppendEntries RPC返回了失败，那么说明prevLogIndex或者prevLogTerm匹配失败，将Leader针对该Server纪律的nextIndex向前调整一个
-			// 失败还有一种情况，就是自己是过期的Leader，对方Follower的Term比自己的高
-			if !reply.Success {
-				// 加上这个当前任期>=reply任期是因为，如果作为Leader掉线，再发送AppendEntries，收到reply为false的原因是任期不合法，而不是nextIndex不匹配,在这种情况下，不更新nextIndex
-				// 把这个条件判断放到里面，是因为，可能会出现reply=false，但是任期小于Follower任期的情况，被判定为AppendEntries RPC成功
-				if curTerm >= reply.Term {
-					// 首先判断是不是preLogIndex大于其日志长度，如果是，则将nextIndex设置为其日志长度
-					var nextIndex int = 0
-					if reply.ConfilictTerm == -1 {
-						rf.mu.Lock()
-						rf.NextIndex[peer] -= 1
 
-						// DebugInfo
-						nextIndex = rf.NextIndex[peer]
-						rf.mu.Unlock()
-					} else {
-						// 否则就是发生了任期冲突，首先检查Leader自己是否有该冲突任期的日志
-						confilictTermIndex := -1
+		rpcDone := make(chan bool, 1)
+		go func() {
+			ok := rf.peers[peer].Call("Raft.AppendEntries", &args, &reply)
+			rpcDone <- ok
+		}()
 
-						rf.mu.Lock()
-						for i := len(rf.Log) - 1; i > 0; i-- {
-							if rf.Log[i].Term == reply.ConfilictTerm {
-								confilictTermIndex = i
-								break
-							}
-						}
+		select {
+		case ok := <-rpcDone:
+			if ok {
+				// 如果发送AppendEntries RPC返回了失败，那么说明prevLogIndex或者prevLogTerm匹配失败，将Leader针对该Server纪律的nextIndex向前调整一个
+				// 失败还有一种情况，就是自己是过期的Leader，对方Follower的Term比自己的高
+				if !reply.Success {
+					// 加上这个当前任期>=reply任期是因为，如果作为Leader掉线，再发送AppendEntries，收到reply为false的原因是任期不合法，而不是nextIndex不匹配,在这种情况下，不更新nextIndex
+					// 把这个条件判断放到里面，是因为，可能会出现reply=false，但是任期小于Follower任期的情况，被判定为AppendEntries RPC成功
+					if curTerm >= reply.Term {
+						// 首先判断是不是preLogIndex大于其日志长度，如果是，则将nextIndex设置为其日志长度
+						var nextIndex int = 0
+						if reply.ConfilictTerm == -1 {
+							rf.mu.Lock()
+							rf.NextIndex[peer] -= reply.ConfilictIndex
 
-						// 如果Leader存在该冲突任期的日志，那么就是该Follower掉线后，Leader日志更新并提交了，
-						if confilictTermIndex != -1 {
-							rf.NextIndex[peer] = confilictTermIndex + 1
+							// DebugInfo
+							nextIndex = rf.NextIndex[peer]
+							rf.mu.Unlock()
 						} else {
-							rf.NextIndex[peer] = reply.ConfilictIndex
+							// 否则就是发生了任期冲突，首先检查Leader自己是否有该冲突任期的日志
+							confilictTermIndex := -1
+
+							rf.mu.Lock()
+							for i := len(rf.Log) - 1; i > 0; i-- {
+								if rf.Log[i].Term == reply.ConfilictTerm {
+									confilictTermIndex = i
+									break
+								}
+							}
+
+							// 如果Leader存在该冲突任期的日志，那么就是该Follower掉线后，Leader日志更新并提交了，
+							if confilictTermIndex != -1 {
+								rf.NextIndex[peer] = confilictTermIndex + 1
+							} else {
+								rf.NextIndex[peer] = reply.ConfilictIndex
+							}
+
+							// nextIndex安全检查
+							if rf.NextIndex[peer] < 1 {
+								rf.NextIndex[peer] = 1
+							}
+							nextIndex = rf.NextIndex[peer]
+							rf.mu.Unlock()
 						}
 
-						// nextIndex安全检查
-						if rf.NextIndex[peer] < 1 {
-							rf.NextIndex[peer] = 1
+						if EnableDebug {
+							Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, peer, args.Term, len(args.Entries), nextIndex)
 						}
-						nextIndex = rf.NextIndex[peer]
+					} else {
+						// 处理自己是过期Leader的情况,原本这种情况，都是由其他几个Server选出更高Term的Leader，由新Leader向自己发送高Term心跳，在AppendEntries中进行身份转换的
+						// 但是，在这里处理的情况就是，当剩余Server不足以选出新Leader发出高Term心跳的情况（其实就算只剩下一个Server，只要那个Server超时，发出高Term的拉票请求，应该也能身份转换）
+						rf.mu.Lock()
+						rf.State = FOLLOWER
+						rf.CurrentTerm = reply.Term
 						rf.mu.Unlock()
-					}
-
-					if EnableDebug {
-						Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d, Failed, new NextIndex:%d", me, peer, args.Term, len(args.Entries), nextIndex)
+						if EnableDebug {
+							Debug(dLeader, "S%d Convert to Follower At T%d", me, reply.Term)
+						}
+						return
 					}
 				} else {
-					// 处理自己是过期Leader的情况,原本这种情况，都是由其他几个Server选出更高Term的Leader，由新Leader向自己发送高Term心跳，在AppendEntries中进行身份转换的
-					// 但是，在这里处理的情况就是，当剩余Server不足以选出新Leader发出高Term心跳的情况（其实就算只剩下一个Server，只要那个Server超时，发出高Term的拉票请求，应该也能身份转换）
+					// 如果Follower成功追加，需要Leader更新对应的matchIndex、nextIndex，甚至commitIndex
 					rf.mu.Lock()
-					rf.State = FOLLOWER
-					rf.CurrentTerm = reply.Term
+					rf.MatchIndex[peer] = args.PrevLogIndex + len(args.Entries)
+					rf.NextIndex[peer] = rf.MatchIndex[peer] + 1
+
+					// DebugInfo
+					nextIndex := rf.NextIndex[peer]
+					rf.mu.Unlock()
+
 					if EnableDebug {
-						Debug(dLeader, "S%d Convert to Follower At T%d", rf.me, rf.CurrentTerm)
+						Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d,Success, new NextIndex:%d", me, peer, args.Term, len(args.Entries), nextIndex)
+					}
+
+					// 调用Leader的commitIndex更新函数
+					rf.LeaderRefreshCommitIndex()
+
+					// 发送完成本轮日志后，如果发现又增加了新日志，那么跳过睡眠，直接发送下一轮新日志
+					rf.mu.Lock()
+					if rf.NextIndex[peer] < len(rf.Log) {
+						select {
+						case rf.NewLogChan[peer] <- 1:
+						default:
+						}
 					}
 					rf.mu.Unlock()
-					return
 				}
 			} else {
-				// 如果Follower成功追加，需要Leader更新对应的matchIndex、nextIndex，甚至commitIndex
-				rf.mu.Lock()
-				rf.MatchIndex[peer] = args.PrevLogIndex + len(args.Entries)
-				rf.NextIndex[peer] = rf.MatchIndex[peer] + 1
-
-				// DebugInfo
-				nextIndex := rf.NextIndex[peer]
-				rf.mu.Unlock()
-
-				if EnableDebug {
-					Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, Log Length:%d,Success, new NextIndex:%d", me, peer, args.Term, len(args.Entries), nextIndex)
+				// 如果 RPC发送失败，即没有回复，那么跳出该次发送循环，等待下一次Leader心跳周期再发送日志
+				if EnableDebug && LeaderElectionDebug {
+					Debug(dLeader, "S%d Sending AppendEntries RPC to S%d At T%d, RPC Failed", me, peer, curTerm)
 				}
-
-				// 调用Leader的commitIndex更新函数
-				rf.LeaderRefreshCommitIndex()
-
-				// 发送完成本轮日志后，如果发现又增加了新日志，那么跳过睡眠，直接发送下一轮新日志
-				rf.mu.Lock()
-				if rf.NextIndex[peer] < len(rf.Log) {
-					select {
-					case rf.NewLogChan[peer] <- 1:
-					default:
-					}
-				}
-				rf.mu.Unlock()
+				// continue
 			}
-		} else {
-			// 如果 RPC发送失败，即没有回复，那么跳出该次发送循环，等待下一次Leader心跳周期再发送日志
-			continue
+		case <-time.After(100 * time.Millisecond):
+			if EnableDebug {
+				Debug(dLeader, "Leader Send AppendEntries RPC to S%d TimeOut", peer)
+			}
 		}
 	}
 }
