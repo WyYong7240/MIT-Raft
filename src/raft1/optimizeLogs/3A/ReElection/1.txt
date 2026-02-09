@@ -1,0 +1,280 @@
+000005 INFO S0 Server initialized success, run ticker
+000007 INFO S1 Server initialized success, run ticker
+000008 INFO S2 Server initialized success, run ticker
+
+000007 TRCE S0 is Status 0, At T0 Debug
+Test (3A): election after network failure (reliable network)...
+000008 TRCE S1 is Status 0, At T0 Debug
+000008 TRCE S2 is Status 0, At T0 Debug
+003235 TIMR S2 TimeOut Convert State From Follower to Candidate At T1
+003237 TRCE S2 is Status 1, At T1 Debug
+003238 TRCE S2 Candidate SendRequestVote To S1 At T1
+003240 TRCE S2 Candidate SendRequestVote To S0 At T1
+003242 VOTE S1 Granting Vote to S2 at T1
+003243 TRCE S2 Candidate Recevie RequestVoteReply From S1 At T1
+003243 TRCE S2 Candidate SendRequestVote Done At T1, Success Come Leader
+// S2 成为Leader
+
+003243 VOTE S0 Granting Vote to S2 at T1
+003243 TRCE Leader Start Replicator For Follower S0
+003244 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:0
+003244 TRCE S1 Receive HeatBeat
+003244 TRCE S1 is Status 0, At T1 Debug
+003244 TRCE S2 Candidate Recevie RequestVoteReply From S0 At T1
+003244 TRCE S0 Receive HeatBeat
+003245 TRCE S0 is Status 0, At T1 Debug
+003243 TRCE S2 is Status 2, At T1 Debug
+003244 TRCE Leader Start Replicator For Follower S1
+003245 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+003246 LOG1 S0 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+003246 CMIT S0 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+003245 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+003246 TRCE S0 Receive HeatBeat
+003247 TRCE S0 is Status 0, At T1 Debug
+003247 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0,Success, new NextIndex:1
+003248 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+003248 LOG1 S1 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+003248 CMIT S1 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+003249 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:1
+003249 TRCE S1 Receive HeatBeat
+003249 TRCE S1 is Status 0, At T1 Debug
+003747 TRCE S2 is Status 2, At T1 Debug
+004250 TRCE S2 is Status 2, At T1 Debug
+004693 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+004695 TRCE S1 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+004695 LOG1 S1 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+004696 CMIT S1 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+004696 TRCE S1 Receive HeatBeat
+004696 TRCE S1 is Status 0, At T1 Debug
+004696 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0,Success, new NextIndex:1
+004754 TRCE S2 is Status 2, At T1 Debug
+005047 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:0
+005050 TRCE S0 At T1 Recive AppendEntries RPC From Leader S2 In T1, Entries Len 0
+005051 LOG1 S0 At T1 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+005052 CMIT S0 At T1, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+005052 TRCE S0 Receive HeatBeat
+005052 TRCE S0 is Status 0, At T1 Debug
+005052 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0,Success, new NextIndex:1
+005261 TRCE S2 is Status 2, At T1 Debug
+
+// Leader1 S2 断开连接
+005413 ERRO 3A Leader1 S2 DisconnentAll
+005766 TRCE S2 is Status 2, At T1 Debug
+006258 LEAD S2 Sending AppendEntries RPC to S1 At T1, Log Length:0, prevLogIndex:0
+006269 TRCE S2 is Status 2, At T1 Debug
+006441 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:0
+006774 TRCE S2 is Status 2, At T1 Debug
+007278 TRCE S2 is Status 2, At T1 Debug
+007781 TRCE S2 is Status 2, At T1 Debug
+
+// S0 超时 
+008144 TIMR S0 TimeOut Convert State From Follower to Candidate At T2
+008145 TRCE S0 is Status 1, At T2 Debug
+008146 TRCE S0 Candidate SendRequestVote To S2 At T2
+008147 TRCE S0 Candidate SendRequestVote To S1 At T2
+008148 VOTE S1 Granting Vote to S0 at T2
+008149 TRCE S0 Candidate Recevie RequestVoteReply From S1 At T2
+
+// S0 成为Leader2
+008149 TRCE S0 Candidate SendRequestVote Done At T2, Success Come Leader
+008149 TRCE S1 Receive HeatBeat
+008149 TRCE S1 is Status 0, At T2 Debug
+008149 TRCE Leader Start Replicator For Follower S1
+008150 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:0
+008149 TRCE Leader Start Replicator For Follower S2
+
+008153 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:0
+008149 TRCE S0 is Status 2, At T2 Debug
+008152 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+008155 LOG1 S1 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+008155 CMIT S1 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+008156 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:1
+008156 TRCE S1 Receive HeatBeat
+008156 TRCE S1 is Status 0, At T2 Debug
+008287 TRCE S2 is Status 2, At T1 Debug
+008660 TRCE S0 is Status 2, At T2 Debug
+008792 TRCE S2 is Status 2, At T1 Debug
+009165 TRCE S0 is Status 2, At T2 Debug
+009297 TRCE S2 is Status 2, At T1 Debug
+009670 TRCE S0 is Status 2, At T2 Debug
+009802 TRCE S2 is Status 2, At T1 Debug
+009913 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:0
+009916 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+009917 LOG1 S1 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+009917 CMIT S1 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+009917 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:1
+009918 TRCE S1 Receive HeatBeat
+009918 TRCE S1 is Status 0, At T2 Debug
+010176 TRCE S0 is Status 2, At T2 Debug
+010307 TRCE S2 is Status 2, At T1 Debug
+010679 TRCE S0 is Status 2, At T2 Debug
+
+// Leader1 S2 重连
+010783 ERRO 3A Leader1 S2 Reconnect
+010815 TRCE S2 is Status 2, At T1 Debug
+011187 TRCE S0 is Status 2, At T2 Debug
+011319 TRCE S2 is Status 2, At T1 Debug
+
+// 发现问题，当S0刚成为Leader给掉线的S2发送RPC却失败时，后面就再也不发送了
+// 怀疑是RPC失败，S2的replicator退出
+011491 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:0
+011496 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+011498 LOG1 S1 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+011498 CMIT S1 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+011498 TRCE S1 Receive HeatBeat
+011498 TRCE S1 is Status 0, At T2 Debug
+011500 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:1
+011693 TRCE S0 is Status 2, At T2 Debug
+011826 TRCE S2 is Status 2, At T1 Debug
+012199 TRCE S0 is Status 2, At T2 Debug
+012330 TRCE S2 is Status 2, At T1 Debug
+012703 TRCE S0 is Status 2, At T2 Debug
+012834 TRCE S2 is Status 2, At T1 Debug
+013066 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:0
+013069 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+013070 LOG1 S1 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+013070 CMIT S1 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+013070 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:1
+013070 TRCE S1 Receive HeatBeat
+013070 TRCE S1 is Status 0, At T2 Debug
+013208 TRCE S0 is Status 2, At T2 Debug
+013339 TRCE S2 is Status 2, At T1 Debug
+013712 TRCE S0 is Status 2, At T2 Debug
+013843 TRCE S2 is Status 2, At T1 Debug
+014185 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:0
+014188 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+014189 LOG1 S1 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+014189 CMIT S1 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+014189 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:1
+014189 TRCE S1 Receive HeatBeat
+014189 TRCE S1 is Status 0, At T2 Debug
+014217 TRCE S0 is Status 2, At T2 Debug
+014348 TRCE S2 is Status 2, At T1 Debug
+014721 TRCE S0 is Status 2, At T2 Debug
+014853 TRCE S2 is Status 2, At T1 Debug
+015226 TRCE S0 is Status 2, At T2 Debug
+015357 TRCE S2 is Status 2, At T1 Debug
+015729 TRCE S0 is Status 2, At T2 Debug
+015862 TRCE S2 is Status 2, At T1 Debug
+016064 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:0
+016067 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+016068 LOG1 S1 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len0)
+016068 CMIT S1 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=0
+016068 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:1
+016069 TRCE S1 Receive HeatBeat
+016069 TRCE S1 is Status 0, At T2 Debug
+
+// Leader2 S0 掉线，仅剩S1
+016127 ERRO 3A Leader2 S0 and another Server DisconnentAll
+016238 TRCE S0 is Status 2, At T2 Debug
+016371 TRCE S2 is Status 2, At T1 Debug
+016743 TRCE S0 is Status 2, At T2 Debug
+016875 TRCE S2 is Status 2, At T1 Debug
+017247 TRCE S0 is Status 2, At T2 Debug
+017379 TRCE S2 is Status 2, At T1 Debug
+017422 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:0
+017755 TRCE S0 is Status 2, At T2 Debug
+017888 TRCE S2 is Status 2, At T1 Debug
+018260 TRCE S0 is Status 2, At T2 Debug
+018391 TRCE S2 is Status 2, At T1 Debug
+018764 TRCE S0 is Status 2, At T2 Debug
+018896 TRCE S2 is Status 2, At T1 Debug
+019268 TRCE S0 is Status 2, At T2 Debug
+019401 TRCE S2 is Status 2, At T1 Debug
+
+// S1 超时
+019713 TIMR S1 TimeOut Convert State From Follower to Candidate At T3
+019714 TRCE S1 is Status 1, At T3 Debug
+019714 TRCE S1 Candidate SendRequestVote To S2 At T3
+019715 TRCE S1 Candidate SendRequestVote To S0 At T3
+019777 TRCE S0 is Status 2, At T2 Debug
+019910 TRCE S2 is Status 2, At T1 Debug
+020284 TRCE S0 is Status 2, At T2 Debug
+020417 TRCE S2 is Status 2, At T1 Debug
+020791 TRCE S0 is Status 2, At T2 Debug
+020925 TRCE S2 is Status 2, At T1 Debug
+021297 TRCE S0 is Status 2, At T2 Debug
+021430 TRCE S2 is Status 2, At T1 Debug
+021803 TRCE S0 is Status 2, At T2 Debug
+021935 TRCE S2 is Status 2, At T1 Debug
+022307 TRCE S0 is Status 2, At T2 Debug
+022439 TRCE S2 is Status 2, At T1 Debug
+022810 TRCE S0 is Status 2, At T2 Debug
+022942 TRCE S2 is Status 2, At T1 Debug
+023094 TRCE S1 Candidate TimeOut Increate Term From T3 to T4
+023095 TRCE S1 is Status 1, At T4 Debug
+023096 TRCE S1 Candidate SendRequestVote To S2 At T4
+023096 TRCE S1 Candidate SendRequestVote To S0 At T4
+023316 TRCE S0 is Status 2, At T2 Debug
+023448 TRCE S2 is Status 2, At T1 Debug
+023821 TRCE S0 is Status 2, At T2 Debug
+023954 TRCE S2 is Status 2, At T1 Debug
+024326 TRCE S0 is Status 2, At T2 Debug
+024458 TRCE S2 is Status 2, At T1 Debug
+024830 TRCE S0 is Status 2, At T2 Debug
+024962 TRCE S2 is Status 2, At T1 Debug
+025334 TRCE S0 is Status 2, At T2 Debug
+025466 TRCE S2 is Status 2, At T1 Debug
+025838 TRCE S0 is Status 2, At T2 Debug
+025970 TRCE S2 is Status 2, At T1 Debug
+026342 TRCE S0 is Status 2, At T2 Debug
+026473 TRCE S2 is Status 2, At T1 Debug
+026726 TRCE S1 Candidate TimeOut Increate Term From T4 to T5
+026727 TRCE S1 is Status 1, At T5 Debug
+026727 TRCE S1 Candidate SendRequestVote To S2 At T5
+026728 TRCE S1 Candidate SendRequestVote To S0 At T5
+026848 TRCE S0 is Status 2, At T2 Debug
+026979 TRCE S2 is Status 2, At T1 Debug
+027352 TRCE S0 is Status 2, At T2 Debug
+027483 TRCE S2 is Status 2, At T1 Debug
+027856 TRCE S0 is Status 2, At T2 Debug
+027988 TRCE S2 is Status 2, At T1 Debug
+028360 TRCE S0 is Status 2, At T2 Debug
+028492 TRCE S2 is Status 2, At T1 Debug
+028870 TRCE S0 is Status 2, At T2 Debug
+029004 TRCE S2 is Status 2, At T1 Debug
+029375 TRCE S0 is Status 2, At T2 Debug
+029508 TRCE S2 is Status 2, At T1 Debug
+029880 TRCE S0 is Status 2, At T2 Debug
+029892 TRCE S1 Candidate TimeOut Increate Term From T5 to T6
+029892 TRCE S1 is Status 1, At T6 Debug
+029893 TRCE S1 Candidate SendRequestVote To S2 At T6
+029893 TRCE S1 Candidate SendRequestVote To S0 At T6
+030013 TRCE S2 is Status 2, At T1 Debug
+030391 TRCE S0 is Status 2, At T2 Debug
+030522 TRCE S2 is Status 2, At T1 Debug
+030895 TRCE S0 is Status 2, At T2 Debug
+031026 TRCE S2 is Status 2, At T1 Debug
+031399 TRCE S0 is Status 2, At T2 Debug
+031531 TRCE S2 is Status 2, At T1 Debug
+031843 LEAD S2 Sending AppendEntries RPC to S0 At T1, Log Length:0, prevLogIndex:0
+031905 TRCE S0 is Status 2, At T2 Debug
+032038 TRCE S2 is Status 2, At T1 Debug
+032409 TRCE S0 is Status 2, At T2 Debug
+032541 TRCE S2 is Status 2, At T1 Debug
+032913 TRCE S0 is Status 2, At T2 Debug
+033046 TRCE S2 is Status 2, At T1 Debug
+033417 TRCE S0 is Status 2, At T2 Debug
+033550 TRCE S2 is Status 2, At T1 Debug
+033571 TRCE S1 Candidate TimeOut Increate Term From T6 to T7
+033572 TRCE S1 is Status 1, At T7 Debug
+033573 TRCE S1 Candidate SendRequestVote To S2 At T7
+033574 TRCE S1 Candidate SendRequestVote To S0 At T7
+033924 TRCE S0 is Status 2, At T2 Debug
+034055 TRCE S2 is Status 2, At T1 Debug
+034426 TRCE S0 is Status 2, At T2 Debug
+034557 TRCE S2 is Status 2, At T1 Debug
+034937 TRCE S0 is Status 2, At T2 Debug
+035069 TRCE S2 is Status 2, At T1 Debug
+035442 TRCE S0 is Status 2, At T2 Debug
+035573 TRCE S2 is Status 2, At T1 Debug
+035945 TRCE S0 is Status 2, At T2 Debug
+036077 TRCE S2 is Status 2, At T1 Debug
+Fatal: leader = 2
+        /root/Golang/MIT-Raft/src/raft1/test.go:158
+        /root/Golang/MIT-Raft/src/raft1/raft_test.go:92
+info: wrote visualization to /tmp/porcupine-2888497785.html
+--- FAIL: TestReElection3A (3.61s)
+FAIL
+exit status 1
+FAIL	6.5840/raft1	3.619s

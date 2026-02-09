@@ -1,0 +1,1692 @@
+000007 INFO S0 Server initialized success, run ticker
+000010 TRCE S0 is Status 0, At T0 Debug
+000011 INFO S1 Server initialized success, run ticker
+000012 TRCE S1 is Status 0, At T0 Debug
+000012 INFO S2 Server initialized success, run ticker
+000013 TRCE S2 is Status 0, At T0 Debug
+000013 INFO S3 Server initialized success, run ticker
+000015 INFO S4 Server initialized success, run ticker
+Test (3B): leader backs up quickly over incorrect follower logs (reliable network)...
+000016 ERRO Tester: 提交命令：100
+000015 TRCE S3 is Status 0, At T0 Debug
+000017 TRCE S4 is Status 0, At T0 Debug
+003014 TIMR S0 TimeOut Convert State From Follower to Candidate At T1
+003325 TIMR S4 TimeOut Convert State From Follower to Candidate At T1
+003778 TIMR S1 TimeOut Convert State From Follower to Candidate At T1
+003928 TIMR S3 TimeOut Convert State From Follower to Candidate At T1
+003940 TIMR S2 TimeOut Convert State From Follower to Candidate At T1
+004248 TRCE S0 is Status 1, At T1 Debug
+004251 TRCE S0 Candidate SendRequestVote To S4 At T1
+004252 TRCE S0 Candidate SendRequestVote To S2 At T1
+004253 TRCE S0 Candidate SendRequestVote To S1 At T1
+004253 TRCE S0 Candidate SendRequestVote To S3 At T1
+004255 TRCE S0 Candidate Recevie RequestVoteReply From S2 At T1
+004256 TRCE S0 Candidate Recevie RequestVoteReply From S4 At T1
+004256 TRCE S0 Candidate Recevie RequestVoteReply From S1 At T1
+004257 TRCE S0 Candidate Recevie RequestVoteReply From S3 At T1
+005268 TRCE S4 is Status 1, At T1 Debug
+005270 TRCE S4 Candidate SendRequestVote To S3 At T1
+005270 TRCE S4 Candidate SendRequestVote To S1 At T1
+005270 TRCE S4 Candidate SendRequestVote To S0 At T1
+005271 TRCE S4 Candidate SendRequestVote To S2 At T1
+005273 TRCE S4 Candidate Recevie RequestVoteReply From S0 At T1
+005273 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T1
+005273 TRCE S4 Candidate Recevie RequestVoteReply From S1 At T1
+005275 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T1
+005291 TRCE S1 is Status 1, At T1 Debug
+005293 TRCE S1 Candidate SendRequestVote To S4 At T1
+005294 TRCE S1 Candidate SendRequestVote To S2 At T1
+005295 TRCE S1 Candidate SendRequestVote To S3 At T1
+005295 TRCE S1 Candidate SendRequestVote To S0 At T1
+005296 TRCE S1 Candidate Recevie RequestVoteReply From S4 At T1
+005297 TRCE S1 Candidate Recevie RequestVoteReply From S2 At T1
+005297 TRCE S1 Candidate Recevie RequestVoteReply From S0 At T1
+005298 TRCE S1 Candidate Recevie RequestVoteReply From S3 At T1
+005588 TRCE S2 is Status 1, At T1 Debug
+005592 TRCE S2 Candidate SendRequestVote To S1 At T1
+005592 TRCE S2 Candidate SendRequestVote To S3 At T1
+005592 TRCE S2 Candidate SendRequestVote To S0 At T1
+005591 TRCE S2 Candidate SendRequestVote To S4 At T1
+005596 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T1
+005595 TRCE S2 Candidate Recevie RequestVoteReply From S1 At T1
+005595 TRCE S2 Candidate Recevie RequestVoteReply From S0 At T1
+005599 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T1
+005816 TRCE S3 is Status 1, At T1 Debug
+005818 TRCE S3 Candidate SendRequestVote To S4 At T1
+005819 TRCE S3 Candidate SendRequestVote To S0 At T1
+005819 TRCE S3 Candidate SendRequestVote To S1 At T1
+005820 TRCE S3 Candidate SendRequestVote To S2 At T1
+005821 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T1
+005822 TRCE S3 Candidate Recevie RequestVoteReply From S0 At T1
+005822 TRCE S3 Candidate Recevie RequestVoteReply From S1 At T1
+005822 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T1
+007819 TRCE S0 Candidate TimeOut Increate Term From T1 to T2
+008473 TRCE S1 Candidate TimeOut Increate Term From T1 to T2
+008602 TRCE S4 Candidate TimeOut Increate Term From T1 to T2
+009007 TRCE S0 is Status 1, At T2 Debug
+009010 TRCE S0 Candidate SendRequestVote To S4 At T2
+009011 TRCE S0 Candidate SendRequestVote To S2 At T2
+009012 TRCE S0 Candidate SendRequestVote To S1 At T2
+009014 VOTE S2 Granting Vote to S0 at T2
+009015 TRCE S0 Candidate Recevie RequestVoteReply From S4 At T2
+009015 TRCE S0 Candidate SendRequestVote To S3 At T2
+009017 TRCE S0 Candidate Recevie RequestVoteReply From S1 At T2
+009015 TRCE S0 Candidate Recevie RequestVoteReply From S2 At T2
+009019 VOTE S3 Granting Vote to S0 at T2
+009023 TRCE S0 Candidate Recevie RequestVoteReply From S3 At T2
+009024 TRCE S0 Candidate SendRequestVote Done At T2, Success Come Leader
+009144 LOG1 Leader S0 At T2, Receive Log, CurLogLength:2
+009774 TRCE S1 is Status 1, At T2 Debug
+009776 TRCE S1 Candidate SendRequestVote To S4 At T2
+009777 TRCE S1 Candidate SendRequestVote To S0 At T2
+009778 TRCE S1 Candidate SendRequestVote To S2 At T2
+009778 TRCE S1 Candidate Recevie RequestVoteReply From S4 At T2
+009778 TRCE S1 Candidate SendRequestVote To S3 At T2
+009781 TRCE S1 Candidate Recevie RequestVoteReply From S3 At T2
+009781 TRCE S1 Candidate Recevie RequestVoteReply From S2 At T2
+009782 TRCE S1 Candidate Recevie RequestVoteReply From S0 At T2
+010161 TRCE S3 is Status 0, At T2 Debug
+010176 TRCE S4 is Status 1, At T2 Debug
+010177 TRCE S4 Candidate SendRequestVote To S3 At T2
+010177 TRCE S4 Candidate SendRequestVote To S1 At T2
+010178 TRCE S4 Candidate SendRequestVote To S2 At T2
+010178 TRCE S4 Candidate SendRequestVote To S0 At T2
+010179 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T2
+010179 TRCE S4 Candidate Recevie RequestVoteReply From S1 At T2
+010180 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T2
+010183 TRCE S4 Candidate Recevie RequestVoteReply From S0 At T2
+010331 TRCE S2 is Status 0, At T2 Debug
+010842 TRCE S0 is Status 2, At T2 Debug
+010843 TRCE S0 is Status 2, At T2 Debug
+010843 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=1, curCount=1, effctiveNum=3
+010844 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=0, curCount=1, effctiveNum=3
+010844 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=0, curCount=1, effctiveNum=3
+010844 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[3]=0, curCount=1, effctiveNum=3
+010844 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[4]=0, curCount=1, effctiveNum=3
+010844 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:1, prevLogIndex:0
+010844 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:1, prevLogIndex:0
+010846 TRCE S4 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 1
+010846 TRCE S4 At T2 Recive AppendEntries From Leader S0 In T2, Convert From Candidate to Follower
+010846 LOG1 S4 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+010847 LOG2 S4 At T2, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+010846 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:1, prevLogIndex:0
+010847 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:1, prevLogIndex:0
+010847 CMIT S4 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+010851 TRCE S3 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 1
+010851 LOG1 S3 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+010851 LOG2 S3 At T2, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+010851 TRCE S3 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 1
+010852 LOG1 S3 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+010852 CMIT S3 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+010847 TRCE S4 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 1
+010856 LOG1 S4 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+010856 CMIT S4 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+010852 CMIT S3 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+010858 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:1,Success, new NextIndex:2
+010851 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:1,Success, new NextIndex:2
+010847 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:1, prevLogIndex:0
+010859 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:1,Success, new NextIndex:2
+010847 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:1, prevLogIndex:0
+010860 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 1
+010861 TRCE S1 At T2 Recive AppendEntries From Leader S0 In T2, Convert From Candidate to Follower
+010847 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[0]=1, curCount=1, effctiveNum=3
+010847 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:0
+010847 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:1, prevLogIndex:0
+010852 TRCE S3 Receive HeatBeat
+010854 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:1,Success, new NextIndex:2
+010861 LOG1 S1 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+010861 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 1
+010861 LOG1 S1 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+010861 CMIT S1 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+010862 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:1,Success, new NextIndex:2
+010861 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[1]=0, curCount=1, effctiveNum=3
+010862 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[2]=0, curCount=1, effctiveNum=3
+010863 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[3]=1, curCount=2, effctiveNum=3
+010863 CMIT Leader S0 Check CommitIndex, targetCommitIndex=1, MatchIndex[4]=1, curCount=3, effctiveNum=3
+010863 CMIT Leader S0 At T2, Refresh CommitIndex:1
+010861 LOG2 S1 At T2, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+010863 CMIT S1 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+010863 TRCE S2 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 1
+010863 LOG1 S2 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+010863 LOG2 S2 At T2, NewEntries:0 Exceed, toInsertIndex:1, appendLength:1
+010863 CMIT S2 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+010863 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:1,Success, new NextIndex:2
+010862 TRCE S2 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 1
+010864 LOG1 S2 At T2 Satisfied prevLogIndex:0, prevLogTerm:0, Start AppendEntries(Len1)
+010864 CMIT S2 At T2, CommitIndex=0, args.LeaderCommit=0, appendLogIndex=1
+010864 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:1,Success, new NextIndex:2
+010864 TRCE S2 Receive HeatBeat
+010864 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:1,Success, new NextIndex:2
+012299 TRCE S4 is Status 0, At T2 Debug
+012304 TRCE S4 Receive HeatBeat
+012581 TRCE S3 is Status 0, At T2 Debug
+012582 TRCE S3 Receive HeatBeat
+012638 TRCE S0 is Status 2, At T2 Debug
+012641 LOG2 S0 At T2, Apply Index:1, LogTerm:2, LogCommand:100
+012643 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0, prevLogIndex:1
+012645 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:1
+012645 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0, prevLogIndex:1
+012644 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:1
+012647 TRCE S4 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+012647 LOG1 S4 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+012647 CMIT S4 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+012648 TRCE S3 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+012648 TRCE S2 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+012650 LOG1 S2 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+012648 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0,Success, new NextIndex:2
+012647 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+012652 LOG1 S1 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+012652 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+012648 LOG1 S3 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+012653 CMIT S3 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+012654 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:2
+012651 CMIT S2 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+012656 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:2
+012655 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0,Success, new NextIndex:2
+012758 TRCE S2 is Status 0, At T2 Debug
+012761 TRCE S2 Receive HeatBeat
+012761 LOG2 S2 At T2, Apply Index:1, LogTerm:2, LogCommand:100
+012795 TRCE S1 is Status 0, At T2 Debug
+012796 TRCE S1 Receive HeatBeat
+012797 LOG2 S1 At T2, Apply Index:1, LogTerm:2, LogCommand:100
+014112 TRCE S4 is Status 0, At T2 Debug
+014113 TRCE S4 Receive HeatBeat
+014113 LOG2 S4 At T2, Apply Index:1, LogTerm:2, LogCommand:100
+014214 TRCE S3 is Status 0, At T2 Debug
+014216 LOG2 S3 At T2, Apply Index:1, LogTerm:2, LogCommand:100
+014217 TRCE S3 Receive HeatBeat
+014525 TRCE S0 is Status 2, At T2 Debug
+014526 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0, prevLogIndex:1
+014527 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:1
+014528 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0, prevLogIndex:1
+014528 TRCE S4 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+014528 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:1
+014529 TRCE S3 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+014529 LOG1 S3 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+014529 CMIT S3 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+014528 LOG1 S4 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+014530 CMIT S4 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+014529 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+014530 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0,Success, new NextIndex:2
+014530 LOG1 S1 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+014530 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+014530 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0,Success, new NextIndex:2
+014530 TRCE S2 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+014531 LOG1 S2 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+014531 CMIT S2 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+014531 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:2
+014531 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:2
+014718 TRCE S2 is Status 0, At T2 Debug
+014720 TRCE S2 Receive HeatBeat
+014764 TRCE S1 is Status 0, At T2 Debug
+014766 TRCE S1 Receive HeatBeat
+015397 TRCE S3 is Status 0, At T2 Debug
+015399 TRCE S3 Receive HeatBeat
+015464 TRCE S4 is Status 0, At T2 Debug
+015466 TRCE S4 Receive HeatBeat
+015909 TRCE S0 is Status 2, At T2 Debug
+015911 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0, prevLogIndex:1
+015912 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:1
+015913 TRCE S4 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+015913 LOG1 S4 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+015913 CMIT S4 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+015913 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0,Success, new NextIndex:2
+015913 TRCE S2 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+015913 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:1
+015913 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0, prevLogIndex:1
+015916 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+015918 LOG1 S1 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+015919 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+015914 LOG1 S2 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+015920 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:2
+015920 CMIT S2 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+015924 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:2
+015917 TRCE S3 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+015925 LOG1 S3 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+015926 CMIT S3 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+015926 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0,Success, new NextIndex:2
+016034 TRCE S1 is Status 0, At T2 Debug
+016035 TRCE S1 Receive HeatBeat
+016560 TRCE S2 is Status 0, At T2 Debug
+016562 TRCE S2 Receive HeatBeat
+016902 TRCE S3 is Status 0, At T2 Debug
+016905 TRCE S3 Receive HeatBeat
+017047 TRCE S4 is Status 0, At T2 Debug
+017050 TRCE S4 Receive HeatBeat
+017124 TRCE S1 is Status 0, At T2 Debug
+017253 TRCE S0 is Status 2, At T2 Debug
+017255 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0, prevLogIndex:1
+017255 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:1
+017256 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:1
+017256 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0, prevLogIndex:1
+017257 TRCE S4 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+017257 LOG1 S4 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+017257 CMIT S4 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+017257 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0,Success, new NextIndex:2
+017258 TRCE S2 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+017258 TRCE S3 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+017258 LOG1 S3 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+017258 CMIT S3 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+017259 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0,Success, new NextIndex:2
+017258 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+017259 LOG1 S1 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+017259 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+017259 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:2
+017260 TRCE S1 Receive HeatBeat
+017258 LOG1 S2 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+017261 CMIT S2 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+017263 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:2
+018388 TRCE S0 is Status 2, At T2 Debug
+018390 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0, prevLogIndex:1
+018391 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0, prevLogIndex:1
+018392 TRCE S4 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+018392 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:1
+018393 TRCE S2 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+018393 LOG1 S2 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+018393 CMIT S2 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+018394 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:0,Success, new NextIndex:2
+018394 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+018394 LOG1 S1 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+018394 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+018395 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:2
+018392 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0, prevLogIndex:1
+018392 LOG1 S4 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+018399 CMIT S4 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+018400 TRCE S3 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+018401 LOG1 S3 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len0)
+018403 CMIT S3 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=1
+018405 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:0,Success, new NextIndex:2
+018400 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:0,Success, new NextIndex:2
+018483 TRCE S2 is Status 0, At T2 Debug
+018486 TRCE S2 Receive HeatBeat
+018727 TRCE S3 is Status 0, At T2 Debug
+018729 TRCE S3 Receive HeatBeat
+018871 TRCE S4 is Status 0, At T2 Debug
+018874 TRCE S4 Receive HeatBeat
+019177 TRCE S1 is Status 0, At T2 Debug
+019179 TRCE S1 Receive HeatBeat
+019395 ERRO Tester: 断连 S2 的连接
+019397 ERRO Tester: 断连 S3 的连接
+019398 ERRO Tester: 断连 S4 的连接
+019399 LOG1 Leader S0 At T2, Receive Log, CurLogLength:3
+019399 LOG1 Leader S0 At T2, Receive Log, CurLogLength:4
+019399 LOG1 Leader S0 At T2, Receive Log, CurLogLength:5
+019399 LOG1 Leader S0 At T2, Receive Log, CurLogLength:6
+019399 LOG1 Leader S0 At T2, Receive Log, CurLogLength:7
+019399 LOG1 Leader S0 At T2, Receive Log, CurLogLength:8
+019400 LOG1 Leader S0 At T2, Receive Log, CurLogLength:9
+019400 LOG1 Leader S0 At T2, Receive Log, CurLogLength:10
+019400 LOG1 Leader S0 At T2, Receive Log, CurLogLength:11
+019400 LOG1 Leader S0 At T2, Receive Log, CurLogLength:12
+019400 LOG1 Leader S0 At T2, Receive Log, CurLogLength:13
+019400 LOG1 Leader S0 At T2, Receive Log, CurLogLength:14
+019400 LOG1 Leader S0 At T2, Receive Log, CurLogLength:15
+019401 LOG1 Leader S0 At T2, Receive Log, CurLogLength:16
+019401 LOG1 Leader S0 At T2, Receive Log, CurLogLength:17
+019401 LOG1 Leader S0 At T2, Receive Log, CurLogLength:18
+019401 LOG1 Leader S0 At T2, Receive Log, CurLogLength:19
+019401 LOG1 Leader S0 At T2, Receive Log, CurLogLength:20
+019401 LOG1 Leader S0 At T2, Receive Log, CurLogLength:21
+019401 LOG1 Leader S0 At T2, Receive Log, CurLogLength:22
+019402 LOG1 Leader S0 At T2, Receive Log, CurLogLength:23
+019402 LOG1 Leader S0 At T2, Receive Log, CurLogLength:24
+019402 LOG1 Leader S0 At T2, Receive Log, CurLogLength:25
+019402 LOG1 Leader S0 At T2, Receive Log, CurLogLength:26
+019402 LOG1 Leader S0 At T2, Receive Log, CurLogLength:27
+019402 LOG1 Leader S0 At T2, Receive Log, CurLogLength:28
+019403 LOG1 Leader S0 At T2, Receive Log, CurLogLength:29
+019403 LOG1 Leader S0 At T2, Receive Log, CurLogLength:30
+019403 LOG1 Leader S0 At T2, Receive Log, CurLogLength:31
+019403 LOG1 Leader S0 At T2, Receive Log, CurLogLength:32
+019403 LOG1 Leader S0 At T2, Receive Log, CurLogLength:33
+019404 LOG1 Leader S0 At T2, Receive Log, CurLogLength:34
+019404 LOG1 Leader S0 At T2, Receive Log, CurLogLength:35
+019404 LOG1 Leader S0 At T2, Receive Log, CurLogLength:36
+019404 LOG1 Leader S0 At T2, Receive Log, CurLogLength:37
+019404 LOG1 Leader S0 At T2, Receive Log, CurLogLength:38
+019404 LOG1 Leader S0 At T2, Receive Log, CurLogLength:39
+019404 LOG1 Leader S0 At T2, Receive Log, CurLogLength:40
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:41
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:42
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:43
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:44
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:45
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:46
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:47
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:48
+019405 LOG1 Leader S0 At T2, Receive Log, CurLogLength:49
+019406 LOG1 Leader S0 At T2, Receive Log, CurLogLength:50
+019406 LOG1 Leader S0 At T2, Receive Log, CurLogLength:51
+019406 LOG1 Leader S0 At T2, Receive Log, CurLogLength:52
+019406 ERRO Tester: 提交50个命令到 Leader S0, 0+
+019850 TRCE S2 is Status 0, At T2 Debug
+019895 TRCE S4 is Status 0, At T2 Debug
+020163 TRCE S0 is Status 2, At T2 Debug
+020165 TRCE S0 is Status 2, At T2 Debug
+020166 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+020166 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, curCount=1, effctiveNum=3
+020167 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=1, effctiveNum=3
+020167 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=1, effctiveNum=3
+020167 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=1, effctiveNum=3
+020167 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+020167 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+020168 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=1, curCount=1, effctiveNum=3
+020168 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=1, effctiveNum=3
+020168 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=1, effctiveNum=3
+020168 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=1, effctiveNum=3
+020169 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+020172 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+020172 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:50, prevLogIndex:1
+020174 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+020176 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+020176 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:50, prevLogIndex:1
+020178 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+020179 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 50
+020180 LOG1 S1 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len50)
+020180 LOG2 S1 At T2, NewEntries:0 Exceed, toInsertIndex:2, appendLength:50
+020180 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=51
+020180 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:50,Success, new NextIndex:52
+020179 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 50
+020181 LOG1 S1 At T2 Satisfied prevLogIndex:1, prevLogTerm:2, Start AppendEntries(Len50)
+020181 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=51
+020185 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:50,Success, new NextIndex:52
+020292 TRCE S3 is Status 0, At T2 Debug
+020748 TRCE S1 is Status 0, At T2 Debug
+020751 TRCE S1 Receive HeatBeat
+021760 TRCE S0 is Status 2, At T2 Debug
+021764 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+021765 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+021765 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+021765 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+021765 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+021766 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+021768 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+021769 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+021770 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+021771 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+021771 LOG1 S1 At T2 Satisfied prevLogIndex:51, prevLogTerm:2, Start AppendEntries(Len0)
+021772 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=51
+021772 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:52
+022347 TRCE S1 is Status 0, At T2 Debug
+022350 TRCE S1 Receive HeatBeat
+022897 TRCE S0 is Status 2, At T2 Debug
+022899 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+022900 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+022900 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+022900 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+022900 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+022900 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+022900 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+022900 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+022904 TRCE S1 At T2 Recive AppendEntries RPC From Leader S0 In T2, Entries Len 0
+022904 LOG1 S1 At T2 Satisfied prevLogIndex:51, prevLogTerm:2, Start AppendEntries(Len0)
+022904 CMIT S1 At T2, CommitIndex=1, args.LeaderCommit=1, appendLogIndex=51
+022900 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+022905 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0,Success, new NextIndex:52
+023242 TIMR S2 TimeOut Convert State From Follower to Candidate At T3
+023479 TRCE S1 is Status 0, At T2 Debug
+023481 TRCE S1 Receive HeatBeat
+023714 TIMR S4 TimeOut Convert State From Follower to Candidate At T3
+024089 TIMR S3 TimeOut Convert State From Follower to Candidate At T3
+024410 ERRO Tester: 断连 S0 的连接
+024413 ERRO Tester: 断连 S1 的连接
+024413 ERRO Tester: 重连 S2 的连接
+024414 ERRO Tester: 重连 S3 的连接
+024414 ERRO Tester: 重连 S4 的连接
+024412 TRCE S0 is Status 2, At T2 Debug
+024415 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+024416 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+024416 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+024416 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+024416 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+024417 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+024417 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+024417 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+024416 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+024857 TRCE S2 is Status 1, At T3 Debug
+024859 TRCE S2 Candidate SendRequestVote To S0 At T3
+024859 TRCE S2 Candidate SendRequestVote To S4 At T3
+024859 TRCE S2 Candidate SendRequestVote To S1 At T3
+024860 TRCE S2 Candidate SendRequestVote To S3 At T3
+024865 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T3
+024866 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T3
+025028 TRCE S1 is Status 0, At T2 Debug
+025186 TRCE S4 is Status 1, At T3 Debug
+025187 TRCE S4 Candidate SendRequestVote To S3 At T3
+025188 TRCE S4 Candidate SendRequestVote To S0 At T3
+025189 TRCE S4 Candidate SendRequestVote To S1 At T3
+025189 TRCE S4 Candidate SendRequestVote To S2 At T3
+025192 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T3
+025192 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T3
+025620 TRCE S3 is Status 1, At T3 Debug
+025622 TRCE S3 Candidate SendRequestVote To S4 At T3
+025622 TRCE S3 Candidate SendRequestVote To S0 At T3
+025623 TRCE S3 Candidate SendRequestVote To S1 At T3
+025623 TRCE S3 Candidate SendRequestVote To S2 At T3
+025624 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T3
+025624 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T3
+026376 TRCE S0 is Status 2, At T2 Debug
+026379 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+026379 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+026379 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+026379 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+026379 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+026379 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+026380 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+026380 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+026381 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+027452 TRCE S0 is Status 2, At T2 Debug
+027454 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+027455 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+027455 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+027455 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+027455 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+027455 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+027455 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+027455 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+027455 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+028544 TIMR S1 TimeOut Convert State From Follower to Candidate At T3
+028681 TRCE S2 Candidate TimeOut Increate Term From T3 to T4
+028807 TRCE S4 Candidate TimeOut Increate Term From T3 to T4
+028840 TRCE S3 Candidate TimeOut Increate Term From T3 to T4
+029410 TRCE S0 is Status 2, At T2 Debug
+029413 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+029414 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+029414 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+029414 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+029414 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+029414 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+029415 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+029415 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+029415 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+029860 TRCE S4 is Status 1, At T4 Debug
+029862 TRCE S4 Candidate SendRequestVote To S3 At T4
+029863 TRCE S4 Candidate SendRequestVote To S0 At T4
+029864 TRCE S4 Candidate SendRequestVote To S1 At T4
+029865 TRCE S4 Candidate SendRequestVote To S2 At T4
+029866 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T4
+029870 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T4
+030340 TRCE S1 is Status 1, At T3 Debug
+030342 TRCE S1 Candidate SendRequestVote To S4 At T3
+030342 TRCE S1 Candidate SendRequestVote To S0 At T3
+030343 TRCE S1 Candidate SendRequestVote To S2 At T3
+030343 TRCE S1 Candidate SendRequestVote To S3 At T3
+030456 TRCE S2 is Status 1, At T4 Debug
+030457 TRCE S2 Candidate SendRequestVote To S4 At T4
+030458 TRCE S2 Candidate SendRequestVote To S0 At T4
+030458 TRCE S2 Candidate SendRequestVote To S1 At T4
+030459 TRCE S2 Candidate SendRequestVote To S3 At T4
+030460 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T4
+030462 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T4
+030615 TRCE S3 is Status 1, At T4 Debug
+030616 TRCE S3 Candidate SendRequestVote To S4 At T4
+030617 TRCE S3 Candidate SendRequestVote To S0 At T4
+030617 TRCE S3 Candidate SendRequestVote To S1 At T4
+030617 TRCE S3 Candidate SendRequestVote To S2 At T4
+030618 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T4
+030620 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T4
+030805 TRCE S0 is Status 2, At T2 Debug
+030808 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+030809 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+030809 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+030809 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+030809 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+030810 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+030810 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+030810 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+030810 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+032170 TRCE S0 is Status 2, At T2 Debug
+032172 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+032172 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+032172 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+032173 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+032173 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+032173 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+032173 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+032173 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+032173 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+033179 TRCE S4 Candidate TimeOut Increate Term From T4 to T5
+033874 TRCE S1 Candidate TimeOut Increate Term From T3 to T4
+033950 TRCE S2 Candidate TimeOut Increate Term From T4 to T5
+034016 TRCE S0 is Status 2, At T2 Debug
+034064 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+034064 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+034064 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+034065 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+034065 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+034065 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+034065 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+034065 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+034065 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+034224 TRCE S3 Candidate TimeOut Increate Term From T4 to T5
+034416 TRCE S4 is Status 1, At T5 Debug
+034417 TRCE S4 Candidate SendRequestVote To S3 At T5
+034418 TRCE S4 Candidate SendRequestVote To S1 At T5
+034418 TRCE S4 Candidate SendRequestVote To S0 At T5
+034418 TRCE S4 Candidate SendRequestVote To S2 At T5
+034420 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T5
+034421 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T5
+034940 TRCE S1 is Status 1, At T4 Debug
+034943 TRCE S1 Candidate SendRequestVote To S4 At T4
+034943 TRCE S1 Candidate SendRequestVote To S0 At T4
+034943 TRCE S1 Candidate SendRequestVote To S2 At T4
+034944 TRCE S1 Candidate SendRequestVote To S3 At T4
+035604 TRCE S2 is Status 1, At T5 Debug
+035606 TRCE S2 Candidate SendRequestVote To S4 At T5
+035608 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T5
+035608 TRCE S2 Candidate SendRequestVote To S0 At T5
+035608 TRCE S2 Candidate SendRequestVote To S3 At T5
+035610 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T5
+035608 TRCE S2 Candidate SendRequestVote To S1 At T5
+035682 TRCE S0 is Status 2, At T2 Debug
+035683 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+035683 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+035683 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+035684 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+035684 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+035684 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+035685 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+035685 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+035685 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+035847 TRCE S3 is Status 1, At T5 Debug
+035850 TRCE S3 Candidate SendRequestVote To S4 At T5
+035851 TRCE S3 Candidate SendRequestVote To S1 At T5
+035850 TRCE S3 Candidate SendRequestVote To S0 At T5
+035851 TRCE S3 Candidate SendRequestVote To S2 At T5
+035853 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T5
+035853 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T5
+036723 TRCE S0 is Status 2, At T2 Debug
+036725 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+036726 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+036726 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+036726 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+036726 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+036726 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+036727 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+036728 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+036728 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+038048 TRCE S4 Candidate TimeOut Increate Term From T5 to T6
+038511 TRCE S1 Candidate TimeOut Increate Term From T4 to T5
+038523 TRCE S0 is Status 2, At T2 Debug
+038525 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+038525 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+038526 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+038526 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+038526 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+038526 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+038526 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+038527 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+038527 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+039045 TRCE S3 Candidate TimeOut Increate Term From T5 to T6
+039126 TRCE S2 Candidate TimeOut Increate Term From T5 to T6
+039149 TRCE S4 is Status 1, At T6 Debug
+039151 TRCE S4 Candidate SendRequestVote To S3 At T6
+039152 TRCE S4 Candidate SendRequestVote To S0 At T6
+039152 TRCE S4 Candidate SendRequestVote To S1 At T6
+039153 TRCE S4 Candidate SendRequestVote To S2 At T6
+039153 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T6
+039155 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T6
+040076 TRCE S0 is Status 2, At T2 Debug
+040078 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+040077 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+040078 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+040078 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+040079 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+040079 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+040079 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+040079 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+040079 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+040168 TRCE S1 is Status 1, At T5 Debug
+040169 TRCE S1 Candidate SendRequestVote To S4 At T5
+040170 TRCE S1 Candidate SendRequestVote To S2 At T5
+040170 TRCE S1 Candidate SendRequestVote To S3 At T5
+040170 TRCE S1 Candidate SendRequestVote To S0 At T5
+040384 TRCE S3 is Status 1, At T6 Debug
+040386 TRCE S3 Candidate SendRequestVote To S4 At T6
+040386 TRCE S3 Candidate SendRequestVote To S0 At T6
+040387 TRCE S3 Candidate SendRequestVote To S1 At T6
+040387 TRCE S3 Candidate SendRequestVote To S2 At T6
+040389 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T6
+040390 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T6
+040913 TRCE S2 is Status 1, At T6 Debug
+040915 TRCE S2 Candidate SendRequestVote To S4 At T6
+040915 TRCE S2 Candidate SendRequestVote To S0 At T6
+040915 TRCE S2 Candidate SendRequestVote To S1 At T6
+040915 TRCE S2 Candidate SendRequestVote To S3 At T6
+040917 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T6
+040920 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T6
+041347 TRCE S0 is Status 2, At T2 Debug
+041349 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+041350 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+041350 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+041350 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+041350 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+041350 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+041350 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+041350 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+041351 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+042585 TRCE S0 is Status 2, At T2 Debug
+042589 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+042590 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+042591 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+042591 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+042592 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+042592 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+042591 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+042590 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+042591 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+042859 TRCE S4 Candidate TimeOut Increate Term From T6 to T7
+043594 TRCE S3 Candidate TimeOut Increate Term From T6 to T7
+043679 TRCE S0 is Status 2, At T2 Debug
+043681 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+043681 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+043681 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+043681 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+043682 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+043682 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+043682 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+043682 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+043683 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+044003 TRCE S4 is Status 1, At T7 Debug
+044004 TRCE S4 Candidate SendRequestVote To S3 At T7
+044005 TRCE S4 Candidate SendRequestVote To S0 At T7
+044005 TRCE S4 Candidate SendRequestVote To S1 At T7
+044005 TRCE S4 Candidate SendRequestVote To S2 At T7
+044006 VOTE S2 Granting Vote to S4 at T7
+044007 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T7
+044006 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T7
+044133 TRCE S1 Candidate TimeOut Increate Term From T5 to T6
+044898 TRCE S3 is Status 1, At T7 Debug
+044900 TRCE S3 Candidate SendRequestVote To S0 At T7
+044901 TRCE S3 Candidate SendRequestVote To S4 At T7
+044901 TRCE S3 Candidate SendRequestVote To S1 At T7
+044901 TRCE S3 Candidate SendRequestVote To S2 At T7
+044903 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T7
+044903 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T7
+045175 TRCE S2 is Status 0, At T7 Debug
+045240 TRCE S1 is Status 1, At T6 Debug
+045242 TRCE S1 Candidate SendRequestVote To S4 At T6
+045242 TRCE S1 Candidate SendRequestVote To S2 At T6
+045242 TRCE S1 Candidate SendRequestVote To S0 At T6
+045243 TRCE S1 Candidate SendRequestVote To S3 At T6
+045334 TRCE S0 is Status 2, At T2 Debug
+045337 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+045337 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+045337 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+045337 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+045337 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+045338 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+045338 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+045338 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+045338 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+046578 TRCE S0 is Status 2, At T2 Debug
+046580 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+046580 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+046580 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+046580 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+046580 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+046580 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+046580 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+046581 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+046582 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+047130 TRCE S4 Candidate TimeOut Increate Term From T7 to T8
+047990 TRCE S3 Candidate TimeOut Increate Term From T7 to T8
+048233 TRCE S0 is Status 2, At T2 Debug
+048234 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+048234 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+048234 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+048234 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+048234 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+048235 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+048235 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+048234 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+048235 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+048867 TRCE S4 is Status 1, At T8 Debug
+048869 TRCE S4 Candidate SendRequestVote To S3 At T8
+048870 TRCE S4 Candidate SendRequestVote To S0 At T8
+048870 TRCE S4 Candidate SendRequestVote To S1 At T8
+048871 TRCE S4 Candidate SendRequestVote To S2 At T8
+048873 VOTE S2 Granting Vote to S4 at T8
+048874 TRCE S2 Receive HeatBeat
+048875 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T8
+048878 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T8
+049090 TRCE S1 Candidate TimeOut Increate Term From T6 to T7
+049391 TRCE S3 is Status 1, At T8 Debug
+049395 TRCE S3 Candidate SendRequestVote To S4 At T8
+049396 TRCE S3 Candidate SendRequestVote To S2 At T8
+049395 TRCE S3 Candidate SendRequestVote To S0 At T8
+049400 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T8
+049396 TRCE S3 Candidate SendRequestVote To S1 At T8
+049400 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T8
+050066 TRCE S0 is Status 2, At T2 Debug
+050067 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+050067 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+050067 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+050068 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+050068 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+050068 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+050069 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+050069 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+050070 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+050287 TRCE S2 is Status 0, At T8 Debug
+051017 TRCE S1 is Status 1, At T7 Debug
+051019 TRCE S1 Candidate SendRequestVote To S4 At T7
+051019 TRCE S1 Candidate SendRequestVote To S2 At T7
+051020 TRCE S1 Candidate SendRequestVote To S3 At T7
+051020 TRCE S1 Candidate SendRequestVote To S0 At T7
+051833 TRCE S0 is Status 2, At T2 Debug
+051835 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+051835 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+051835 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+051835 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+051835 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+051835 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+051836 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+051837 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+051837 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+052157 TRCE S4 Candidate TimeOut Increate Term From T8 to T9
+052446 TRCE S3 Candidate TimeOut Increate Term From T8 to T9
+052836 TRCE S0 is Status 2, At T2 Debug
+052838 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+052838 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+052838 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+052838 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+052838 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+052842 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+052838 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+052848 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+052842 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+053361 TIMR S2 TimeOut Convert State From Follower to Candidate At T9
+053672 TRCE S4 is Status 1, At T9 Debug
+053675 TRCE S4 Candidate SendRequestVote To S3 At T9
+053676 TRCE S4 Candidate SendRequestVote To S1 At T9
+053677 TRCE S4 Candidate SendRequestVote To S2 At T9
+053678 TRCE S4 Candidate SendRequestVote To S0 At T9
+053681 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T9
+053682 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T9
+053743 TRCE S3 is Status 1, At T9 Debug
+053745 TRCE S3 Candidate SendRequestVote To S4 At T9
+053746 TRCE S3 Candidate SendRequestVote To S0 At T9
+053746 TRCE S3 Candidate SendRequestVote To S1 At T9
+053747 TRCE S3 Candidate SendRequestVote To S2 At T9
+053747 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T9
+053750 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T9
+054374 TRCE S2 is Status 1, At T9 Debug
+054376 TRCE S2 Candidate SendRequestVote To S4 At T9
+054377 TRCE S2 Candidate SendRequestVote To S0 At T9
+054378 TRCE S2 Candidate SendRequestVote To S3 At T9
+054378 TRCE S2 Candidate SendRequestVote To S1 At T9
+054379 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T9
+054381 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T9
+054669 TRCE S0 is Status 2, At T2 Debug
+054674 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+054674 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+054675 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+054674 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+054676 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+054676 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+054676 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+054676 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+054674 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+054792 TRCE S1 Candidate TimeOut Increate Term From T7 to T8
+056188 TRCE S1 is Status 1, At T8 Debug
+056190 TRCE S1 Candidate SendRequestVote To S4 At T8
+056191 TRCE S1 Candidate SendRequestVote To S2 At T8
+056191 TRCE S1 Candidate SendRequestVote To S0 At T8
+056191 TRCE S1 Candidate SendRequestVote To S3 At T8
+056551 TRCE S0 is Status 2, At T2 Debug
+056553 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+056553 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+056553 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+056553 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+056554 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+056553 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+056554 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+056554 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+056554 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+057557 TRCE S4 Candidate TimeOut Increate Term From T9 to T10
+057603 TRCE S3 Candidate TimeOut Increate Term From T9 to T10
+057825 TRCE S2 Candidate TimeOut Increate Term From T9 to T10
+058545 TRCE S0 is Status 2, At T2 Debug
+058547 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+058547 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+058547 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+058549 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+058549 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+058549 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+058548 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+058549 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+058549 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+059037 TRCE S4 is Status 1, At T10 Debug
+059039 TRCE S4 Candidate SendRequestVote To S3 At T10
+059040 TRCE S4 Candidate SendRequestVote To S1 At T10
+059040 TRCE S4 Candidate SendRequestVote To S2 At T10
+059040 TRCE S4 Candidate SendRequestVote To S0 At T10
+059042 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T10
+059043 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T10
+059072 TRCE S3 is Status 1, At T10 Debug
+059073 TRCE S3 Candidate SendRequestVote To S4 At T10
+059074 TRCE S3 Candidate SendRequestVote To S0 At T10
+059075 TRCE S3 Candidate SendRequestVote To S1 At T10
+059075 TRCE S3 Candidate SendRequestVote To S2 At T10
+059076 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T10
+059078 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T10
+059642 TRCE S2 is Status 1, At T10 Debug
+059645 TRCE S2 Candidate SendRequestVote To S4 At T10
+059645 TRCE S2 Candidate SendRequestVote To S0 At T10
+059646 TRCE S2 Candidate SendRequestVote To S1 At T10
+059647 TRCE S2 Candidate SendRequestVote To S3 At T10
+059648 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T10
+059649 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T10
+059667 TRCE S0 is Status 2, At T2 Debug
+059668 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+059669 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+059669 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+059669 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+059669 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+059669 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+059669 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+059670 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+059670 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+060192 TRCE S1 Candidate TimeOut Increate Term From T8 to T9
+060687 TRCE S0 is Status 2, At T2 Debug
+060689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+060689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+060689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+060689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+060689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+060689 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+060690 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+060690 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+060691 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+062046 TRCE S1 is Status 1, At T9 Debug
+062048 TRCE S1 Candidate SendRequestVote To S4 At T9
+062049 TRCE S1 Candidate SendRequestVote To S2 At T9
+062049 TRCE S1 Candidate SendRequestVote To S0 At T9
+062049 TRCE S1 Candidate SendRequestVote To S3 At T9
+062151 TRCE S0 is Status 2, At T2 Debug
+062153 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+062153 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+062154 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+062154 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+062154 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+062154 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+062154 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+062155 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+062155 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+062323 TRCE S3 Candidate TimeOut Increate Term From T10 to T11
+062983 TRCE S4 Candidate TimeOut Increate Term From T10 to T11
+063387 TRCE S2 Candidate TimeOut Increate Term From T10 to T11
+063866 TRCE S0 is Status 2, At T2 Debug
+063868 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+063868 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+063870 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+063870 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+063870 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+063870 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+063870 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+063870 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+063870 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+064106 TRCE S3 is Status 1, At T11 Debug
+064108 TRCE S3 Candidate SendRequestVote To S4 At T11
+064109 TRCE S3 Candidate SendRequestVote To S1 At T11
+064110 TRCE S3 Candidate SendRequestVote To S0 At T11
+064110 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T11
+064110 TRCE S3 Candidate SendRequestVote To S2 At T11
+064113 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T11
+064891 TRCE S4 is Status 1, At T11 Debug
+064893 TRCE S4 Candidate SendRequestVote To S3 At T11
+064894 TRCE S4 Candidate SendRequestVote To S1 At T11
+064894 TRCE S4 Candidate SendRequestVote To S0 At T11
+064894 TRCE S4 Candidate SendRequestVote To S2 At T11
+064897 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T11
+064897 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T11
+065167 TRCE S0 is Status 2, At T2 Debug
+065169 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+065169 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+065170 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+065170 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+065170 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+065170 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+065171 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+065172 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+065171 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+065341 TRCE S2 is Status 1, At T11 Debug
+065343 TRCE S2 Candidate SendRequestVote To S4 At T11
+065344 TRCE S2 Candidate SendRequestVote To S1 At T11
+065345 TRCE S2 Candidate SendRequestVote To S3 At T11
+065345 TRCE S2 Candidate SendRequestVote To S0 At T11
+065346 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T11
+065348 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T11
+065508 TRCE S1 Candidate TimeOut Increate Term From T9 to T10
+066203 TRCE S0 is Status 2, At T2 Debug
+066205 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+066206 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+066206 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+066206 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+066206 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+066206 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+066206 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+066207 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+066207 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+067278 TRCE S1 is Status 1, At T10 Debug
+067280 TRCE S1 Candidate SendRequestVote To S4 At T10
+067280 TRCE S1 Candidate SendRequestVote To S0 At T10
+067281 TRCE S1 Candidate SendRequestVote To S2 At T10
+067281 TRCE S1 Candidate SendRequestVote To S3 At T10
+067302 TRCE S3 Candidate TimeOut Increate Term From T11 to T12
+067936 TRCE S0 is Status 2, At T2 Debug
+067938 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+067938 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+067938 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+067939 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+067939 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+067939 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+067939 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+067940 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+067940 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+068817 TRCE S4 Candidate TimeOut Increate Term From T11 to T12
+068830 TRCE S2 Candidate TimeOut Increate Term From T11 to T12
+068990 TRCE S3 is Status 1, At T12 Debug
+068993 TRCE S3 Candidate SendRequestVote To S4 At T12
+068994 TRCE S3 Candidate SendRequestVote To S0 At T12
+068995 TRCE S3 Candidate SendRequestVote To S1 At T12
+068995 TRCE S3 Candidate SendRequestVote To S2 At T12
+068997 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T12
+068998 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T12
+069740 TRCE S0 is Status 2, At T2 Debug
+069744 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+069745 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+069745 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+069745 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+069745 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+069746 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+069746 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+069745 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+069745 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+069944 TRCE S2 is Status 1, At T12 Debug
+069946 TRCE S2 Candidate SendRequestVote To S4 At T12
+069946 TRCE S2 Candidate SendRequestVote To S0 At T12
+069947 TRCE S2 Candidate SendRequestVote To S3 At T12
+069947 TRCE S2 Candidate SendRequestVote To S1 At T12
+069949 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T12
+069949 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T12
+070122 TRCE S4 is Status 1, At T12 Debug
+070124 TRCE S4 Candidate SendRequestVote To S3 At T12
+070125 TRCE S4 Candidate SendRequestVote To S0 At T12
+070126 TRCE S4 Candidate SendRequestVote To S1 At T12
+070127 TRCE S4 Candidate SendRequestVote To S2 At T12
+070127 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T12
+070130 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T12
+070401 TRCE S1 Candidate TimeOut Increate Term From T10 to T11
+071185 TRCE S0 is Status 2, At T2 Debug
+071187 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+071188 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+071188 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+071188 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+071188 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+071188 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+071188 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+071188 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+071188 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+071452 TRCE S1 is Status 1, At T11 Debug
+071454 TRCE S1 Candidate SendRequestVote To S4 At T11
+071454 TRCE S1 Candidate SendRequestVote To S0 At T11
+071455 TRCE S1 Candidate SendRequestVote To S3 At T11
+071455 TRCE S1 Candidate SendRequestVote To S2 At T11
+072688 TRCE S0 is Status 2, At T2 Debug
+072689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+072689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+072689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+072689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+072689 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+072690 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+072690 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+072690 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+072691 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+072843 TRCE S3 Candidate TimeOut Increate Term From T12 to T13
+073300 TRCE S2 Candidate TimeOut Increate Term From T12 to T13
+073774 TRCE S4 Candidate TimeOut Increate Term From T12 to T13
+074115 TRCE S3 is Status 1, At T13 Debug
+074117 TRCE S3 Candidate SendRequestVote To S4 At T13
+074117 TRCE S3 Candidate SendRequestVote To S0 At T13
+074118 TRCE S3 Candidate SendRequestVote To S1 At T13
+074118 TRCE S3 Candidate SendRequestVote To S2 At T13
+074120 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T13
+074123 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T13
+074264 TRCE S0 is Status 2, At T2 Debug
+074268 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+074268 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+074268 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+074268 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+074269 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+074269 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+074269 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+074270 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+074270 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+074595 TRCE S1 Candidate TimeOut Increate Term From T11 to T12
+074610 TRCE S2 is Status 1, At T13 Debug
+074611 TRCE S2 Candidate SendRequestVote To S4 At T13
+074611 TRCE S2 Candidate SendRequestVote To S0 At T13
+074612 TRCE S2 Candidate SendRequestVote To S1 At T13
+074612 TRCE S2 Candidate SendRequestVote To S3 At T13
+074613 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T13
+074615 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T13
+074920 TRCE S4 is Status 1, At T13 Debug
+074923 TRCE S4 Candidate SendRequestVote To S3 At T13
+074924 TRCE S4 Candidate SendRequestVote To S0 At T13
+074924 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T13
+074925 TRCE S4 Candidate SendRequestVote To S1 At T13
+074925 TRCE S4 Candidate SendRequestVote To S2 At T13
+074928 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T13
+075819 TRCE S0 is Status 2, At T2 Debug
+075820 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+075821 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+075821 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+075821 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+075821 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+075821 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+075822 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+075822 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+075822 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+076311 TRCE S1 is Status 1, At T12 Debug
+076313 TRCE S1 Candidate SendRequestVote To S4 At T12
+076313 TRCE S1 Candidate SendRequestVote To S2 At T12
+076313 TRCE S1 Candidate SendRequestVote To S0 At T12
+076314 TRCE S1 Candidate SendRequestVote To S3 At T12
+077205 TRCE S3 Candidate TimeOut Increate Term From T13 to T14
+077471 TRCE S0 is Status 2, At T2 Debug
+077473 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+077474 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+077474 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+077474 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+077474 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+077474 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+077475 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+077475 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+077476 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+078231 TRCE S2 Candidate TimeOut Increate Term From T13 to T14
+078626 TRCE S4 Candidate TimeOut Increate Term From T13 to T14
+078668 TRCE S3 is Status 1, At T14 Debug
+078670 TRCE S3 Candidate SendRequestVote To S4 At T14
+078671 TRCE S3 Candidate SendRequestVote To S1 At T14
+078672 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T14
+078672 TRCE S3 Candidate SendRequestVote To S0 At T14
+078673 TRCE S3 Candidate SendRequestVote To S2 At T14
+078678 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T14
+079104 TRCE S0 is Status 2, At T2 Debug
+079106 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+079106 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+079106 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+079106 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+079106 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+079107 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+079107 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+079108 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+079108 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+080037 TRCE S4 is Status 1, At T14 Debug
+080039 TRCE S4 Candidate SendRequestVote To S3 At T14
+080041 TRCE S4 Candidate SendRequestVote To S0 At T14
+080041 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T14
+080041 TRCE S4 Candidate SendRequestVote To S2 At T14
+080042 TRCE S4 Candidate SendRequestVote To S1 At T14
+080048 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T14
+080072 TRCE S1 Candidate TimeOut Increate Term From T12 to T13
+080163 TRCE S2 is Status 1, At T14 Debug
+080165 TRCE S2 Candidate SendRequestVote To S4 At T14
+080166 TRCE S2 Candidate SendRequestVote To S0 At T14
+080166 TRCE S2 Candidate SendRequestVote To S1 At T14
+080167 TRCE S2 Candidate SendRequestVote To S3 At T14
+080169 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T14
+080172 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T14
+081037 TRCE S0 is Status 2, At T2 Debug
+081038 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+081038 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+081038 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+081039 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+081039 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+081039 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+081040 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+081041 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+081041 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+081870 TRCE S1 is Status 1, At T13 Debug
+081872 TRCE S1 Candidate SendRequestVote To S2 At T13
+081873 TRCE S1 Candidate SendRequestVote To S0 At T13
+081873 TRCE S1 Candidate SendRequestVote To S3 At T13
+081872 TRCE S1 Candidate SendRequestVote To S4 At T13
+082107 TRCE S0 is Status 2, At T2 Debug
+082110 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+082110 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+082111 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+082111 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+082111 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+082111 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+082112 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+082111 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+082112 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+082269 TRCE S3 Candidate TimeOut Increate Term From T14 to T15
+083479 TRCE S4 Candidate TimeOut Increate Term From T14 to T15
+083921 TRCE S2 Candidate TimeOut Increate Term From T14 to T15
+084060 TRCE S3 is Status 1, At T15 Debug
+084063 TRCE S3 Candidate SendRequestVote To S4 At T15
+084065 TRCE S3 Candidate SendRequestVote To S1 At T15
+084065 TRCE S3 Candidate SendRequestVote To S0 At T15
+084065 TRCE S3 Candidate SendRequestVote To S2 At T15
+084095 TRCE S0 is Status 2, At T2 Debug
+084182 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+084182 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+084182 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+084182 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+084182 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+084182 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+084181 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T15
+084183 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+084183 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T15
+084183 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+084183 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+084561 TRCE S4 is Status 1, At T15 Debug
+084564 TRCE S4 Candidate SendRequestVote To S3 At T15
+084565 TRCE S4 Candidate SendRequestVote To S0 At T15
+084566 TRCE S4 Candidate SendRequestVote To S1 At T15
+084567 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T15
+084566 TRCE S4 Candidate SendRequestVote To S2 At T15
+084570 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T15
+084938 TRCE S1 Candidate TimeOut Increate Term From T13 to T14
+085604 TRCE S0 is Status 2, At T2 Debug
+085605 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+085606 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+085606 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+085606 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+085606 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+085606 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+085606 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+085607 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+085607 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+085747 TRCE S2 is Status 1, At T15 Debug
+085751 TRCE S2 Candidate SendRequestVote To S4 At T15
+085752 TRCE S2 Candidate SendRequestVote To S0 At T15
+085753 TRCE S2 Candidate SendRequestVote To S3 At T15
+085752 TRCE S2 Candidate SendRequestVote To S1 At T15
+085754 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T15
+085756 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T15
+086246 TRCE S1 is Status 1, At T14 Debug
+086248 TRCE S1 Candidate SendRequestVote To S0 At T14
+086248 TRCE S1 Candidate SendRequestVote To S4 At T14
+086249 TRCE S1 Candidate SendRequestVote To S3 At T14
+086249 TRCE S1 Candidate SendRequestVote To S2 At T14
+087315 TRCE S3 Candidate TimeOut Increate Term From T15 to T16
+087572 TRCE S4 Candidate TimeOut Increate Term From T15 to T16
+087585 TRCE S0 is Status 2, At T2 Debug
+087587 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+087587 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+087587 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+087587 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+087587 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+087587 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+087587 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+087588 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+087588 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+088805 TRCE S4 is Status 1, At T16 Debug
+088806 TRCE S4 Candidate SendRequestVote To S3 At T16
+088807 TRCE S4 Candidate SendRequestVote To S0 At T16
+088807 TRCE S4 Candidate SendRequestVote To S1 At T16
+088807 TRCE S4 Candidate SendRequestVote To S2 At T16
+088809 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T16
+088810 VOTE S2 Granting Vote to S4 at T16
+088810 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T16
+089263 TRCE S3 is Status 1, At T16 Debug
+089265 TRCE S3 Candidate SendRequestVote To S4 At T16
+089266 TRCE S3 Candidate SendRequestVote To S0 At T16
+089267 TRCE S3 Candidate SendRequestVote To S1 At T16
+089267 TRCE S3 Candidate SendRequestVote To S2 At T16
+089269 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T16
+089270 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T16
+089299 TRCE S0 is Status 2, At T2 Debug
+089300 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+089300 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+089300 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+089300 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+089300 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+089301 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+089301 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+089301 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+089302 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+089892 TRCE S1 Candidate TimeOut Increate Term From T14 to T15
+090740 TRCE S2 is Status 0, At T16 Debug
+090933 TRCE S0 is Status 2, At T2 Debug
+090934 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+090935 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+090935 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+090935 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+090935 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+090935 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+090936 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+090936 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+090936 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+090957 TRCE S1 is Status 1, At T15 Debug
+090959 TRCE S1 Candidate SendRequestVote To S4 At T15
+090959 TRCE S1 Candidate SendRequestVote To S0 At T15
+090959 TRCE S1 Candidate SendRequestVote To S2 At T15
+090960 TRCE S1 Candidate SendRequestVote To S3 At T15
+092326 TRCE S3 Candidate TimeOut Increate Term From T16 to T17
+092338 TRCE S4 Candidate TimeOut Increate Term From T16 to T17
+092384 TRCE S0 is Status 2, At T2 Debug
+092387 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+092389 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+092389 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+092389 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+092394 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+092394 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+092388 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+092388 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+092388 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+093919 TRCE S3 is Status 1, At T17 Debug
+093920 TRCE S3 Candidate SendRequestVote To S4 At T17
+093921 TRCE S3 Candidate SendRequestVote To S1 At T17
+093921 TRCE S3 Candidate SendRequestVote To S2 At T17
+093921 TRCE S3 Candidate SendRequestVote To S0 At T17
+093922 VOTE S2 Granting Vote to S3 at T17
+093922 TRCE S2 Receive HeatBeat
+093922 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T17
+093923 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T17
+094137 TRCE S4 is Status 1, At T17 Debug
+094140 TRCE S4 Candidate SendRequestVote To S3 At T17
+094141 TRCE S4 Candidate SendRequestVote To S0 At T17
+094141 TRCE S4 Candidate SendRequestVote To S1 At T17
+094142 TRCE S4 Candidate SendRequestVote To S2 At T17
+094145 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T17
+094147 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T17
+094219 TRCE S0 is Status 2, At T2 Debug
+094220 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+094221 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+094221 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+094221 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+094221 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+094221 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+094221 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+094222 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+094222 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+094531 TRCE S1 Candidate TimeOut Increate Term From T15 to T16
+094924 TRCE S2 is Status 0, At T17 Debug
+095658 TRCE S1 is Status 1, At T16 Debug
+095660 TRCE S1 Candidate SendRequestVote To S4 At T16
+095660 TRCE S1 Candidate SendRequestVote To S0 At T16
+095661 TRCE S1 Candidate SendRequestVote To S3 At T16
+095661 TRCE S1 Candidate SendRequestVote To S2 At T16
+095776 TRCE S0 is Status 2, At T2 Debug
+095778 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+095778 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+095778 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+095778 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+095778 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+095780 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+095782 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+095782 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+095782 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+097369 TRCE S0 is Status 2, At T2 Debug
+097370 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+097370 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+097370 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+097370 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+097371 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+097371 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+097371 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+097371 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+097372 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+097396 TRCE S3 Candidate TimeOut Increate Term From T17 to T18
+097783 TRCE S4 Candidate TimeOut Increate Term From T17 to T18
+098344 TIMR S2 TimeOut Convert State From Follower to Candidate At T18
+098379 TRCE S0 is Status 2, At T2 Debug
+098380 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+098381 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+098381 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+098381 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+098381 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+098381 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+098382 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+098382 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+098382 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+098859 TRCE S1 Candidate TimeOut Increate Term From T16 to T17
+098872 TRCE S4 is Status 1, At T18 Debug
+098873 TRCE S4 Candidate SendRequestVote To S3 At T18
+098873 TRCE S4 Candidate SendRequestVote To S1 At T18
+098874 TRCE S4 Candidate SendRequestVote To S0 At T18
+098874 TRCE S4 Candidate SendRequestVote To S2 At T18
+098875 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T18
+098875 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T18
+099002 TRCE S3 is Status 1, At T18 Debug
+099004 TRCE S3 Candidate SendRequestVote To S4 At T18
+099005 TRCE S3 Candidate SendRequestVote To S1 At T18
+099005 TRCE S3 Candidate SendRequestVote To S0 At T18
+099005 TRCE S3 Candidate SendRequestVote To S2 At T18
+099007 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T18
+099007 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T18
+099598 TRCE S0 is Status 2, At T2 Debug
+099600 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+099600 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+099600 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+099600 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+099601 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+099601 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+099601 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+099600 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+099600 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+100008 TRCE S1 is Status 1, At T17 Debug
+100010 TRCE S1 Candidate SendRequestVote To S4 At T17
+100011 TRCE S1 Candidate SendRequestVote To S2 At T17
+100011 TRCE S1 Candidate SendRequestVote To S3 At T17
+100011 TRCE S1 Candidate SendRequestVote To S0 At T17
+100054 TRCE S2 is Status 1, At T18 Debug
+100057 TRCE S2 Candidate SendRequestVote To S4 At T18
+100058 TRCE S2 Candidate SendRequestVote To S1 At T18
+100058 TRCE S2 Candidate SendRequestVote To S0 At T18
+100059 TRCE S2 Candidate SendRequestVote To S3 At T18
+100062 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T18
+100064 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T18
+101178 TRCE S0 is Status 2, At T2 Debug
+101183 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+101183 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+101184 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+101184 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+101184 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+101184 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+101184 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+101184 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+101184 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+101907 TRCE S4 Candidate TimeOut Increate Term From T18 to T19
+102624 TRCE S3 Candidate TimeOut Increate Term From T18 to T19
+103083 TRCE S0 is Status 2, At T2 Debug
+103085 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+103086 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+103086 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+103086 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+103086 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+103086 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+103087 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+103087 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+103086 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+103380 TRCE S2 Candidate TimeOut Increate Term From T18 to T19
+103407 TRCE S1 Candidate TimeOut Increate Term From T17 to T18
+103463 TRCE S4 is Status 1, At T19 Debug
+103465 TRCE S4 Candidate SendRequestVote To S3 At T19
+103466 TRCE S4 Candidate SendRequestVote To S0 At T19
+103467 TRCE S4 Candidate SendRequestVote To S1 At T19
+103467 TRCE S4 Candidate SendRequestVote To S2 At T19
+103468 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T19
+103470 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T19
+104322 TRCE S3 is Status 1, At T19 Debug
+104323 TRCE S3 Candidate SendRequestVote To S4 At T19
+104324 TRCE S3 Candidate SendRequestVote To S0 At T19
+104324 TRCE S3 Candidate SendRequestVote To S1 At T19
+104325 TRCE S3 Candidate SendRequestVote To S2 At T19
+104326 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T19
+104329 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T19
+104621 TRCE S1 is Status 1, At T18 Debug
+104623 TRCE S1 Candidate SendRequestVote To S4 At T18
+104624 TRCE S1 Candidate SendRequestVote To S2 At T18
+104624 TRCE S1 Candidate SendRequestVote To S3 At T18
+104624 TRCE S1 Candidate SendRequestVote To S0 At T18
+104677 TRCE S0 is Status 2, At T2 Debug
+104681 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+104683 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+104684 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+104684 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+104684 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+104682 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+104683 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+104683 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+104683 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+104924 TRCE S2 is Status 1, At T19 Debug
+104926 TRCE S2 Candidate SendRequestVote To S4 At T19
+104926 TRCE S2 Candidate SendRequestVote To S1 At T19
+104927 TRCE S2 Candidate SendRequestVote To S0 At T19
+104927 TRCE S2 Candidate SendRequestVote To S3 At T19
+104929 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T19
+104931 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T19
+106332 TRCE S0 is Status 2, At T2 Debug
+106333 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+106334 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+106334 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+106334 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+106334 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+106334 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+106335 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+106335 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+106335 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+107286 TRCE S4 Candidate TimeOut Increate Term From T19 to T20
+107587 TRCE S3 Candidate TimeOut Increate Term From T19 to T20
+108126 TRCE S1 Candidate TimeOut Increate Term From T18 to T19
+108182 TRCE S0 is Status 2, At T2 Debug
+108184 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+108184 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+108184 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+108184 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+108184 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+108184 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+108184 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+108185 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+108185 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+108217 TRCE S2 Candidate TimeOut Increate Term From T19 to T20
+108669 TRCE S3 is Status 1, At T20 Debug
+108671 TRCE S3 Candidate SendRequestVote To S0 At T20
+108671 TRCE S3 Candidate SendRequestVote To S1 At T20
+108671 TRCE S3 Candidate SendRequestVote To S4 At T20
+108672 TRCE S3 Candidate SendRequestVote To S2 At T20
+108674 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T20
+108674 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T20
+108704 TRCE S4 is Status 1, At T20 Debug
+108706 TRCE S4 Candidate SendRequestVote To S3 At T20
+108706 TRCE S4 Candidate SendRequestVote To S0 At T20
+108707 TRCE S4 Candidate SendRequestVote To S2 At T20
+108708 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T20
+108707 TRCE S4 Candidate SendRequestVote To S1 At T20
+108710 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T20
+109157 TRCE S1 is Status 1, At T19 Debug
+109158 TRCE S1 Candidate SendRequestVote To S4 At T19
+109159 TRCE S1 Candidate SendRequestVote To S2 At T19
+109159 TRCE S1 Candidate SendRequestVote To S0 At T19
+109160 TRCE S1 Candidate SendRequestVote To S3 At T19
+109976 TRCE S0 is Status 2, At T2 Debug
+109978 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+109978 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+109978 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+109978 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+109978 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+109978 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+109978 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+109979 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+109979 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+110125 TRCE S2 is Status 1, At T20 Debug
+110127 TRCE S2 Candidate SendRequestVote To S4 At T20
+110127 TRCE S2 Candidate SendRequestVote To S1 At T20
+110127 TRCE S2 Candidate SendRequestVote To S0 At T20
+110128 TRCE S2 Candidate SendRequestVote To S3 At T20
+110129 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T20
+110134 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T20
+110983 TRCE S0 is Status 2, At T2 Debug
+110984 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+110985 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+110985 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+110985 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+110985 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+110985 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+110985 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+110985 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+110985 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+112269 TRCE S3 Candidate TimeOut Increate Term From T20 to T21
+112369 TRCE S4 Candidate TimeOut Increate Term From T20 to T21
+112860 TRCE S0 is Status 2, At T2 Debug
+112862 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+112863 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+112863 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+112863 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+112863 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+112863 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+112863 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+112864 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+112864 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+112884 TRCE S1 Candidate TimeOut Increate Term From T19 to T20
+113486 TRCE S4 is Status 1, At T21 Debug
+113488 TRCE S4 Candidate SendRequestVote To S3 At T21
+113489 TRCE S4 Candidate SendRequestVote To S1 At T21
+113490 TRCE S4 Candidate SendRequestVote To S2 At T21
+113490 VOTE S2 Granting Vote to S4 at T21
+113490 TRCE S4 Candidate SendRequestVote To S0 At T21
+113492 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T21
+113492 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T21
+114159 TRCE S3 is Status 1, At T21 Debug
+114161 TRCE S3 Candidate SendRequestVote To S4 At T21
+114161 TRCE S3 Candidate SendRequestVote To S1 At T21
+114162 TRCE S3 Candidate SendRequestVote To S2 At T21
+114162 TRCE S3 Candidate SendRequestVote To S0 At T21
+114163 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T21
+114163 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T21
+114194 TRCE S0 is Status 2, At T2 Debug
+114195 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+114196 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+114196 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+114196 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+114196 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+114196 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+114196 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+114197 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+114197 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+114657 TRCE S1 is Status 1, At T20 Debug
+114658 TRCE S1 Candidate SendRequestVote To S4 At T20
+114659 TRCE S1 Candidate SendRequestVote To S2 At T20
+114659 TRCE S1 Candidate SendRequestVote To S0 At T20
+114659 TRCE S1 Candidate SendRequestVote To S3 At T20
+115366 TRCE S2 is Status 0, At T21 Debug
+115610 TRCE S0 is Status 2, At T2 Debug
+115612 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+115612 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+115612 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+115612 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+115613 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+115612 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+115613 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+115613 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+115613 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+116815 TRCE S4 Candidate TimeOut Increate Term From T21 to T22
+117323 TRCE S0 is Status 2, At T2 Debug
+117325 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+117325 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+117325 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+117326 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+117326 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+117326 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+117326 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+117326 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+117327 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+117753 TRCE S3 Candidate TimeOut Increate Term From T21 to T22
+118037 TRCE S1 Candidate TimeOut Increate Term From T20 to T21
+118157 TRCE S4 is Status 1, At T22 Debug
+118158 TRCE S4 Candidate SendRequestVote To S3 At T22
+118159 TRCE S4 Candidate SendRequestVote To S1 At T22
+118160 TRCE S4 Candidate SendRequestVote To S2 At T22
+118160 TRCE S4 Candidate SendRequestVote To S0 At T22
+118161 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T22
+118162 VOTE S2 Granting Vote to S4 at T22
+118163 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T22
+118163 TRCE S2 Receive HeatBeat
+118473 TRCE S0 is Status 2, At T2 Debug
+118475 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+118475 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+118475 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+118475 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+118475 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+118475 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+118477 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+118477 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+118477 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+119188 TRCE S2 is Status 0, At T22 Debug
+119262 TRCE S1 is Status 1, At T21 Debug
+119263 TRCE S1 Candidate SendRequestVote To S4 At T21
+119263 TRCE S1 Candidate SendRequestVote To S0 At T21
+119263 TRCE S1 Candidate SendRequestVote To S2 At T21
+119264 TRCE S1 Candidate SendRequestVote To S3 At T21
+119459 TRCE S3 is Status 1, At T22 Debug
+119462 TRCE S3 Candidate SendRequestVote To S4 At T22
+119462 TRCE S3 Candidate SendRequestVote To S0 At T22
+119463 TRCE S3 Candidate SendRequestVote To S1 At T22
+119463 TRCE S3 Candidate SendRequestVote To S2 At T22
+119465 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T22
+119465 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T22
+119702 TRCE S0 is Status 2, At T2 Debug
+119703 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+119704 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+119704 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+119704 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+119704 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+119704 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+119704 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+119705 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+119705 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+120750 TRCE S0 is Status 2, At T2 Debug
+120752 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+120753 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+120753 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+120753 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+120753 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+120753 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+120754 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+120755 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+120755 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+121692 TRCE S4 Candidate TimeOut Increate Term From T22 to T23
+121893 TRCE S0 is Status 2, At T2 Debug
+121896 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+121896 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+121897 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+121897 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+121897 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+121897 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+121897 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+121898 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+121898 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+122507 TIMR S2 TimeOut Convert State From Follower to Candidate At T23
+122661 TRCE S3 Candidate TimeOut Increate Term From T22 to T23
+122842 TRCE S1 Candidate TimeOut Increate Term From T21 to T22
+123477 TRCE S4 is Status 1, At T23 Debug
+123479 TRCE S4 Candidate SendRequestVote To S3 At T23
+123479 TRCE S4 Candidate SendRequestVote To S1 At T23
+123480 TRCE S4 Candidate SendRequestVote To S2 At T23
+123479 TRCE S4 Candidate SendRequestVote To S0 At T23
+123481 TRCE S4 Candidate Recevie RequestVoteReply From S2 At T23
+123483 TRCE S4 Candidate Recevie RequestVoteReply From S3 At T23
+123787 TRCE S0 is Status 2, At T2 Debug
+123790 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[0]=51, curCount=1, effctiveNum=3
+123791 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[1]=51, curCount=2, effctiveNum=3
+123791 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[2]=1, curCount=2, effctiveNum=3
+123791 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[3]=1, curCount=2, effctiveNum=3
+123791 CMIT Leader S0 Check CommitIndex, targetCommitIndex=2, MatchIndex[4]=1, curCount=2, effctiveNum=3
+123791 LEAD S0 Sending AppendEntries RPC to S4 At T2, Log Length:50, prevLogIndex:1
+123792 LEAD S0 Sending AppendEntries RPC to S2 At T2, Log Length:50, prevLogIndex:1
+123792 LEAD S0 Sending AppendEntries RPC to S1 At T2, Log Length:0, prevLogIndex:51
+123793 LEAD S0 Sending AppendEntries RPC to S3 At T2, Log Length:50, prevLogIndex:1
+123967 TRCE S1 is Status 1, At T22 Debug
+123970 TRCE S1 Candidate SendRequestVote To S4 At T22
+123970 TRCE S1 Candidate SendRequestVote To S2 At T22
+123970 TRCE S1 Candidate SendRequestVote To S0 At T22
+123971 TRCE S1 Candidate SendRequestVote To S3 At T22
+124086 TRCE S3 is Status 1, At T23 Debug
+124088 TRCE S3 Candidate SendRequestVote To S4 At T23
+124088 TRCE S3 Candidate SendRequestVote To S0 At T23
+124089 TRCE S3 Candidate SendRequestVote To S1 At T23
+124089 TRCE S3 Candidate SendRequestVote To S2 At T23
+124091 TRCE S3 Candidate Recevie RequestVoteReply From S2 At T23
+124092 TRCE S3 Candidate Recevie RequestVoteReply From S4 At T23
+124404 TRCE S2 is Status 1, At T23 Debug
+124406 TRCE S2 Candidate SendRequestVote To S4 At T23
+124407 TRCE S2 Candidate SendRequestVote To S1 At T23
+124407 TRCE S2 Candidate SendRequestVote To S0 At T23
+124408 TRCE S2 Candidate SendRequestVote To S3 At T23
+124409 TRCE S2 Candidate Recevie RequestVoteReply From S4 At T23
+124411 TRCE S2 Candidate Recevie RequestVoteReply From S3 At T23
+Fatal: one(200) failed to reach agreement
+        /root/Golang/MIT-Raft/src/raft1/test.go:286
+        /root/Golang/MIT-Raft/src/raft1/raft_test.go:630
+info: wrote visualization to /tmp/porcupine-341223781.html
+--- FAIL: TestBackup3B (12.47s)
+FAIL
+exit status 1
+FAIL	6.5840/raft1	12.475s
