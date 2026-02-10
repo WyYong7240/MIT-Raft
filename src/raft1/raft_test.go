@@ -848,29 +848,39 @@ func TestPersist13C(t *testing.T) {
 	tester.AnnotateTest("TestPersist13C", servers)
 	ts.Begin("Test (3C): basic persistence")
 
+	Debug(dError, "Tester: 提交命令：11")
 	ts.one(11, servers, true)
 
+	Debug(dError, "Tester: 所有Server关机")
 	ts.g.Shutdown()
 	tester.AnnotateShutdownAll()
+	Debug(dError, "Tester: 所有Server开机")
 	ts.g.StartServers()
 	tester.AnnotateRestartAll()
 
+	Debug(dError, "Tester: 提交命令：12")
 	ts.one(12, servers, true)
 
 	leader1 := ts.checkOneLeader()
+	Debug(dError, "Tester: Leader S%d 关机", leader1)
 	ts.g.ShutdownServer(leader1)
 	tester.AnnotateShutdown([]int{leader1})
+	Debug(dError, "Tester: Leader S%d 开机", leader1)
 	ts.restart(leader1)
 	tester.AnnotateRestart([]int{leader1})
 
+	Debug(dError, "Tester: 提交命令：13")
 	ts.one(13, servers, true)
 
 	leader2 := ts.checkOneLeader()
+	Debug(dError, "Tester: Leader S%d 关机", leader2)
 	ts.g.ShutdownServer(leader2)
 	tester.AnnotateShutdown([]int{leader2})
 
+	Debug(dError, "Tester: 提交命令：14")
 	ts.one(14, servers-1, true)
 
+	Debug(dError, "Tester: Leader S%d 开机", leader2)
 	ts.restart(leader2)
 	tester.AnnotateRestart([]int{leader2})
 
@@ -879,14 +889,18 @@ func TestPersist13C(t *testing.T) {
 	tester.AnnotateCheckerSuccess("all committed until index 4", "OK")
 
 	i3 := (ts.checkOneLeader() + 1) % servers
+	Debug(dError, "Tester: Server S%d 关机", i3)
 	ts.g.ShutdownServer(i3)
 	tester.AnnotateShutdown([]int{i3})
 
+	Debug(dError, "Tester: 提交命令：15")
 	ts.one(15, servers-1, true)
 
+	Debug(dError, "Tester: Server S%d 开机", i3)
 	ts.restart(i3)
 	tester.AnnotateRestart([]int{i3})
 
+	Debug(dError, "Tester: 提交命令：16")
 	ts.one(16, servers, true)
 }
 
@@ -1054,9 +1068,11 @@ func TestUnreliableAgree3C(t *testing.T) {
 			wg.Add(1)
 			go func(iters, j int) {
 				defer wg.Done()
+				Debug(dError, "Tester: 协程提交命令：%d", 100*iters+j)
 				ts.one((100*iters)+j, 1, true)
 			}(iters, j)
 		}
+		Debug(dError, "Tester: 主线程提交命令：%d", iters)
 		ts.one(iters, 1, true)
 	}
 
