@@ -9,7 +9,9 @@ package raft
 import (
 	//	"bytes"
 
+	"bytes"
 	"context"
+	"log"
 	"math"
 	"math/rand"
 	"sync"
@@ -17,12 +19,13 @@ import (
 	"time"
 
 	//	"6.5840/labgob"
+	"6.5840/labgob"
 	"6.5840/labrpc"
 	"6.5840/raftapi"
 	tester "6.5840/tester1"
 )
 
-// 由于设定最久200ms一个心跳，因此，Follower超时时间设定为250ms~350ms
+// 由于设定最久200ms一个心跳，因此，Follower超时时间设定为300ms~400ms
 const TIMTOUTDURATION_INTERVAL = 100 // 选举超时基础时间，单位毫秒
 const BASE_TIMEOUT_DURATION = 300
 
@@ -33,6 +36,7 @@ const SERVER_BASE_TIMEOUT = 1000
 const isRandom = true
 const LeaderElectionDebug = true
 const LogAppendDebug = true
+const PersistDebug = true
 const EnableDebug = false
 
 var ME int
@@ -112,6 +116,19 @@ func (rf *Raft) persist() {
 	// e.Encode(rf.yyy)
 	// raftstate := w.Bytes()
 	// rf.persister.Save(raftstate, nil)
+
+	buffer := new(bytes.Buffer)
+	encoder := labgob.NewEncoder(buffer)
+
+	rf.mu.Lock()
+	encoder.Encode(rf.CurrentTerm)
+	encoder.Encode(rf.VoteFor)
+	encoder.Encode(rf.Log)
+	rf.mu.Unlock()
+
+	raftState := buffer.Bytes()
+	rf.persister.Save(raftState, nil)
+
 }
 
 // restore previously persisted state.
@@ -132,6 +149,28 @@ func (rf *Raft) readPersist(data []byte) {
 	//   rf.xxx = xxx
 	//   rf.yyy = yyy
 	// }
+
+	dataBuffer := bytes.NewBuffer(data)
+	decoder := labgob.NewDecoder(dataBuffer)
+	var curTerm int = 0
+	var voteFor int = 0
+	var logArray []LogEntry = make([]LogEntry, 0)
+
+	rf.mu.Lock()
+	me := rf.me
+	rf.mu.Unlock()
+	if decoder.Decode(&curTerm) != nil || decoder.Decode(&voteFor) != nil || decoder.Decode(&logArray) != nil {
+		log.Fatalf("S%d Restart Read Persist Error", me)
+	} else {
+		rf.mu.Lock()
+		rf.CurrentTerm = curTerm
+		rf.VoteFor = voteFor
+		rf.Log = logArray
+		rf.mu.Unlock()
+		if EnableDebug && PersistDebug {
+			Debug(dPersist, "S%d Restart Success, curTerm=%d, voteFor=%d, logLen=%d", me, curTerm, voteFor, len(logArray))
+		}
+	}
 }
 
 // how many bytes in Raft's persisted log?
@@ -199,7 +238,6 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 
 	// 最后，处理对方Term比自己大、相等的情况
 	if args.Term > curTerm {
-
 		if isHeLogNewer {
 			// 如果对方日志更新，我投票，并更新自己的Term，转为Follower
 			reply.Term = args.Term
@@ -265,6 +303,7 @@ func (rf *Raft) RequestVote(args *RequestVoteArgs, reply *RequestVoteReply) {
 			}
 		}
 	}
+	rf.persist()
 }
 
 type AppendEntriesArgs struct {
@@ -348,6 +387,8 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 			Debug(dTrace, "S%d At T%d Recive AppendEntries From Leader S%d In T%d, Convert to Follower", me, curTerm, args.LeaderID, args.Term)
 		}
 	}
+	// 保存选票信息
+	rf.persist()
 
 	// 不论任期是大于还是等于自己的任期，都需要处理发送来的新增日志条目，不同的是，针对选举的处理
 	var myPrevLogTerm int = 0
@@ -379,7 +420,10 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 
 				// 如果下一个新日志条目要插入的位置，超过了目前log的容量，也就是该插入位置后面都是空的，那么将后续新条目直接append到log后面，不用再循环了
 				if toInsertIndex > logLen-1 {
-					toAppend := args.Entries[i:]
+					// 原本的toAppend := args.Entries[i:] 只是对原本日志内存地址的引用，如果被修改，就会出现追加到Server中的command变成nil的情况
+					toAppend := make([]LogEntry, len(args.Entries[i:]))
+					copy(toAppend, args.Entries[i:])
+
 					rf.mu.Lock()
 					rf.Log = append(rf.Log, toAppend...)
 					rf.mu.Unlock()
@@ -390,7 +434,9 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 					break
 				} else if toInsertIndexLogTerm != args.Entries[i].Term {
 					// 在处理后续新追加条目时，出现了索引相同，任期不同的情况，需要将该冲突条目及其后面的条目都删除，并重新追加新的条目
-					toAppend := args.Entries[i:] // 获取后续新条目
+					toAppend := make([]LogEntry, len(args.Entries[i:])) // 获取后续新条目
+					copy(toAppend, args.Entries[i:])
+
 					rf.mu.Lock()
 					rf.Log = rf.Log[:toInsertIndex]      // 将冲突条目及其后面的条目都删除
 					rf.Log = append(rf.Log, toAppend...) // 追加后续新条目
@@ -402,9 +448,12 @@ func (rf *Raft) AppendEntries(args *AppendEntriesArgs, reply *AppendEntriesReply
 					break // 所有新条目追加完毕，跳出循环
 				} else {
 					// 需要追加的条目，在该Server上是已有条目，不用处理
-					break
+					continue
 				}
 			}
+			// 保存日志信息
+			rf.persist()
+
 			reply.Success = true
 			reply.Term = curTerm
 			reply.ConfilictIndex = -1
@@ -526,8 +575,11 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	rf.NextIndex[rf.me] += 1
 	rf.mu.Unlock()
 
+	// 保存Leader日志信息
+	rf.persist()
+
 	if LogAppendDebug && EnableDebug {
-		Debug(dLog, "Leader S%d At T%d, Receive Log", me, term)
+		Debug(dLog, "Leader S%d At T%d, Receive Log: %v", me, term, command)
 	}
 
 	// Leader并行向所有Follower发送新条目的AppendEntries RPC
@@ -664,6 +716,10 @@ func (rf *Raft) replicator(peer int) {
 						rf.State = FOLLOWER
 						rf.CurrentTerm = reply.Term
 						rf.mu.Unlock()
+
+						// 保存curTerm
+						rf.persist()
+
 						if EnableDebug {
 							Debug(dLeader, "S%d Convert to Follower At T%d", me, reply.Term)
 						}
@@ -866,6 +922,9 @@ func (rf *Raft) FollowerCase(me int) {
 		curTerm := rf.CurrentTerm
 		rf.mu.Unlock()
 
+		// 保存候选者身份
+		rf.persist()
+
 		if LeaderElectionDebug && EnableDebug {
 			Debug(dTimer, "S%d TimeOut Convert State From Follower to Candidate At T%d", me, curTerm)
 		}
@@ -949,6 +1008,9 @@ func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, se
 				}
 				rf.mu.Unlock()
 
+				// 保存Leader身份
+				rf.persist()
+
 				if LeaderElectionDebug && EnableDebug {
 					Debug(dTrace, "S%d Candidate SendRequestVote Done At T%d, Success Come Leader", me, curTerm)
 				}
@@ -967,6 +1029,9 @@ func (rf *Raft) CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, se
 				rf.CurrentTerm = reply.Term
 				rf.VoteFor = -1
 				rf.mu.Unlock()
+
+				// 保存当前身份
+				rf.persist()
 
 				if LeaderElectionDebug && EnableDebug {
 					Debug(dTrace, "S%d Candidate SendRequestVote Receive Higher Term At T%d, Convert to Follower", me, reply.Term)
@@ -988,14 +1053,8 @@ func (rf *Raft) CandidateCase(me int) {
 	serverNum := len(rf.peers)
 	rf.mu.Unlock()
 
-	guaranteedNum := 1 // 初始化为1，是因为自己给自己投一票
-	effectiveNum := 0  // 计算过半门槛
-	// 设定过半有效门槛票数
-	if serverNum%2 == 0 {
-		effectiveNum = serverNum / 2
-	} else {
-		effectiveNum = serverNum/2 + 1
-	}
+	guaranteedNum := 1                                     // 初始化为1，是因为自己给自己投一票
+	effectiveNum := int(math.Ceil(float64(serverNum) / 2)) // 计算过半门槛
 
 	// 将发送拉票请求包装为一个函数，并使用goroutine方式运行，
 	go rf.CandidateSendVoteRequestParallel(guaranteedNum, effectiveNum, serverNum)
@@ -1018,6 +1077,9 @@ func (rf *Raft) CandidateCase(me int) {
 		//DebugInfo
 		curTerm := rf.CurrentTerm
 		rf.mu.Unlock()
+
+		// 保存当前任期信息
+		rf.persist()
 
 		if LeaderElectionDebug && EnableDebug {
 			Debug(dTrace, "S%d Candidate TimeOut Increate Term From T%d to T%d", me, curTerm-1, curTerm)
